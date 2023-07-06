@@ -3,6 +3,7 @@ package com.example.walkingmate_back.battle.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class Battle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long id; // 대결 번호 (자동 증가)
 
     @Column

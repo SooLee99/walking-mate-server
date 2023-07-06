@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode
+//@Data
+//@NoArgsConstructor
+//@AllArgsConstructor
+//@EqualsAndHashCode
 public class BoardId implements Serializable {
 
-    private Long id;
-    private UserEntity user;
+ //   private Long id;
+ //   private UserEntity user;
 }

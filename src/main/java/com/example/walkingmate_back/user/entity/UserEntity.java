@@ -17,13 +17,14 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString(exclude = {"teamMembers", "boards", "boardComments", "buyHistorys", "checkLists", "runRecords"})
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user")
 public class UserEntity {
 
     @Id
+    @Column
     private String id; // 사용자 id
 
     @Column

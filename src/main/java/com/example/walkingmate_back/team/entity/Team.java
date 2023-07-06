@@ -18,6 +18,7 @@ public class Team {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long id;  // 팀 id
 
     @Column

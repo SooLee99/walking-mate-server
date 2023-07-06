@@ -1,5 +1,6 @@
 package com.example.walkingmate_back.history.entity;
 
+import com.example.walkingmate_back.main.entity.BaseTimeEntity;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,11 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "runRecord")
-public class RunRecord {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 러닝 기록 번호 (자동 증가)
+public class RunRecord extends BaseTimeEntity {
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,18 +30,7 @@ public class RunRecord {
     @Column
     private int step;  // 걸음 수
 
-    @Column
-    private LocalDateTime created_at;  // 시간
-    private LocalDateTime updated_at;
-    @PrePersist
-    public void PrePersist() {
-        this.created_at = LocalDateTime.now();
-        this.updated_at = LocalDateTime.now();
-    }
-    @PreUpdate
-    public void preUpdate() {
-        this.updated_at = LocalDateTime.now();
-    }
+    // 시간은 따로 BaseTime으로 빼둠
 
     @Column
     private double distance;  // 거리

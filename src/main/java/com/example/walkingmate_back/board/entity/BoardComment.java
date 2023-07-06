@@ -1,9 +1,11 @@
 package com.example.walkingmate_back.board.entity;
 
+import com.example.walkingmate_back.main.entity.BaseTimeEntity;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -14,10 +16,11 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "boardComment")
-public class BoardComment {
+public class BoardComment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long id; // 댓글 번호 (자동 증가)
 
     @Id
@@ -25,12 +28,11 @@ public class BoardComment {
     @JoinColumn(name = "boardId") // 외래키 설정
     private Board board;  // 게시판 번호
 
+    // 시간 빼둠
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId") // 외래키 설정
     private UserEntity user;  // 사용자 id
-
-    @Column
-    private Date date;  // 작성 날짜
 
     @Column
     private String content;  // 내용

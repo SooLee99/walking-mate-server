@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -15,8 +16,7 @@ import java.util.Date;
 @EqualsAndHashCode
 public class RunRecordId implements Serializable {
 
-    private Long id;
     private UserEntity user;
-    private Date date;
+    private LocalDateTime date;
 
 }
