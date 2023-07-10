@@ -1,18 +1,16 @@
 package com.example.walkingmate_back.board.entity;
 
+import com.example.walkingmate_back.board.dto.BoardRequestDTO;
+import com.example.walkingmate_back.board.dto.BoardUpdateDTO;
 import com.example.walkingmate_back.main.entity.BaseTimeEntity;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
 @Entity
 @Getter
 @Setter
 @ToString
-//@IdClass(BoardId.class)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "board")
@@ -34,4 +32,17 @@ public class Board extends BaseTimeEntity {
 
     @Column
     private String content;  // 내용
+
+    public Board(UserEntity user, String title, String content) {
+        this.user=user;
+        this.title=title;
+        this.content=content;
+    }
+
+    // 게시글 수정
+    public Board update(BoardUpdateDTO boardUpdateDTO) {
+        this.title=boardUpdateDTO.getTitle();
+        this.content=boardUpdateDTO.getContent();
+        return this;
+    }
 }

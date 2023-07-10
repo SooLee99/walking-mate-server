@@ -29,6 +29,12 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // validation 추가
+    implementation 'org.springframework.boot:spring-boot-starter-validation:3.0.1'
+    // security 추가
+    //implementation 'org.springframework.boot:spring-boot-starter-security'
+    // springsecurity6 추가
+    //implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
 }
 
 tasks.named('test') {
