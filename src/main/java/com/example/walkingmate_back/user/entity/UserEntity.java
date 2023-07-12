@@ -10,7 +10,6 @@ import com.example.walkingmate_back.team.entity.TeamMember;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +41,12 @@ public class UserEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teamId") // 외래키 설정
     private Team team;  // 사용자의 팀 번호
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private UserBank userBank;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private UserBody userBody;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<TeamMember> teamMembers;

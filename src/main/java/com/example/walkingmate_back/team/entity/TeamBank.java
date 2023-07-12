@@ -14,6 +14,9 @@ import lombok.*;
 public class TeamBank {
 
     @Id
+    @Column(name = "teamId")
+    private Long id; // 팀 id
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teamId") // 외래키 설정
     private Team team;  // 팀 id

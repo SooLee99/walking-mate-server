@@ -14,6 +14,9 @@ import lombok.*;
 public class UserBank {
 
     @Id
+    @Column(name = "userId")
+    private String userId;  // 사용자 id
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId") // 외래키 설정
     private UserEntity user;  // 사용자 id
