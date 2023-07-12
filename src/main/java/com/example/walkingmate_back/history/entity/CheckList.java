@@ -1,5 +1,6 @@
 package com.example.walkingmate_back.history.entity;
 
+import com.example.walkingmate_back.history.dto.CheckListRequestDTO;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,7 +12,6 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-//@IdClass(CheckListId.class)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "checkList")
@@ -33,4 +33,23 @@ public class CheckList {
 
     @Column
     private String content;  // 내용
+
+    public CheckList(UserEntity userEntity, LocalDateTime date, String content, boolean checked) {
+        this.user=userEntity;
+        this.date=date;
+        this.content=content;
+        this.checked=checked;
+    }
+
+    public CheckList updateCheckd(boolean checked) {
+        this.checked=checked;
+        return this;
+
+    }
+
+    public CheckList update(CheckListRequestDTO checkListRequestDTO, LocalDateTime date) {
+        this.content=checkListRequestDTO.getContent();
+        this.date=date;
+        return this;
+    }
 }

@@ -1,7 +1,6 @@
 package com.example.walkingmate_back.history.dto;
 
 import lombok.Data;
-import java.util.Date;
 
 @Data
 public class RunRecordRequestDTO {

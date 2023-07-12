@@ -6,11 +6,16 @@ import com.example.walkingmate_back.history.service.RunRecordService;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.repository.UserRepository;
 import org.springframework.web.bind.annotation.*;
-
 import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+/**
+ *    운동 기록 등록, 조회 - 날짜별
+ *
+ *   @version          1.00 / 2023.07.12
+ *   @author           전우진
+ */
 
 //@Controller
 @RestController

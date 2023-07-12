@@ -1,6 +1,5 @@
 package com.example.walkingmate_back.history.service;
 
-import com.example.walkingmate_back.board.dto.BoardResponseDTO;
 import com.example.walkingmate_back.history.dto.RunRecordRequestDTO;
 import com.example.walkingmate_back.history.dto.RunRecordResponseDTO;
 import com.example.walkingmate_back.history.entity.RunRecord;
@@ -14,9 +13,17 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+/**
+ *    운동 기록 등록, 조회 - 날짜별
+ *    - 서비스 로직
+ *
+ *   @version          1.00 / 2023.07.12
+ *   @author           전우진
+ */
+
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +33,10 @@ public class RunRecordService {
     private final RunRecordRepository runRecordRepository;
     private final UserRepository userRepository;
 
+    /**
+     * 사용자 확인 후 운동 기록 저장
+     * - 전우진 2023.07.12
+     */
     public int saveRun(RunRecordRequestDTO runRecordRequestDTO) throws ParseException {
         Optional<UserEntity> user = userRepository.findById(runRecordRequestDTO.getUserId());
         LocalDate now = LocalDate.now();
@@ -39,6 +50,10 @@ public class RunRecordService {
         }
     }
 
+    /**
+     * 사용자 확인 후 날짜별 운동 기록 조회
+     * - 전우진 2023.07.12
+     */
     public List<RunRecordResponseDTO> getDateRun(String id, String date) {
         Optional<UserEntity> user = userRepository.findById(id);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
