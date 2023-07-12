@@ -44,9 +44,7 @@ public class RunRecordService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         LocalDate lc = LocalDate.parse(date, formatter);
 
-        RunRecord runRecordDate = runRecordRepository.findByDate(lc);
-
-        List<RunRecord> runRecords = runRecordRepository.findByUserIdWithDate(user.get().getId(), runRecordDate.getDate());
+        List<RunRecord> runRecords = runRecordRepository.findByUserIdWithDate(user.get().getId(), lc);
         List<RunRecordResponseDTO> result = new ArrayList<>();
 
         for (RunRecord runRecord : runRecords) {

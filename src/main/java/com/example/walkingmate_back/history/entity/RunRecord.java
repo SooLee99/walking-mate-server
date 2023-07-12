@@ -4,9 +4,7 @@ import com.example.walkingmate_back.main.entity.BaseTimeEntity;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -18,6 +16,9 @@ import java.util.Date;
 public class RunRecord extends BaseTimeEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId") // 외래키 설정
     private UserEntity user;  // 사용자 id
@@ -32,4 +33,11 @@ public class RunRecord extends BaseTimeEntity {
 
     @Column
     private double distance;  // 거리
+
+    public RunRecord(UserEntity userEntity, LocalDate now, int step, double distance) {
+        this.user=userEntity;
+        this.date=now;
+        this.step=step;
+        this.distance=distance;
+    }
 }
