@@ -46,4 +46,10 @@ public class Team {
 
     @OneToMany(mappedBy = "team", orphanRemoval = true)
     private List<BattleRival> battleRivals;
+
+    public Team(String name, int peopleNum, String state) {
+        this.name=name;
+        this.peopleNum=peopleNum;
+        this.state=state;
+    }
 }
