@@ -1,6 +1,8 @@
 package com.example.walkingmate_back.team.service;
 
+import com.example.walkingmate_back.team.dto.TeamMemberResponseDTO;
 import com.example.walkingmate_back.team.dto.TeamRequestDTO;
+import com.example.walkingmate_back.team.dto.TeamResponseDTO;
 import com.example.walkingmate_back.team.entity.Team;
 import com.example.walkingmate_back.team.entity.TeamMember;
 import com.example.walkingmate_back.team.repository.TeamMemberRepository;
@@ -10,10 +12,13 @@ import com.example.walkingmate_back.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
- *    팀 생성, 삭제
+ *    팀 생성, 삭제, 단일 조회, 전체 조회
  *    - 서비스 로직
  *
  *   @version          1.00 / 2023.07.13
@@ -38,12 +43,15 @@ public class TeamService {
 
         if(user != null) {  // 사용자 확인
             if(user.get().getTeam() == null) {  // 기존 팀이 없는 경우
-                Team team = new Team(teamRequestDTO.getName(), teamRequestDTO.getPeopleNum(), teamRequestDTO.getState());
+                Team team = new Team(teamRequestDTO.getName(), teamRequestDTO.getPeopleNum(), "모집");
                 teamRepository.save(team);
 
                 // 팀 가입 - 리더
                 TeamMember teamMember = new TeamMember(user.get(), team, true);
                 teamMemberRepository.save(teamMember);
+
+                // 사용자 팀 아이디 추가
+
                 return 1;
             } else {
                 return -1; // 기존 팀이 이미 있으므로 생성 불가
@@ -69,5 +77,63 @@ public class TeamService {
         // 팀에 있는 멤버 모두 삭제
 
         return 1;
+    }
+
+    /**
+     * 팀 확인 후 단일 팀 조회
+     * - 전우진 2023.07.13
+     */
+    public Optional<TeamResponseDTO> getTeam(Long teamId) {
+        Optional<Team> result = teamRepository.findById(teamId);
+
+        if(result.isPresent()) {
+            Team team = result.get();
+
+            // 멤버
+            List<TeamMember> teamMembers = team.getTeamMembers();
+
+            List<TeamMemberResponseDTO> teamMemberResponseDTOList = teamMembers.stream()
+                    .map(teamMember -> new TeamMemberResponseDTO(teamMember.getUser().getId(), teamMember.getTeam().getId(), teamMember.isTeamLeader()))
+                    .collect(Collectors.toList());
+
+            return Optional.of(new TeamResponseDTO(
+                    team.getId(),
+                    team.getName(),
+                    team.getPeopleNum(),
+                    team.getState(),
+                    teamMemberResponseDTOList
+            ));
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * 팀 확인 후 팀 전체 조회
+     * - 전우진 2023.07.13
+     */
+    public List<TeamResponseDTO> getAllTeam() {
+
+        List<Team> teams = teamRepository.findAll();
+        List<TeamResponseDTO> result = new ArrayList<>();
+
+        for(Team team : teams) {
+
+            List<TeamMemberResponseDTO> teamMemberResponseDTOList = team.getTeamMembers().stream()
+                    .map(teamMember -> new TeamMemberResponseDTO(teamMember.getUser().getId(), teamMember.getTeam().getId(), teamMember.isTeamLeader()))
+                    .collect(Collectors.toList());
+
+            TeamResponseDTO teamResponseDTO = new TeamResponseDTO(
+                    team.getId(),
+                    team.getName(),
+                    team.getPeopleNum(),
+                    team.getState(),
+                    teamMemberResponseDTOList
+            );
+
+            result.add(teamResponseDTO);
+
+        }
+        return result;
     }
 }

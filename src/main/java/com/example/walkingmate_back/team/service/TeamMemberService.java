@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 /**
- *    멤버 가입
+ *    멤버 가입, 나가기(삭제)
  *    - 서비스 로직
  *
  *   @version          1.00 / 2023.07.13
@@ -57,5 +57,22 @@ public class TeamMemberService {
         }
     }
 
+    /**
+     * 팀 확인 후 멤버 나가기(삭제)
+     * - 전우진 2023.07.13
+     */
+    public int deleteTeamMember(Long teamId, String userId) {
+        Optional<Team> team = teamRepository.findById(teamId);
 
+        if(team == null) {
+            return -1;
+        }
+
+        TeamMember teamMember = teamMemberRepository.findByUserId(userId);
+        teamMemberRepository.delete(teamMember);
+
+        // 사용자 팀 아이디 null 값으로 업데이트
+
+        return 1;
+    }
 }
