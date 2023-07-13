@@ -4,9 +4,7 @@ import com.example.walkingmate_back.history.dto.CheckListRequestDTO;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -26,7 +24,7 @@ public class CheckList {
     private UserEntity user;  // 사용자 id
 
     @Column
-    private LocalDateTime date;  // 작성 날짜
+    private LocalDate date;  // 작성 날짜
 
     @Column
     private boolean checked;  // 체크 여부
@@ -34,7 +32,7 @@ public class CheckList {
     @Column
     private String content;  // 내용
 
-    public CheckList(UserEntity userEntity, LocalDateTime date, String content, boolean checked) {
+    public CheckList(UserEntity userEntity, LocalDate date, String content, boolean checked) {
         this.user=userEntity;
         this.date=date;
         this.content=content;
@@ -47,7 +45,7 @@ public class CheckList {
 
     }
 
-    public CheckList update(CheckListRequestDTO checkListRequestDTO, LocalDateTime date) {
+    public CheckList update(CheckListRequestDTO checkListRequestDTO, LocalDate date) {
         this.content=checkListRequestDTO.getContent();
         this.date=date;
         return this;

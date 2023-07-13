@@ -1,6 +1,7 @@
 package com.example.walkingmate_back.history.service;
 
 import com.example.walkingmate_back.history.dto.CheckListRequestDTO;
+import com.example.walkingmate_back.history.dto.CheckListResponseDTO;
 import com.example.walkingmate_back.history.entity.CheckList;
 import com.example.walkingmate_back.history.repository.CheckListRepository;
 import com.example.walkingmate_back.user.entity.UserEntity;
@@ -8,14 +9,17 @@ import com.example.walkingmate_back.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
- *    체크리스트 등록, 수정, 삭제, 체크 및 해제
+ *    체크리스트 등록, 수정, 삭제, 체크 및 해제, 조회
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.12
+ *   @version          1.00 / 2023.07.13
  *   @author           전우진
  */
 
@@ -33,7 +37,7 @@ public class CheckListService {
      */
     public int saveCheckList(CheckListRequestDTO checkListRequestDTO) {
         Optional<UserEntity> user = userRepository.findById(checkListRequestDTO.getUserId());
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate now = LocalDate.now();
 
         if(user != null) {
             CheckList checkList = new CheckList(user.get(), now, checkListRequestDTO.getContent(), false);
@@ -52,7 +56,7 @@ public class CheckListService {
      */
     public int updateCheckList(Long listId, CheckListRequestDTO checkListRequestDTO) {
         Optional<CheckList> result = checkListRepository.findById(listId);
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate now = LocalDate.now();
 
         if(result == null) {
             return -1;
@@ -108,6 +112,31 @@ public class CheckListService {
         }
         checkListRepository.delete(checkList);
         return 1;
+
+    }
+
+    /**
+     * 체크리스트 탐색 후 체크리스트 조회
+     * - 전우진 2023.07.13
+     */
+    public List<CheckListResponseDTO> getDateCheckList(String id, String date) {
+        Optional<UserEntity> user = userRepository.findById(id);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDate lc = LocalDate.parse(date, formatter);
+
+        List<CheckList> checkLists = checkListRepository.findByUserIdWithDate(user.get().getId(), lc);
+        List<CheckListResponseDTO> result = new ArrayList<>();
+
+        for (CheckList checkList : checkLists) {
+            CheckListResponseDTO checkListResponseDTO = new CheckListResponseDTO(
+                    checkList.getUser().getId(),
+                    checkList.getDate().toString(),
+                    checkList.isChecked(),
+                    checkList.getContent()
+            );
+            result.add(checkListResponseDTO);
+        }
+        return result;
 
     }
 }
