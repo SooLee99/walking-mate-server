@@ -1,9 +1,7 @@
 package com.example.walkingmate_back.team.dto;
 
-import com.example.walkingmate_back.board.dto.BoardCommentResponseDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.List;
 

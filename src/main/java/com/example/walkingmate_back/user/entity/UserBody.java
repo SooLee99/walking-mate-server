@@ -1,5 +1,6 @@
 package com.example.walkingmate_back.user.entity;
 
+import com.example.walkingmate_back.user.dto.UserBodyUpdateDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,4 +28,10 @@ public class UserBody {
     @Column
     private int weight;  // 사용자 몸무게
 
+    // 신체정보 수정
+    public UserBody update(UserBodyUpdateDTO userBodyUpdateDTO) {
+        this.height=userBodyUpdateDTO.getHeight();
+        this.weight=userBodyUpdateDTO.getWeight();
+        return this;
+    }
 }
