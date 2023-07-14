@@ -43,7 +43,7 @@ public class UserEntity {
     private Team team;  // 사용자의 팀 번호
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private UserBank userBank;
+    private UserRank userRank;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private UserBody userBody;

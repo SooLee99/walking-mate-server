@@ -1,8 +1,6 @@
 package com.example.walkingmate_back.team.entity;
 
 import com.example.walkingmate_back.battle.entity.BattleRival;
-import com.example.walkingmate_back.history.entity.RunRecord;
-import com.example.walkingmate_back.user.entity.UserBank;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,7 +34,7 @@ public class Team {
     private UserEntity user;
 
     @OneToOne(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private TeamBank teamBank;
+    private TeamRank teamRank;
 
     @OneToMany(mappedBy = "team", orphanRemoval = true)
     private List<TeamMember> teamMembers;

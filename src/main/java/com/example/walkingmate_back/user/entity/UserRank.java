@@ -10,8 +10,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-@Table(name = "userBank")
-public class UserBank {
+@Table(name = "userRank")
+public class UserRank {
 
     @Id
     @Column(name = "userId")
