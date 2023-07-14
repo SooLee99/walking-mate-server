@@ -38,10 +38,19 @@ public class RunRecordController {
 
     // 운동 기록 조회 - 날짜별
     @GetMapping({"/list/{date}"})
-    public List<RunRecordResponseDTO> listBoard(@PathVariable String date) {
+    public List<RunRecordResponseDTO> listDateRun(@PathVariable String date) {
         String nickName = "aaa";
         Optional<UserEntity> user = userRepository.findById(nickName);
 
         return runRecordService.getDateRun(user.get().getId(), date);
+    }
+
+    // 운동 기록 조회
+    @GetMapping({"/list"})
+    public List<RunRecordResponseDTO> listAllRun() {
+        String nickName = "aaa";
+        Optional<UserEntity> user = userRepository.findById(nickName);
+
+        return runRecordService.getAllRun(user.get().getId());
     }
 }

@@ -75,4 +75,28 @@ public class RunRecordService {
         }
         return result;
     }
+
+    /**
+     * 사용자 확인 후 운동 기록 조회
+     * - 전우진 2023.07.14
+     */
+    public List<RunRecordResponseDTO> getAllRun(String id) {
+        Optional<UserEntity> user = userRepository.findById(id);
+
+        List<RunRecord> runRecords = runRecordRepository.findByUserId(user.get().getId());
+        List<RunRecordResponseDTO> result = new ArrayList<>();
+
+        for (RunRecord runRecord : runRecords) {
+            RunRecordResponseDTO runRecordResponseDTO = new RunRecordResponseDTO(
+                    runRecord.getUser().getId(),
+                    runRecord.getDate().toString(),
+                    runRecord.getStep(),
+                    runRecord.getDistance(),
+                    runRecord.getRegTime(),
+                    runRecord.getUpdateTime()
+            );
+            result.add(runRecordResponseDTO);
+        }
+        return result;
+    }
 }

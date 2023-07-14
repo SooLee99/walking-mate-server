@@ -13,4 +13,6 @@ public interface RunRecordRepository extends JpaRepository<RunRecord, Long> {
     @Query("select d from RunRecord d where d.user.id LIKE %:userId% and d.date = :date order by d.id")
     List<RunRecord> findByUserIdWithDate(@Param("userId")String id, @Param("date") LocalDate date);
 
+    // 사용자 아이디로 기록 조회
+    List<RunRecord> findByUserId(String id);
 }
