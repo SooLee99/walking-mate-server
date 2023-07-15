@@ -18,12 +18,21 @@ public class TeamResponseDTO {
     private String state;  // 팀 경쟁 상태
 
     List<TeamMemberResponseDTO> teamMembers = new ArrayList<>(); // 댓글 리스트
+    TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO();
 
     public TeamResponseDTO(Long id, String name, int peopleNum, String state, List<TeamMemberResponseDTO> teamMemberResponseDTOList) {
         this.id=id;
         this.name=name;
         this.peopleNum=peopleNum;
         this.state=state;
+        this.teamMembers=teamMemberResponseDTOList;
+    }
+    public TeamResponseDTO(Long id, String name, int peopleNum, String state, TeamRankResponseDTO teamRankResponseDTO, List<TeamMemberResponseDTO> teamMemberResponseDTOList) {
+        this.id=id;
+        this.name=name;
+        this.peopleNum=peopleNum;
+        this.state=state;
+        this.teamRankResponseDTO=teamRankResponseDTO;
         this.teamMembers=teamMemberResponseDTOList;
     }
 }

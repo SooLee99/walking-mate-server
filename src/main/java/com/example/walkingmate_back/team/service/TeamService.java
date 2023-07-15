@@ -1,11 +1,14 @@
 package com.example.walkingmate_back.team.service;
 
 import com.example.walkingmate_back.team.dto.TeamMemberResponseDTO;
+import com.example.walkingmate_back.team.dto.TeamRankResponseDTO;
 import com.example.walkingmate_back.team.dto.TeamRequestDTO;
 import com.example.walkingmate_back.team.dto.TeamResponseDTO;
 import com.example.walkingmate_back.team.entity.Team;
 import com.example.walkingmate_back.team.entity.TeamMember;
+import com.example.walkingmate_back.team.entity.TeamRank;
 import com.example.walkingmate_back.team.repository.TeamMemberRepository;
+import com.example.walkingmate_back.team.repository.TeamRankRepository;
 import com.example.walkingmate_back.team.repository.TeamRepository;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.repository.UserRepository;
@@ -18,10 +21,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- *    팀 생성, 삭제, 단일 조회, 전체 조회
+ *    팀 생성, 삭제, 단일 조회, 전체 조회, 가입된 팀 정보 조회
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.13
+ *   @version          1.00 / 2023.07.15
  *   @author           전우진
  */
 
@@ -33,6 +36,7 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
     private final TeamMemberRepository teamMemberRepository;
+    private final TeamRankRepository teamRankRepository;
 
     /**
      * 사용자 확인 후 팀 생성
@@ -135,5 +139,43 @@ public class TeamService {
 
         }
         return result;
+    }
+
+    /**
+     * 가입된 팀 정보 조회 - 랭킹 포함
+     * - 전우진 2023.07.15
+     */
+    public Optional<TeamResponseDTO> getUserTeam(String userId) {
+        Optional<UserEntity> user = userRepository.findById(userId);
+        Long teamId = user.get().getTeam().getId();
+
+        Optional<Team> result = teamRepository.findById(teamId);
+
+        if(result.isPresent()) {
+            Team team = result.get();
+
+            // 멤버
+            List<TeamMember> teamMembers = team.getTeamMembers();
+
+            List<TeamMemberResponseDTO> teamMemberResponseDTOList = teamMembers.stream()
+                    .map(teamMember -> new TeamMemberResponseDTO(teamMember.getUser().getId(), teamMember.getTeam().getId(), teamMember.isTeamLeader()))
+                    .collect(Collectors.toList());
+
+            // 랭킹
+            TeamRank teamRanks = team.getTeamRank();
+
+            TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO(teamRanks.getTeam().getId(), teamRanks.getCoin(), teamRanks.getTear());
+
+            return Optional.of(new TeamResponseDTO(
+                    team.getId(),
+                    team.getName(),
+                    team.getPeopleNum(),
+                    team.getState(),
+                    teamRankResponseDTO,
+                    teamMemberResponseDTOList
+            ));
+        } else {
+            return Optional.empty();
+        }
     }
 }

@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- *    팀 생성, 삭제, 단일 조회, 전체 조회
+ *    팀 생성, 삭제, 단일 조회, 전체 조회, 가입된 팀 정보 조회
  *
- *   @version          1.00 / 2023.07.13
+ *   @version          1.00 / 2023.07.15
  *   @author           전우진
  */
 
@@ -50,5 +50,13 @@ public class TeamController {
     @GetMapping("/list")
     public List<TeamResponseDTO> listTeam() {
         return teamService.getAllTeam();
+    }
+
+    // 가입된 팀 정보 조회 - 랭킹 포함
+    @GetMapping("/list/userTeam")
+    public Optional<TeamResponseDTO> SpecificationUserTeam() {
+        String userId = "aaa";
+
+        return teamService.getUserTeam(userId);
     }
 }
