@@ -2,9 +2,7 @@ package com.example.walkingmate_back.battle.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -22,11 +20,12 @@ public class Battle {
     private Long id; // 대결 번호 (자동 증가)
 
     @Column
-    private Date startDate;  // 시작 날짜
+    private LocalDate startDate;  // 시작 날짜
 
     @Column
     private int totalStep;  // 대결 걸음 수
 
     @OneToMany(mappedBy = "battle", orphanRemoval = true)
     private List<BattleRival> battleRivals;
+
 }

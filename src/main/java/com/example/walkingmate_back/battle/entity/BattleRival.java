@@ -26,4 +26,9 @@ public class BattleRival {
 
     @Column
     private int step;  // 걸음 수
+
+    public BattleRival(Battle battle, Team team) {
+        this.battle=battle;
+        this.team=team;
+    }
 }

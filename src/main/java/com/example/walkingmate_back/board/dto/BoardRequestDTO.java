@@ -16,8 +16,7 @@ public class BoardRequestDTO {
     @NotBlank(message = "내용은 필수 항목입니다.")
     private String content;  // 내용
 
-    public BoardRequestDTO(Long id, String userId, String title, String content) {
-        this.id=id;
+    public BoardRequestDTO(String userId, String title, String content) {
         this.userId=userId;
         this.title=title;
         this.content=content;
