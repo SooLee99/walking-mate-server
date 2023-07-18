@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CheckListResponseDTO {
 
+    private Long listId;  // 체크리스트 id
+
     private String userId;  // 사용자 id
 
     private String date;  // 작성 날짜
@@ -15,10 +17,12 @@ public class CheckListResponseDTO {
 
     private String content;  // 내용
 
-    public CheckListResponseDTO(String userId, String date, boolean checked, String content) {
+    public CheckListResponseDTO(Long listId, String userId, String date, boolean checked, String content) {
+        this.listId=listId;
         this.userId=userId;
         this.date=date;
         this.checked=checked;
         this.content=content;
     }
+
 }

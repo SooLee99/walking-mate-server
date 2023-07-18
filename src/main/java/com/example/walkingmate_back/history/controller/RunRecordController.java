@@ -1,14 +1,13 @@
 package com.example.walkingmate_back.history.controller;
 
 import com.example.walkingmate_back.history.dto.RunRecordRequestDTO;
-import com.example.walkingmate_back.history.dto.RunRecordResponseDTO;
 import com.example.walkingmate_back.history.service.RunRecordService;
+import com.example.walkingmate_back.main.entity.Message;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.repository.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
-import java.util.List;
-import java.util.Optional;
 
 /**
  *    운동 기록 등록, 조회 - 날짜별
@@ -32,25 +31,25 @@ public class RunRecordController {
 
     // 운동 기록 추가
     @PostMapping("/record")
-    public int saveRun(@RequestBody RunRecordRequestDTO runRecordRequestDTO) throws ParseException {
+    public ResponseEntity<Message> saveRun(@RequestBody RunRecordRequestDTO runRecordRequestDTO) throws ParseException {
         return runRecordService.saveRun(runRecordRequestDTO);
     }
 
     // 운동 기록 조회 - 날짜별
     @GetMapping({"/list/{date}"})
-    public List<RunRecordResponseDTO> listDateRun(@PathVariable String date) {
+    public ResponseEntity<Message> listDateRun(@PathVariable String date) {
         String nickName = "aaa";
-        Optional<UserEntity> user = userRepository.findById(nickName);
+        UserEntity user = userRepository.findById(nickName).orElse(null);
 
-        return runRecordService.getDateRun(user.get().getId(), date);
+        return runRecordService.getDateRun(user.getId(), date);
     }
 
     // 운동 기록 조회
     @GetMapping({"/list"})
-    public List<RunRecordResponseDTO> listAllRun() {
+    public ResponseEntity<Message> listAllRun() {
         String nickName = "aaa";
-        Optional<UserEntity> user = userRepository.findById(nickName);
+        UserEntity user = userRepository.findById(nickName).orElse(null);
 
-        return runRecordService.getAllRun(user.get().getId());
+        return runRecordService.getAllRun(user.getId());
     }
 }

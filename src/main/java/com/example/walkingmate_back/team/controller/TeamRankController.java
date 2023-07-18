@@ -1,11 +1,11 @@
 package com.example.walkingmate_back.team.controller;
 
-import com.example.walkingmate_back.team.dto.TeamRankResponseDTO;
+import com.example.walkingmate_back.main.entity.Message;
 import com.example.walkingmate_back.team.service.TeamRankService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
 
 /**
  *    팀 전체 랭킹 조회
@@ -27,7 +27,7 @@ public class TeamRankController {
 
     // 전체 랭킹 조회
     @GetMapping("/list")
-    public List<TeamRankResponseDTO> SpecificationTeamRank() {
+    public ResponseEntity<Message> SpecificationTeamRank() {
         return teamRankService.getAllRank();
     }
 

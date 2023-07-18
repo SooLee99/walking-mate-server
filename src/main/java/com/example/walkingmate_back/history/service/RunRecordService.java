@@ -4,9 +4,12 @@ import com.example.walkingmate_back.history.dto.RunRecordRequestDTO;
 import com.example.walkingmate_back.history.dto.RunRecordResponseDTO;
 import com.example.walkingmate_back.history.entity.RunRecord;
 import com.example.walkingmate_back.history.repository.RunRecordRepository;
+import com.example.walkingmate_back.main.entity.Message;
+import com.example.walkingmate_back.main.entity.StatusEnum;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
@@ -14,7 +17,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  *    운동 기록 등록, 조회 - 날짜별
@@ -36,16 +38,23 @@ public class RunRecordService {
      * 사용자 확인 후 운동 기록 저장
      * - 전우진 2023.07.12
      */
-    public int saveRun(RunRecordRequestDTO runRecordRequestDTO) throws ParseException {
-        Optional<UserEntity> user = userRepository.findById(runRecordRequestDTO.getUserId());
+    public ResponseEntity<Message> saveRun(RunRecordRequestDTO runRecordRequestDTO) throws ParseException {
+        UserEntity user = userRepository.findById(runRecordRequestDTO.getUserId()).orElse(null);
         LocalDate now = LocalDate.now();
 
-        if(user != null) {
-            RunRecord runRecord = new RunRecord(user.get(), now, runRecordRequestDTO.getStep(), runRecordRequestDTO.getDistance());
+        if(user != null) {  // 사용자가 존재하는 경우
+            RunRecord runRecord = new RunRecord(user, now, runRecordRequestDTO.getStep(), runRecordRequestDTO.getDistance());
             runRecordRepository.save(runRecord);
-            return 1;
+
+            Message message = new Message();
+            message.setStatus(StatusEnum.OK);
+            message.setMessage("성공 코드");
+            message.setData("운동 기록 저장 성공");
+
+            return ResponseEntity.ok().body(message);
         } else {
-            return -1;
+            // 사용자가 존재하지 않는 경우
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -53,12 +62,12 @@ public class RunRecordService {
      * 사용자 확인 후 날짜별 운동 기록 조회
      * - 전우진 2023.07.12
      */
-    public List<RunRecordResponseDTO> getDateRun(String id, String date) {
-        Optional<UserEntity> user = userRepository.findById(id);
+    public ResponseEntity<Message> getDateRun(String id, String date) {
+        UserEntity user = userRepository.findById(id).orElse(null);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         LocalDate lc = LocalDate.parse(date, formatter);
 
-        List<RunRecord> runRecords = runRecordRepository.findByUserIdWithDate(user.get().getId(), lc);
+        List<RunRecord> runRecords = runRecordRepository.findByUserIdWithDate(user.getId(), lc);
         List<RunRecordResponseDTO> result = new ArrayList<>();
 
         for (RunRecord runRecord : runRecords) {
@@ -72,17 +81,23 @@ public class RunRecordService {
             );
             result.add(runRecordResponseDTO);
         }
-        return result;
+
+        Message message = new Message();
+        message.setStatus(StatusEnum.OK);
+        message.setMessage("성공 코드");
+        message.setData(result);
+
+        return ResponseEntity.ok().body(message);
     }
 
     /**
      * 사용자 확인 후 운동 기록 조회
      * - 전우진 2023.07.14
      */
-    public List<RunRecordResponseDTO> getAllRun(String id) {
-        Optional<UserEntity> user = userRepository.findById(id);
+    public ResponseEntity<Message> getAllRun(String id) {
+        UserEntity user = userRepository.findById(id).orElse(null);
 
-        List<RunRecord> runRecords = runRecordRepository.findByUserId(user.get().getId());
+        List<RunRecord> runRecords = runRecordRepository.findByUserId(user.getId());
         List<RunRecordResponseDTO> result = new ArrayList<>();
 
         for (RunRecord runRecord : runRecords) {
@@ -96,6 +111,12 @@ public class RunRecordService {
             );
             result.add(runRecordResponseDTO);
         }
-        return result;
+
+        Message message = new Message();
+        message.setStatus(StatusEnum.OK);
+        message.setMessage("성공 코드");
+        message.setData(result);
+
+        return ResponseEntity.ok().body(message);
     }
 }

@@ -1,5 +1,7 @@
 package com.example.walkingmate_back.team.service;
 
+import com.example.walkingmate_back.main.entity.Message;
+import com.example.walkingmate_back.main.entity.StatusEnum;
 import com.example.walkingmate_back.team.dto.TeamMemberRequestDTO;
 import com.example.walkingmate_back.team.entity.Team;
 import com.example.walkingmate_back.team.entity.TeamMember;
@@ -8,15 +10,15 @@ import com.example.walkingmate_back.team.repository.TeamRepository;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
 
 /**
  *    멤버 가입, 나가기(삭제)
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.13
+ *   @version          1.00 / 2023.07.18
  *   @author           전우진
  */
 
@@ -33,27 +35,35 @@ public class TeamMemberService {
      * 사용자, 팀 여부, 팀 확인 후 멤버 가입
      * - 전우진 2023.07.13
      */
-    public int saveMember(Long teamId, TeamMemberRequestDTO teamMemberRequestDTO) {
-        Optional<UserEntity> user = userRepository.findById(teamMemberRequestDTO.getUserId());
+    public ResponseEntity<Message> saveMember(Long teamId, TeamMemberRequestDTO teamMemberRequestDTO) {
+        UserEntity user = userRepository.findById(teamMemberRequestDTO.getUserId()).orElse(null);
 
-        if(user != null) { //사용자 확인
-            if(user.get().getTeam() == null) { // 기존 팀이 없는 경우
-                Optional<Team> team = teamRepository.findById(teamId);
-                if(team != null) { // 팀 존재 확인
-                    TeamMember teamMember = new TeamMember(user.get(), team.get(), false);
+        if(user != null) { //사용자가 존재하는 경우
+            if(user.getTeam() == null) { // 기존 팀이 없는 경우
+                Team team = teamRepository.findById(teamId).orElse(null);
+                if(team != null) { // 팀이 존재하는 경우
+                    TeamMember teamMember = new TeamMember(user, team, false);
                     teamMemberRepository.save(teamMember);
 
                     // 사용자 팀 아이디 업데이트 해줘야함 - 팀 아이디 추가
 
-                    return 1;
-                } else { // 팀 존재하지 않을 경우
-                    return -1;
+                    Message message = new Message();
+                    message.setStatus(StatusEnum.OK);
+                    message.setMessage("성공 코드");
+                    message.setData("멤버 가입 성공");
+
+                    return ResponseEntity.ok().body(message);
+                } else {
+                    // 팀이 존재하지 않을 경우
+                    return ResponseEntity.notFound().build();
                 }
             } else {
-                return -2; // 기존 팀 있음
+                // 기존 팀이 있는 경우
+                return ResponseEntity.notFound().build();
             }
         } else {
-            return -3; // 사용자 확인 불가
+            // 사용자가 존재하지 않는 경우
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -61,11 +71,12 @@ public class TeamMemberService {
      * 팀 확인 후 멤버 나가기(삭제)
      * - 전우진 2023.07.13
      */
-    public int deleteTeamMember(Long teamId, String userId) {
-        Optional<Team> team = teamRepository.findById(teamId);
+    public ResponseEntity<Message> deleteTeamMember(Long teamId, String userId) {
+        Team team = teamRepository.findById(teamId).orElse(null);
 
         if(team == null) {
-            return -1;
+            // 팀이 존재하지 않을 경우
+            return ResponseEntity.notFound().build();
         }
 
         TeamMember teamMember = teamMemberRepository.findByUserId(userId);
@@ -73,6 +84,11 @@ public class TeamMemberService {
 
         // 사용자 팀 아이디 null 값으로 업데이트
 
-        return 1;
+        Message message = new Message();
+        message.setStatus(StatusEnum.OK);
+        message.setMessage("성공 코드");
+        message.setData("멤버 삭제 성공");
+
+        return ResponseEntity.ok().body(message);
     }
 }

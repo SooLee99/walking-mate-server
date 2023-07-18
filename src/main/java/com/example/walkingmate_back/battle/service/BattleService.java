@@ -6,23 +6,25 @@ import com.example.walkingmate_back.battle.entity.Battle;
 import com.example.walkingmate_back.battle.entity.BattleRival;
 import com.example.walkingmate_back.battle.repository.BattleRepository;
 import com.example.walkingmate_back.battle.repository.BattleRivalRepository;
+import com.example.walkingmate_back.main.entity.Message;
+import com.example.walkingmate_back.main.entity.StatusEnum;
 import com.example.walkingmate_back.team.entity.TeamMember;
 import com.example.walkingmate_back.team.repository.TeamMemberRepository;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  *    대결 생성, 삭제, 단일 조회, 전체 조회
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.17
+ *   @version          1.00 / 2023.07.18
  *   @author           전우진
  */
 
@@ -40,25 +42,35 @@ public class BattleService {
      * 사용자, 팀 리더 확인 후 대결 생성
      * - 전우진 2023.07.17
      */
-    public int saveBattle(String userId) {
+    public ResponseEntity<Message> saveBattle(String userId) {
         UserEntity user = userRepository.findById(userId).orElse(null);
 
-        if(user.getTeam().getId() != null) {
+        if(user.getTeam().getId() != null) { // 팀 소속이 있는 경우
             TeamMember teamMember = teamMemberRepository.findByUserId(userId);
 
-            if(teamMember.isTeamLeader() == true) {
+            if(teamMember.isTeamLeader() == true) {  // 팀장인 경우
+
+                // 팀이 배틀 라이벌에 소속되지 않은 경우
+
                 Battle battle = new Battle();
                 battleRepository.save(battle);
 
                 BattleRival battleRival = new BattleRival(battle, teamMember.getTeam());
                 battleRivalRepository.save(battleRival);
 
-                return 1;
-            } else { // 팀장이 아닌 경우
-                return -2;
+                Message message = new Message();
+                message.setStatus(StatusEnum.OK);
+                message.setMessage("성공 코드");
+                message.setData("대결 저장 성공");
+
+                return ResponseEntity.ok().body(message);
+            } else {
+                // 팀장이 아닌 경우
+                return ResponseEntity.notFound().build();
             }
-        } else { // 팀 소속이 없는 경우
-            return -1;
+        } else {
+            // 팀 소속이 없는 경우
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -66,24 +78,31 @@ public class BattleService {
      * 대결 확인 후 대결 삭제
      * - 전우진 2023.07.17
      */
-    public int deleteBattle(Long battleId) {
+    public ResponseEntity<Message> deleteBattle(Long battleId) {
         Battle battle = battleRepository.findById(battleId).orElse(null);
+
         if(battle == null) {
-            return -1;
+            // 대결이 존재하지 않는 경우
+            return ResponseEntity.notFound().build();
         }
 
         // 대결상대 모두 삭제
 
         battleRepository.delete(battle);
-        return 1;
+
+        Message message = new Message();
+        message.setStatus(StatusEnum.OK);
+        message.setMessage("성공 코드");
+        message.setData("대결 삭제 성공");
+
+        return ResponseEntity.ok().body(message);
     }
 
     /**
      * 대결 확인 후 대결 전체 조회
      * - 전우진 2023.07.17
      */
-    public List<BattleResponseDTO> getAllBattle() {
-
+    public ResponseEntity<Message> getAllBattle() {
         List<Battle> battles = battleRepository.findAll();
         List<BattleResponseDTO> result = new ArrayList<>();
 
@@ -101,7 +120,13 @@ public class BattleService {
             );
             result.add(battleResponseDTO);
         }
-        return result;
+
+        Message message = new Message();
+        message.setStatus(StatusEnum.OK);
+        message.setMessage("성공 코드");
+        message.setData(result);
+
+        return ResponseEntity.ok().body(message);
     }
 
     /**
@@ -109,11 +134,10 @@ public class BattleService {
      * - 전우진 2023.07.17
      */
 
-    public Optional<BattleResponseDTO> getBattle(Long battleId) {
-        Optional<Battle> result = battleRepository.findById(battleId);
+    public ResponseEntity<Message> getBattle(Long battleId) {
+        Battle battle = battleRepository.findById(battleId).orElse(null);
 
-        if(result != null) {
-            Battle battle = result.get();
+        if(battle != null) {  // 대결이 존재하는 경우
 
             List<BattleRival> battleRivals = battle.getBattleRivals();
 
@@ -121,14 +145,22 @@ public class BattleService {
                     .map(battleRival -> new BattleRivalResponseDTO(battleRival.getTeam().getId(), battleRival.getStep()))
                     .collect(Collectors.toList());
 
-            return Optional.of(new BattleResponseDTO(
+            BattleResponseDTO battleResponseDTO = new BattleResponseDTO(
                     battle.getId(),
                     battle.getStartDate(),
                     battle.getTotalStep(),
                     battleRivalResponseDTOList
-            ));
+            );
+
+            Message message = new Message();
+            message.setStatus(StatusEnum.OK);
+            message.setMessage("성공 코드");
+            message.setData(battleResponseDTO);
+
+            return ResponseEntity.ok().body(message);
         } else {
-            return Optional.empty();
+            // 대결이 존재하지 않는 경우
+            return ResponseEntity.notFound().build();
         }
     }
 }
