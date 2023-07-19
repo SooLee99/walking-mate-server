@@ -1,6 +1,7 @@
 package com.example.walkingmate_back.battle.controller;
 
 import com.example.walkingmate_back.battle.dto.BattleRequestDTO;
+import com.example.walkingmate_back.battle.dto.BattleSearchDTO;
 import com.example.walkingmate_back.battle.service.BattleService;
 import com.example.walkingmate_back.main.entity.Message;
 import org.springframework.http.ResponseEntity;
@@ -52,5 +53,10 @@ public class BattleController {
         return battleService.getBattle(battleId);
     }
 
+//    // 대결 검색 조회
+//    @GetMapping("/list/search")
+//    public ResponseEntity<Message> listSearchBatlle(@RequestBody BattleSearchDTO battleSearchDTO) {
+//        return battleService.getSearchBattle(battleSearchDTO);
+//    }
 
 }

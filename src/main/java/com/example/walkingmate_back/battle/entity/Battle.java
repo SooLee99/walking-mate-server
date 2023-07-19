@@ -1,5 +1,6 @@
 package com.example.walkingmate_back.battle.entity;
 
+import com.example.walkingmate_back.battle.dto.BattleRivalUpdateDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
@@ -30,5 +31,9 @@ public class Battle {
 
     public Battle(LocalDate startDate) {
         this.startDate = startDate;
+    }
+
+    public void update(BattleRivalUpdateDTO battleRivalUpdateDTO) {
+        this.totalStep=totalStep+battleRivalUpdateDTO.getStep();
     }
 }

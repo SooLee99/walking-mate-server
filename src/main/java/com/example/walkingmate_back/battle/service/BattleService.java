@@ -3,6 +3,7 @@ package com.example.walkingmate_back.battle.service;
 import com.example.walkingmate_back.battle.dto.BattleRequestDTO;
 import com.example.walkingmate_back.battle.dto.BattleResponseDTO;
 import com.example.walkingmate_back.battle.dto.BattleRivalResponseDTO;
+import com.example.walkingmate_back.battle.dto.BattleSearchDTO;
 import com.example.walkingmate_back.battle.entity.Battle;
 import com.example.walkingmate_back.battle.entity.BattleRival;
 import com.example.walkingmate_back.battle.repository.BattleRepository;
@@ -191,6 +192,5 @@ public class BattleService {
             return ResponseEntity.notFound().build();
         }
     }
-
 
 }

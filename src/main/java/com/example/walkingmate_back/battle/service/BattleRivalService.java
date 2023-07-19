@@ -1,5 +1,6 @@
 package com.example.walkingmate_back.battle.service;
 
+import com.example.walkingmate_back.battle.dto.BattleRivalUpdateDTO;
 import com.example.walkingmate_back.battle.entity.Battle;
 import com.example.walkingmate_back.battle.entity.BattleRival;
 import com.example.walkingmate_back.battle.repository.BattleRepository;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- *    대결 라이벌 저장
+ *    대결 라이벌 저장, 걸음 수 수정
  *    - 서비스 로직
  *
  *   @version          1.00 / 2023.07.19
@@ -76,5 +77,35 @@ public class BattleRivalService {
             // 팀 소속이 없는 경우
             return ResponseEntity.notFound().build();
         }
+    }
+
+    /**
+     * 대결 확인 후 대결 라이벌 걸음 수 수정
+     * - 전우진 2023.07.19
+     */
+    public ResponseEntity<Message> updateBattleRival(BattleRivalUpdateDTO battleRivalUpdateDTO, Long battleId, String userId) {
+        UserEntity user = userRepository.findById(userId).orElse(null);
+
+        Battle battle = battleRepository.findById(battleId).orElse(null);
+
+        if(battle == null) {
+            // 대결이 존재하지 않는 경우
+            return ResponseEntity.notFound().build();
+        }
+
+        BattleRival battleRival = battleRivalRepository.findByTeamId(user.getTeam().getId());
+
+        battleRival.update(battleRivalUpdateDTO);
+        battleRivalRepository.save(battleRival);
+
+        battle.update(battleRivalUpdateDTO);
+        battleRepository.save(battle);
+
+        Message message = new Message();
+        message.setStatus(StatusEnum.OK);
+        message.setMessage("성공 코드");
+        message.setData("대결 라이벌 수정 성공");
+
+        return ResponseEntity.ok().body(message);
     }
 }
