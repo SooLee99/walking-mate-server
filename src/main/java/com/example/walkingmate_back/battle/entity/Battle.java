@@ -28,4 +28,7 @@ public class Battle {
     @OneToMany(mappedBy = "battle", orphanRemoval = true)
     private List<BattleRival> battleRivals;
 
+    public Battle(LocalDate startDate) {
+        this.startDate = startDate;
+    }
 }

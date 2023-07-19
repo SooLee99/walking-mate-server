@@ -15,12 +15,15 @@ public class BattleResponseDTO {
 
     private int totalStep;  // 대결 걸음 수
 
+    private String battleCheck;  // 대결 진행 여부
+
     private List<BattleRivalResponseDTO> battleRivals;
 
-    public BattleResponseDTO(Long id, LocalDate startDate, int totalStep, List<BattleRivalResponseDTO> battleRivalResponseDTOList) {
+    public BattleResponseDTO(Long id, LocalDate startDate, int totalStep, String battleCheck, List<BattleRivalResponseDTO> battleRivalResponseDTOList) {
         this.id=id;
         this.startDate=startDate;
         this.totalStep=totalStep;
+        this.battleCheck=battleCheck;
         this.battleRivals=battleRivalResponseDTOList;
     }
 }

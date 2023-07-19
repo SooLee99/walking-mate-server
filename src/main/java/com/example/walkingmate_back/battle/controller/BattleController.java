@@ -1,14 +1,16 @@
 package com.example.walkingmate_back.battle.controller;
 
+import com.example.walkingmate_back.battle.dto.BattleRequestDTO;
 import com.example.walkingmate_back.battle.service.BattleService;
 import com.example.walkingmate_back.main.entity.Message;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.text.ParseException;
 
 /**
  *    대결 생성, 삭제, 단일 조회, 전체 조회
  *
- *   @version          1.00 / 2023.07.18
+ *   @version          1.00 / 2023.07.19
  *   @author           전우진
  */
 
@@ -25,10 +27,10 @@ public class BattleController {
 
     // 대결 생성
     @PostMapping("/new")
-    public ResponseEntity<Message> saveBattle(){
+    public ResponseEntity<Message> saveBattle(@RequestBody BattleRequestDTO battleRequestDTO) throws ParseException {
         String userId = "ccc";
 
-        return battleService.saveBattle(userId);
+        return battleService.saveBattle(battleRequestDTO, userId);
     }
 
     // 대결 삭제
@@ -49,4 +51,6 @@ public class BattleController {
 
         return battleService.getBattle(battleId);
     }
+
+
 }

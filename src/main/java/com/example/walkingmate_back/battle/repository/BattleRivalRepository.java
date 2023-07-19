@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BattleRivalRepository extends JpaRepository<BattleRival, BattleRivalId> {
 
+    BattleRival findByTeamId(Long teamId);
 }
