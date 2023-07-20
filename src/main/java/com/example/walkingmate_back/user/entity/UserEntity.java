@@ -38,7 +38,7 @@ public class UserEntity {
     @Column
     private Date birth; // 사용자 생년월일
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teamId") // 외래키 설정
     private Team team;  // 사용자의 팀 번호
 
@@ -68,5 +68,9 @@ public class UserEntity {
 
     public void update(Team team) {
         this.team=team;
+    }
+
+    public void deleteTeamMember(Object o) {
+        this.team=null;
     }
 }

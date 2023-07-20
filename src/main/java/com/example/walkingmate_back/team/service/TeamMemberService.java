@@ -26,6 +26,7 @@ public class TeamMemberService {
 
     private final TeamMemberRepository teamMemberRepository;
     private final TeamRepository teamRepository;
+    private final UserRepository userRepository;
 
     /**
      * 사용자, 팀 여부, 팀 확인 후 멤버 가입
@@ -38,8 +39,8 @@ public class TeamMemberService {
             teamMemberRepository.save(teamMember);
 
             // 사용자 팀 아이디 업데이트 해줘야함 - 팀 아이디 추가
-           // user.update(team);
-            //userRepository.save(user);
+            user.update(team);
+            userRepository.save(user);
 
             return TeamMemberResponseDTO.builder()
                     .userId(teamMember.getUser().getId())
@@ -58,6 +59,7 @@ public class TeamMemberService {
      */
     public TeamMemberResponseDTO deleteTeamMember(Long teamId, String userId) {
         Team team = teamRepository.findById(teamId).orElse(null);
+        UserEntity user = userRepository.findById(userId).orElse(null);
 
         if(team == null) {
             // 팀이 존재하지 않을 경우
@@ -68,6 +70,8 @@ public class TeamMemberService {
         teamMemberRepository.delete(teamMember);
 
         // 사용자 팀 아이디 null 값으로 업데이트
+        user.deleteTeamMember(null);
+        userRepository.save(user);
 
         return TeamMemberResponseDTO.builder()
                 .userId(teamMember.getUser().getId())
