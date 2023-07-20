@@ -39,7 +39,7 @@ public class BattleService {
      * 사용자, 팀 리더 확인 후 대결 생성
      * - 전우진 2023.07.17
      */
-    public BattleResponseDTO saveBattle(BattleRequestDTO battleRequestDTO, UserEntity user) throws ParseException {
+    public BattleResponseDTO saveBattle(BattleRequestDTO battleRequestDTO, TeamMember teamMember) throws ParseException {
         // 문자열
         String dateStr = battleRequestDTO.getStartDate();
         // 포맷터
@@ -47,14 +47,14 @@ public class BattleService {
         // 문자열 -> Date
         LocalDate date = LocalDate.parse(dateStr, formatter);
 
-        BattleRival result = battleRivalRepository.findByTeamId(user.getTeam().getId());
+        BattleRival result = battleRivalRepository.findByTeamId(teamMember.getTeam().getId());
 
         // 팀이 대결을 생성하지 않은 경우
         if(result == null) {
             Battle battle = new Battle(date);
             battleRepository.save(battle);
 
-            BattleRival battleRival = new BattleRival(battle, user.getTeam());
+            BattleRival battleRival = new BattleRival(battle, teamMember.getTeam());
             battleRivalRepository.save(battleRival);
 
             return BattleResponseDTO.builder()

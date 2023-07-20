@@ -44,22 +44,23 @@ public class BattleRivalController {
     // 대결 라이벌 저장
     @PostMapping("/battleRival/{battleId}")
     public ResponseEntity<DefaultRes<BattleRivalResponseDTO>> saveBattleRival(@PathVariable Long battleId) {
-        String userId = "ccc";
+        String userId = "aaa";
         UserEntity user = userService.FindUser(userId); // 사용자 확인
         if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
+        TeamMember teamMember = teamMemberService.FindTeam(user.getId());
+
         // 팀 소속이 없는 경우
-        if(user.getTeam().getId() == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+        if(teamMember.getTeam().getId() == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
 
         // 팀장이 아닌 경우
-        TeamMember teamMember = teamMemberService.FindTeam(user.getId());
         if(teamMember.isTeamLeader() == false) return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_TEAMLEADER, null), HttpStatus.OK);
 
         // 대결이 존재하지 않는 경우
         Battle battle = battleService.FindBattle(battleId);
         if(battle == null)  return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_BATTLE, null), HttpStatus.OK);
 
-        BattleRivalResponseDTO battleRivalResponseDTO = battleRivalService.saveBattleRival(battle, user);
+        BattleRivalResponseDTO battleRivalResponseDTO = battleRivalService.saveBattleRival(battle, teamMember);
 
         if(battleRivalResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_BATTLERIVAL, battleRivalResponseDTO), HttpStatus.OK);
@@ -70,11 +71,12 @@ public class BattleRivalController {
     // 대결 라이벌 수정 - 걸음 수
     @PutMapping("/battleRival/{battleId}")
     public ResponseEntity<DefaultRes<BattleRivalResponseDTO>> updateBattleRival(@RequestBody BattleRivalUpdateDTO battleRivalUpdateDTO, @PathVariable Long battleId) {
-        String userId = "ccc";
+        String userId = "bbb";
         UserEntity user = userService.FindUser(userId);
         if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
-        BattleRivalResponseDTO battleRivalResponseDTO = battleRivalService.updateBattleRival(battleRivalUpdateDTO, battleId, user);
+        TeamMember teamMember = teamMemberService.FindTeam(user.getId());
+        BattleRivalResponseDTO battleRivalResponseDTO = battleRivalService.updateBattleRival(battleRivalUpdateDTO, battleId, teamMember);
 
         if(battleRivalResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.UPDATE_BATTLERIVAL, battleRivalResponseDTO), HttpStatus.OK);

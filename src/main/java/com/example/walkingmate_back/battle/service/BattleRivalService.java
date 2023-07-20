@@ -6,6 +6,7 @@ import com.example.walkingmate_back.battle.entity.Battle;
 import com.example.walkingmate_back.battle.entity.BattleRival;
 import com.example.walkingmate_back.battle.repository.BattleRepository;
 import com.example.walkingmate_back.battle.repository.BattleRivalRepository;
+import com.example.walkingmate_back.team.entity.TeamMember;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,13 +32,13 @@ public class BattleRivalService {
      * 사용자, 팀 소속, 팀장, 대결 여부 확인 후 대결 라이벌 저장
      * - 전우진 2023.07.19
      */
-    public BattleRivalResponseDTO saveBattleRival(Battle battle, UserEntity user) {
+    public BattleRivalResponseDTO saveBattleRival(Battle battle, TeamMember teamMember) {
 
-        BattleRival result = battleRivalRepository.findByTeamId(user.getTeam().getId());
+        BattleRival result = battleRivalRepository.findByTeamId(teamMember.getTeam().getId());
 
         // 팀이 대결에 참여하지 않은 경우
         if(result == null) {
-            BattleRival battleRival = new BattleRival(battle, user.getTeam());
+            BattleRival battleRival = new BattleRival(battle, teamMember.getTeam());
             battleRivalRepository.save(battleRival);
 
             return BattleRivalResponseDTO.builder()
@@ -54,7 +55,7 @@ public class BattleRivalService {
      * 대결 확인 후 대결 라이벌 걸음 수 수정
      * - 전우진 2023.07.19
      */
-    public BattleRivalResponseDTO updateBattleRival(BattleRivalUpdateDTO battleRivalUpdateDTO, Long battleId, UserEntity user) {
+    public BattleRivalResponseDTO updateBattleRival(BattleRivalUpdateDTO battleRivalUpdateDTO, Long battleId, TeamMember teamMember) {
         Battle battle = battleRepository.findById(battleId).orElse(null);
 
         if(battle == null) {
@@ -62,7 +63,7 @@ public class BattleRivalService {
             return null;
         }
 
-        BattleRival battleRival = battleRivalRepository.findByTeamId(user.getTeam().getId());
+        BattleRival battleRival = battleRivalRepository.findByTeamId(teamMember.getTeam().getId());
 
         battleRival.update(battleRivalUpdateDTO);
         battleRivalRepository.save(battleRival);

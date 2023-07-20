@@ -84,7 +84,7 @@ public class TeamController {
     // 가입된 팀 정보 조회 - 랭킹 포함
     @GetMapping("/list/userTeam")
     public ResponseEntity<DefaultRes<TeamResponseDTO>> SpecificationUserTeam() {
-        String userId = "aaa";
+        String userId = "bbb";
         TeamResponseDTO teamResponseDTO = teamService.getUserTeam(userId);
 
         if(teamResponseDTO != null)

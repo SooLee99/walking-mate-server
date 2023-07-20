@@ -42,7 +42,7 @@ public class TeamService {
      * - 전우진 2023.07.13
      */
     public TeamResponseDTO saveTeam(TeamRequestDTO teamRequestDTO, UserEntity user) {
-        if(user.getTeam() == null) {  // 기존 팀이 없는 경우
+        if(teamMemberRepository.findByUserId(user.getId()) == null) {  // 기존 팀이 없는 경우
             Team team = new Team(teamRequestDTO.getName(), teamRequestDTO.getPeopleNum(), "모집");
             teamRepository.save(team);
 
@@ -54,9 +54,9 @@ public class TeamService {
             TeamRank teamRank = new TeamRank(team.getId(), 0, "실버");
             teamRankRepository.save(teamRank);
 
-            // 사용자 팀 아이디 추가
-            user.update(team);
-            userRepository.save(user);
+//            // 사용자 팀 아이디 추가
+//            user.update(team);
+//            userRepository.save(user);
 
             return TeamResponseDTO.builder()
                     .id(team.getId())
@@ -163,7 +163,7 @@ public class TeamService {
      */
     public TeamResponseDTO getUserTeam(String userId) {
         UserEntity user = userRepository.findById(userId).orElse(null);
-        Long teamId = user.getTeam().getId();
+        Long teamId = teamMemberRepository.findByUserId(userId).getTeam().getId();
 
         Team team = teamRepository.findById(teamId).orElse(null);
 

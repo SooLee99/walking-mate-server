@@ -5,6 +5,7 @@ import com.example.walkingmate_back.main.entity.ResponseMessage;
 import com.example.walkingmate_back.main.entity.StatusEnum;
 import com.example.walkingmate_back.team.dto.TeamMemberRequestDTO;
 import com.example.walkingmate_back.team.dto.TeamMemberResponseDTO;
+import com.example.walkingmate_back.team.entity.TeamMember;
 import com.example.walkingmate_back.team.service.TeamMemberService;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.service.UserService;
@@ -40,7 +41,7 @@ public class TeamMemberController {
         if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
         // 기존 팀이 없는 경우
-        if(user.getTeam() != null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+        if(teamMemberService.FindTeam(user.getId()) != null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
 
         TeamMemberResponseDTO teamMemberResponseDTO = teamMemberService.saveMember(teamId, user);
 
