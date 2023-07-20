@@ -1,17 +1,23 @@
 package com.example.walkingmate_back.history.controller;
 
 import com.example.walkingmate_back.history.dto.CheckListRequestDTO;
+import com.example.walkingmate_back.history.dto.CheckListResponseDTO;
 import com.example.walkingmate_back.history.service.CheckListService;
-import com.example.walkingmate_back.main.entity.Message;
+import com.example.walkingmate_back.main.entity.DefaultRes;
+import com.example.walkingmate_back.main.entity.ResponseMessage;
+import com.example.walkingmate_back.main.entity.StatusEnum;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  *    체크리스트 등록, 수정, 삭제, 체크 및 해제, 조회
  *
- *   @version          1.00 / 2023.07.18
+ *   @version          1.00 / 2023.07.20
  *   @author           전우진
  */
 
@@ -30,36 +36,61 @@ public class CheckListController {
 
     // 체크리스트 추가
     @PostMapping("/save")
-    public ResponseEntity<Message> saveCheckList(@RequestBody CheckListRequestDTO checkListRequestDTO) {
-        return checkListService.saveCheckList(checkListRequestDTO);
+    public ResponseEntity<DefaultRes<CheckListResponseDTO>> saveCheckList(@RequestBody CheckListRequestDTO checkListRequestDTO) {
+        CheckListResponseDTO checkListResponseDTO = checkListService.saveCheckList(checkListRequestDTO);
+
+        if(checkListResponseDTO != null)
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_CHECKLIST, checkListResponseDTO), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
     }
 
     // 체크리스트 수정
     @PutMapping("/{listId}")
-    public ResponseEntity<Message> updateCheckList(@PathVariable Long listId, @RequestBody CheckListRequestDTO checkListRequestDTO) {
-        return checkListService.updateCheckList(listId, checkListRequestDTO);
+    public ResponseEntity<DefaultRes<CheckListResponseDTO>> updateCheckList(@PathVariable Long listId, @RequestBody CheckListRequestDTO checkListRequestDTO) {
+        CheckListResponseDTO checkListResponseDTO = checkListService.updateCheckList(listId, checkListRequestDTO);
+
+        if(checkListResponseDTO != null)
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.UPDATE_CHECKLIST, checkListResponseDTO), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_CHECKLIST, null), HttpStatus.OK);
     }
 
     // 체크리스트 삭제
     @DeleteMapping("/{listId}")
-    public ResponseEntity<Message> deleteCheckList(@PathVariable Long listId) {
-        return checkListService.deleteCheckList(listId);
+    public ResponseEntity<DefaultRes<CheckListResponseDTO>> deleteCheckList(@PathVariable Long listId) {
+        CheckListResponseDTO checkListResponseDTO = checkListService.deleteCheckList(listId);
+
+        if(checkListResponseDTO != null)
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.DELETE_CHECKLIST, checkListResponseDTO), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_CHECKLIST, null), HttpStatus.OK);
     }
 
 
     // 체크리스트 체크 및 해제
     @PutMapping("/checked/{listId}")
-    public ResponseEntity<Message> updateCheckd(@PathVariable Long listId) {
-        return checkListService.updateCheckd(listId);
+    public ResponseEntity<DefaultRes<CheckListResponseDTO>> updateCheckd(@PathVariable Long listId) {
+        CheckListResponseDTO checkListResponseDTO = checkListService.updateCheckd(listId);
+
+        if(checkListResponseDTO != null)
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.CHECK_CHECKLIST, checkListResponseDTO), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_CHECKLIST, null), HttpStatus.OK);
     }
 
     // 체크리스트 조회 - 날짜별
     @GetMapping({"/list/{date}"})
-    public ResponseEntity<Message> listCheckList(@PathVariable String date) {
+    public ResponseEntity<DefaultRes<List<CheckListResponseDTO>>> listCheckList(@PathVariable String date) {
         String nickName = "aaa";
         UserEntity user = userRepository.findById(nickName).orElse(null);
 
-        return checkListService.getDateCheckList(user.getId(), date);
+        List<CheckListResponseDTO> checkListResponseDTO = checkListService.getDateCheckList(user.getId(), date);
+
+        if(checkListResponseDTO != null)
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, checkListResponseDTO), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_CHECKLIST, null), HttpStatus.OK);
     }
 
 }

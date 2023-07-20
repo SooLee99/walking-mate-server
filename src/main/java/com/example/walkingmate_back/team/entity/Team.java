@@ -50,4 +50,6 @@ public class Team {
         this.peopleNum=peopleNum;
         this.state=state;
     }
+
+
 }

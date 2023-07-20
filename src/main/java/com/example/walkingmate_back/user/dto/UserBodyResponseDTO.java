@@ -1,5 +1,6 @@
 package com.example.walkingmate_back.user.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ public class UserBodyResponseDTO {
 
     private int weight;  // 사용자 몸무게
 
+    @Builder
     public UserBodyResponseDTO(String userId, int weight, int height) {
         this.userId=userId;
         this.weight=weight;

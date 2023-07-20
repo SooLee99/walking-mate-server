@@ -4,12 +4,9 @@ import com.example.walkingmate_back.history.dto.RunRecordRequestDTO;
 import com.example.walkingmate_back.history.dto.RunRecordResponseDTO;
 import com.example.walkingmate_back.history.entity.RunRecord;
 import com.example.walkingmate_back.history.repository.RunRecordRepository;
-import com.example.walkingmate_back.main.entity.Message;
-import com.example.walkingmate_back.main.entity.StatusEnum;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
@@ -22,7 +19,7 @@ import java.util.List;
  *    운동 기록 등록, 조회 - 날짜별
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.12
+ *   @version          1.00 / 2023.07.20
  *   @author           전우진
  */
 
@@ -38,7 +35,7 @@ public class RunRecordService {
      * 사용자 확인 후 운동 기록 저장
      * - 전우진 2023.07.12
      */
-    public ResponseEntity<Message> saveRun(RunRecordRequestDTO runRecordRequestDTO) throws ParseException {
+    public RunRecordResponseDTO saveRun(RunRecordRequestDTO runRecordRequestDTO) throws ParseException {
         UserEntity user = userRepository.findById(runRecordRequestDTO.getUserId()).orElse(null);
         LocalDate now = LocalDate.now();
 
@@ -46,15 +43,16 @@ public class RunRecordService {
             RunRecord runRecord = new RunRecord(user, now, runRecordRequestDTO.getStep(), runRecordRequestDTO.getDistance());
             runRecordRepository.save(runRecord);
 
-            Message message = new Message();
-            message.setStatus(StatusEnum.OK);
-            message.setMessage("성공 코드");
-            message.setData("운동 기록 저장 성공");
-
-            return ResponseEntity.ok().body(message);
+            String date = runRecord.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+            return RunRecordResponseDTO.builder()
+                    .userId(runRecord.getUser().getId())
+                    .date(date)
+                    .step(runRecord.getStep())
+                    .distance(runRecord.getDistance())
+                    .build();
         } else {
             // 사용자가 존재하지 않는 경우
-            return ResponseEntity.notFound().build();
+            return null;
         }
     }
 
@@ -62,7 +60,7 @@ public class RunRecordService {
      * 사용자 확인 후 날짜별 운동 기록 조회
      * - 전우진 2023.07.12
      */
-    public ResponseEntity<Message> getDateRun(String id, String date) {
+    public List<RunRecordResponseDTO> getDateRun(String id, String date) {
         UserEntity user = userRepository.findById(id).orElse(null);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         LocalDate lc = LocalDate.parse(date, formatter);
@@ -81,20 +79,14 @@ public class RunRecordService {
             );
             result.add(runRecordResponseDTO);
         }
-
-        Message message = new Message();
-        message.setStatus(StatusEnum.OK);
-        message.setMessage("성공 코드");
-        message.setData(result);
-
-        return ResponseEntity.ok().body(message);
+        return result;
     }
 
     /**
      * 사용자 확인 후 운동 기록 조회
      * - 전우진 2023.07.14
      */
-    public ResponseEntity<Message> getAllRun(String id) {
+    public List<RunRecordResponseDTO> getAllRun(String id) {
         UserEntity user = userRepository.findById(id).orElse(null);
 
         List<RunRecord> runRecords = runRecordRepository.findByUserId(user.getId());
@@ -112,11 +104,6 @@ public class RunRecordService {
             result.add(runRecordResponseDTO);
         }
 
-        Message message = new Message();
-        message.setStatus(StatusEnum.OK);
-        message.setMessage("성공 코드");
-        message.setData(result);
-
-        return ResponseEntity.ok().body(message);
+        return result;
     }
 }

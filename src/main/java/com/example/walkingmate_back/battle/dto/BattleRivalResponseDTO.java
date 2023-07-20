@@ -1,5 +1,6 @@
 package com.example.walkingmate_back.battle.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ public class BattleRivalResponseDTO {
 
     private int step;  // 걸음 수
 
+    @Builder
     public BattleRivalResponseDTO(Long teamId, String name, int peopleNum, int step) {
         this.teamId=teamId;
         this.teamName=name;

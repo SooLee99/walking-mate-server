@@ -1,5 +1,6 @@
 package com.example.walkingmate_back.history.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ public class RunRecordResponseDTO {
 
     private double distance;  // 거리
 
+    @Builder
     public RunRecordResponseDTO(String userId, String date, int step, double distance, LocalDateTime regTime, LocalDateTime updateTime) {
         this.userId=userId;
         this.date=date;

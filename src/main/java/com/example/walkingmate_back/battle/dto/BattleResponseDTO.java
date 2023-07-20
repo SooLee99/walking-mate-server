@@ -1,5 +1,6 @@
 package com.example.walkingmate_back.battle.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ public class BattleResponseDTO {
 
     private List<BattleRivalResponseDTO> battleRivals;
 
+    @Builder
     public BattleResponseDTO(Long id, LocalDate startDate, int totalStep, String battleCheck, List<BattleRivalResponseDTO> battleRivalResponseDTOList) {
         this.id=id;
         this.startDate=startDate;

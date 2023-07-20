@@ -66,4 +66,7 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<RunRecord> runRecords;
 
+    public void update(Team team) {
+        this.team=team;
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.walkingmate_back.user.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ public class UserRankResponseDTO {
 
     private int coin;  // 사용자 코인
 
+    @Builder
     public UserRankResponseDTO(String userId, int coin, String tear) {
         this.userId=userId;
         this.coin=coin;

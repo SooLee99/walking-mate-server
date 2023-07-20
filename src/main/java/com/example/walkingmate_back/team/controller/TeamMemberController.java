@@ -1,15 +1,21 @@
 package com.example.walkingmate_back.team.controller;
 
-import com.example.walkingmate_back.main.entity.Message;
+import com.example.walkingmate_back.main.entity.DefaultRes;
+import com.example.walkingmate_back.main.entity.ResponseMessage;
+import com.example.walkingmate_back.main.entity.StatusEnum;
 import com.example.walkingmate_back.team.dto.TeamMemberRequestDTO;
+import com.example.walkingmate_back.team.dto.TeamMemberResponseDTO;
 import com.example.walkingmate_back.team.service.TeamMemberService;
+import com.example.walkingmate_back.user.entity.UserEntity;
+import com.example.walkingmate_back.user.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
  *    멤버 가입, 삭제
  *
- *   @version          1.00 / 2023.07.18
+ *   @version          1.00 / 2023.07.20
  *   @author           전우진
  */
 
@@ -19,24 +25,41 @@ import org.springframework.web.bind.annotation.*;
 public class TeamMemberController {
 
     private final TeamMemberService teamMemberService;
+    private final UserService userService;
 
-    public TeamMemberController(TeamMemberService teamMemberService) {
+    public TeamMemberController(TeamMemberService teamMemberService, UserService userService) {
         this.teamMemberService = teamMemberService;
+        this.userService = userService;
     }
 
     // 멤버 가입
     @PostMapping("/{teamId}/member/save")
-    public ResponseEntity<Message> saveMember(@PathVariable Long teamId, @RequestBody TeamMemberRequestDTO teamMemberRequestDTO){
+    public ResponseEntity<DefaultRes<TeamMemberResponseDTO>> saveMember(@PathVariable Long teamId, @RequestBody TeamMemberRequestDTO teamMemberRequestDTO){
+        // 사용자 확인
+        UserEntity user = userService.FindUser(teamMemberRequestDTO.getUserId());
+        if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
-        return teamMemberService.saveMember(teamId, teamMemberRequestDTO);
+        // 기존 팀이 없는 경우
+        if(user.getTeam() != null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+
+        TeamMemberResponseDTO teamMemberResponseDTO = teamMemberService.saveMember(teamId, user);
+
+        if(teamMemberResponseDTO != null)
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_TEAMMEMBER, teamMemberResponseDTO), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
     }
 
     // 팀 멤버 삭제
     @DeleteMapping("/{teamId}/member")
-    public ResponseEntity<Message> deleteTeamMember(@PathVariable Long teamId) {
-        String userId = "ccc";
+    public ResponseEntity<DefaultRes<TeamMemberResponseDTO>> deleteTeamMember(@PathVariable Long teamId) {
+        String userId = "bbb";
+        TeamMemberResponseDTO teamMemberResponseDTO = teamMemberService.deleteTeamMember(teamId, userId);
 
-        return teamMemberService.deleteTeamMember(teamId, userId);
+        if(teamMemberResponseDTO != null)
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.DELETE_TEAMMEMBER, teamMemberResponseDTO), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
     }
 
 

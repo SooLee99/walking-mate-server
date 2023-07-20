@@ -1,5 +1,6 @@
 package com.example.walkingmate_back.history.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +18,7 @@ public class CheckListResponseDTO {
 
     private String content;  // 내용
 
+    @Builder
     public CheckListResponseDTO(Long listId, String userId, String date, boolean checked, String content) {
         this.listId=listId;
         this.userId=userId;

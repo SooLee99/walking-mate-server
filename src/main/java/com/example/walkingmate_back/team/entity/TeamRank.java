@@ -26,4 +26,10 @@ public class TeamRank {
 
     @Column
     private int coin;  // 팀 코인
+
+    public TeamRank(Long teamId, int coin, String tear) {
+        this.id=teamId;
+        this.coin=coin;
+        this.tear=tear;
+    }
 }

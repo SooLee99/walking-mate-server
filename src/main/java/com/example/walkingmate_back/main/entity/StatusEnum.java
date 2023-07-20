@@ -3,9 +3,15 @@ package com.example.walkingmate_back.main.entity;
 // 상태코드 enum
 public enum StatusEnum {
     OK(200, "OK"),
+    CREATED(201, "CREATED"),
+    NO_CONTENT(204, "NO_CONTENT"),
     BAD_REQUEST(400, "BAD_REQUEST"),
+    UNAUTHORIZED(401, "UNAUTHORIZED "),
+    FORBIDDEN(403, "FORBIDDEN "),
     NOT_FOUND(404, "NOT_FOUND"),
-    INTERNAL_SERER_ERROR(500, "INTERNAL_SERVER_ERROR");
+    INTERNAL_SERER_ERROR(500, "INTERNAL_SERVER_ERROR"),
+    SERVICE_UNAVAILABLE(503, "SERVICE_UNAVAILABLE"),
+    DB_ERROR(600, "DB_ERROR");
 
     int statusCode;
     String code;

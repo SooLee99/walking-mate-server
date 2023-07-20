@@ -1,5 +1,6 @@
 package com.example.walkingmate_back.team.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.ArrayList;
@@ -19,14 +20,7 @@ public class TeamResponseDTO {
 
     List<TeamMemberResponseDTO> teamMembers = new ArrayList<>(); // 댓글 리스트
     TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO();
-
-    public TeamResponseDTO(Long id, String name, int peopleNum, String state, List<TeamMemberResponseDTO> teamMemberResponseDTOList) {
-        this.id=id;
-        this.name=name;
-        this.peopleNum=peopleNum;
-        this.state=state;
-        this.teamMembers=teamMemberResponseDTOList;
-    }
+    @Builder
     public TeamResponseDTO(Long id, String name, int peopleNum, String state, TeamRankResponseDTO teamRankResponseDTO, List<TeamMemberResponseDTO> teamMemberResponseDTOList) {
         this.id=id;
         this.name=name;

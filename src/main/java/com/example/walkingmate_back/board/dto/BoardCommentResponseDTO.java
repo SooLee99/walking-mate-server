@@ -1,5 +1,6 @@
 package com.example.walkingmate_back.board.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +18,7 @@ public class BoardCommentResponseDTO {
 
     private String content;  // 내용
 
+    @Builder
     public BoardCommentResponseDTO(Long id, Long boardId, String userId, String content, LocalDateTime regTime, LocalDateTime updateTime) {
         this.id=id;
         this.boardId=boardId;
