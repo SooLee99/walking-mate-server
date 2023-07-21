@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  *    팀 생성, 삭제, 단일 조회, 전체 조회, 가입된 팀 정보 조회
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.20
+ *   @version          1.00 / 2023.07.21
  *   @author           전우진
  */
 
@@ -54,10 +54,6 @@ public class TeamService {
             TeamRank teamRank = new TeamRank(team.getId(), 0, "실버");
             teamRankRepository.save(teamRank);
 
-//            // 사용자 팀 아이디 추가
-//            user.update(team);
-//            userRepository.save(user);
-
             return TeamResponseDTO.builder()
                     .id(team.getId())
                     .name(team.getName())
@@ -82,10 +78,7 @@ public class TeamService {
             return null;
         }
 
-        // 팀 삭제 시 팀에 속한 사용자도 같이 삭제 됨
         teamRepository.delete(team);
-
-        // 팀에 있는 멤버 모두 삭제
 
         return TeamResponseDTO.builder()
                 .id(team.getId())
@@ -110,12 +103,17 @@ public class TeamService {
                     .map(teamMember -> new TeamMemberResponseDTO(teamMember.getUser().getId(), teamMember.getTeam().getId(), teamMember.isTeamLeader()))
                     .collect(Collectors.toList());
 
+            // 랭킹
+            TeamRank teamRanks = team.getTeamRank();
+            TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO(teamRanks.getTeam().getId(), teamRanks.getCoin(), teamRanks.getTear());
+
             return TeamResponseDTO.builder()
                     .id(team.getId())
                     .name(team.getName())
                     .peopleNum(team.getPeopleNum())
                     .state(team.getState())
                     .teamMemberResponseDTOList(teamMemberResponseDTOList)
+                    .teamRankResponseDTO(teamRankResponseDTO)
                     .build();
         } else {
             return null;

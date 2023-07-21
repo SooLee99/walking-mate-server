@@ -12,7 +12,7 @@ import java.util.List;
 /**
  *    팀 전체 랭킹 조회
  *
- *   @version          1.00 / 2023.07.20
+ *   @version          1.00 / 2023.07.21
  *   @author           전우진
  */
 

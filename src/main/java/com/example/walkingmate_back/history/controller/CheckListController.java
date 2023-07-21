@@ -3,9 +3,9 @@ package com.example.walkingmate_back.history.controller;
 import com.example.walkingmate_back.history.dto.CheckListRequestDTO;
 import com.example.walkingmate_back.history.dto.CheckListResponseDTO;
 import com.example.walkingmate_back.history.service.CheckListService;
-import com.example.walkingmate_back.main.entity.DefaultRes;
-import com.example.walkingmate_back.main.entity.ResponseMessage;
-import com.example.walkingmate_back.main.entity.StatusEnum;
+import com.example.walkingmate_back.main.response.DefaultRes;
+import com.example.walkingmate_back.main.response.ResponseMessage;
+import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.repository.UserRepository;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ import java.util.List;
 /**
  *    체크리스트 등록, 수정, 삭제, 체크 및 해제, 조회
  *
- *   @version          1.00 / 2023.07.20
+ *   @version          1.00 / 2023.07.21
  *   @author           전우진
  */
 
@@ -42,7 +42,7 @@ public class CheckListController {
         if(checkListResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_CHECKLIST, checkListResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
     }
 
     // 체크리스트 수정
@@ -53,7 +53,7 @@ public class CheckListController {
         if(checkListResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.UPDATE_CHECKLIST, checkListResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_CHECKLIST, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_CHECKLIST, null), HttpStatus.OK);
     }
 
     // 체크리스트 삭제
@@ -64,7 +64,7 @@ public class CheckListController {
         if(checkListResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.DELETE_CHECKLIST, checkListResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_CHECKLIST, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_CHECKLIST, null), HttpStatus.OK);
     }
 
 
@@ -76,7 +76,7 @@ public class CheckListController {
         if(checkListResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.CHECK_CHECKLIST, checkListResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_CHECKLIST, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_CHECKLIST, null), HttpStatus.OK);
     }
 
     // 체크리스트 조회 - 날짜별
@@ -90,7 +90,7 @@ public class CheckListController {
         if(checkListResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, checkListResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_CHECKLIST, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_CHECKLIST, null), HttpStatus.OK);
     }
 
 }

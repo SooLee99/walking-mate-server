@@ -8,7 +8,6 @@ import com.example.walkingmate_back.battle.entity.BattleRival;
 import com.example.walkingmate_back.battle.repository.BattleRepository;
 import com.example.walkingmate_back.battle.repository.BattleRivalRepository;
 import com.example.walkingmate_back.team.entity.TeamMember;
-import com.example.walkingmate_back.user.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +22,7 @@ import java.util.stream.Collectors;
  *    대결 생성, 삭제, 단일 조회, 전체 조회
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.20
+ *   @version          1.00 / 2023.07.21
  *   @author           전우진
  */
 

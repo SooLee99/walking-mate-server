@@ -1,4 +1,4 @@
-package com.example.walkingmate_back.main.entity;
+package com.example.walkingmate_back.main.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

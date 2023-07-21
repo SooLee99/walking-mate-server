@@ -1,4 +1,4 @@
-package com.example.walkingmate_back.main.entity;
+package com.example.walkingmate_back.main.response;
 
 // 상태코드 enum
 public enum StatusEnum {
@@ -10,8 +10,7 @@ public enum StatusEnum {
     FORBIDDEN(403, "FORBIDDEN "),
     NOT_FOUND(404, "NOT_FOUND"),
     INTERNAL_SERER_ERROR(500, "INTERNAL_SERVER_ERROR"),
-    SERVICE_UNAVAILABLE(503, "SERVICE_UNAVAILABLE"),
-    DB_ERROR(600, "DB_ERROR");
+    SERVICE_UNAVAILABLE(503, "SERVICE_UNAVAILABLE");
 
     int statusCode;
     String code;

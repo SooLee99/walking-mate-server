@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  *    게시글 등록, 수정, 삭제, 단일 조회, 전체 조회
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.20
+ *   @version          1.00 / 2023.07.21
  *   @author           전우진
  */
 

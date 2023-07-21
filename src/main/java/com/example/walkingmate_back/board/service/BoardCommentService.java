@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
  *    댓글 등록, 수정, 삭제
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.20
+ *   @version          1.00 / 2023.07.21
  *   @author           전우진
  */
 

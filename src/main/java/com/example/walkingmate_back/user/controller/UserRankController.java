@@ -1,8 +1,8 @@
 package com.example.walkingmate_back.user.controller;
 
-import com.example.walkingmate_back.main.entity.DefaultRes;
-import com.example.walkingmate_back.main.entity.ResponseMessage;
-import com.example.walkingmate_back.main.entity.StatusEnum;
+import com.example.walkingmate_back.main.response.DefaultRes;
+import com.example.walkingmate_back.main.response.ResponseMessage;
+import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.user.dto.UserRankResponseDTO;
 import com.example.walkingmate_back.user.service.UserRankService;
 import org.springframework.http.HttpStatus;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  *    사용자 개인 랭킹, 전체 랭킹 조회
  *
- *   @version          1.00 / 2023.07.20
+ *   @version          1.00 / 2023.07.21
  *   @author           전우진
  */
 
@@ -39,7 +39,7 @@ public class UserRankController {
         if(userRankResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, userRankResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_USERRANK, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USERRANK, null), HttpStatus.OK);
     }
 
     // 랭킹 전체 조회
@@ -50,7 +50,7 @@ public class UserRankController {
         if(userRankResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, userRankResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_USERRANK, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USERRANK, null), HttpStatus.OK);
     }
 
 }

@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
  *    사용자 신체정보 수정, 조회
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.20
+ *   @version          1.00 / 2023.07.21
  *   @author           전우진
  */
 

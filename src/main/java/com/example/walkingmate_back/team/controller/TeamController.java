@@ -1,8 +1,8 @@
 package com.example.walkingmate_back.team.controller;
 
-import com.example.walkingmate_back.main.entity.DefaultRes;
-import com.example.walkingmate_back.main.entity.ResponseMessage;
-import com.example.walkingmate_back.main.entity.StatusEnum;
+import com.example.walkingmate_back.main.response.DefaultRes;
+import com.example.walkingmate_back.main.response.ResponseMessage;
+import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.team.dto.TeamRequestDTO;
 import com.example.walkingmate_back.team.dto.TeamResponseDTO;
 import com.example.walkingmate_back.team.service.TeamService;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  *    팀 생성, 삭제, 단일 조회, 전체 조회, 가입된 팀 정보 조회
  *
- *   @version          1.00 / 2023.07.20
+ *   @version          1.00 / 2023.07.21
  *   @author           전우진
  */
 
@@ -38,14 +38,14 @@ public class TeamController {
     public ResponseEntity<DefaultRes<TeamResponseDTO>> saveTeam(@RequestBody TeamRequestDTO teamRequestDTO){
         String userId = "aaa";
         UserEntity user = userService.FindUser(userId);
-        if(user == null)  return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
+        if(user == null)  return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
         TeamResponseDTO teamResponseDTO = teamService.saveTeam(teamRequestDTO, user);
 
         if(teamResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_TEAM, teamResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_WRITE_TEAM, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_WRITE_TEAM, null), HttpStatus.OK);
     }
 
     // 팀 삭제
@@ -56,7 +56,7 @@ public class TeamController {
         if(teamResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.DELETE_TEAM, teamResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
     }
 
     // 단일 팀 조회 - 멤버 포함
@@ -67,7 +67,7 @@ public class TeamController {
         if(teamResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, teamResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
     }
 
     // 팀 전체 조회 - 멤버 포함
@@ -78,18 +78,18 @@ public class TeamController {
         if(teamResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, teamResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
     }
 
     // 가입된 팀 정보 조회 - 랭킹 포함
     @GetMapping("/list/userTeam")
     public ResponseEntity<DefaultRes<TeamResponseDTO>> SpecificationUserTeam() {
-        String userId = "bbb";
+        String userId = "aaa";
         TeamResponseDTO teamResponseDTO = teamService.getUserTeam(userId);
 
         if(teamResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, teamResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
     }
 }

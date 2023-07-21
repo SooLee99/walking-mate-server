@@ -4,9 +4,9 @@ import com.example.walkingmate_back.board.dto.BoardRequestDTO;
 import com.example.walkingmate_back.board.dto.BoardResponseDTO;
 import com.example.walkingmate_back.board.dto.BoardUpdateDTO;
 import com.example.walkingmate_back.board.service.BoardService;
-import com.example.walkingmate_back.main.entity.ResponseMessage;
-import com.example.walkingmate_back.main.entity.DefaultRes;
-import com.example.walkingmate_back.main.entity.StatusEnum;
+import com.example.walkingmate_back.main.response.ResponseMessage;
+import com.example.walkingmate_back.main.response.DefaultRes;
+import com.example.walkingmate_back.main.response.StatusEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,7 @@ import java.util.Optional;
 /**
  *    게시글 등록, 수정, 삭제, 단일 조회, 전체 조회
  *
- *   @version          1.00 / 2023.07.20
+ *   @version          1.00 / 2023.07.21
  *   @author           전우진
  */
 
@@ -40,7 +40,7 @@ public class BoardController {
         if(boardResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_BOARD, boardResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
     }
 
     // 게시글 수정
@@ -51,7 +51,7 @@ public class BoardController {
         if(boardResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.UPDATE_BOARD, boardResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_BOARD, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_BOARD, null), HttpStatus.OK);
     }
 
     // 게시글 삭제
@@ -62,7 +62,7 @@ public class BoardController {
         if(boardResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.DELETE_BOARD, boardResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_BOARD, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_BOARD, null), HttpStatus.OK);
     }
 
     // 단일 게시글 조회 - 댓글 포함
@@ -73,7 +73,7 @@ public class BoardController {
         if(boardResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, boardResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_BOARD, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_BOARD, null), HttpStatus.OK);
     }
 
     // 게시글 전체 조회 - 댓글 포함
@@ -86,6 +86,6 @@ public class BoardController {
         if(boardResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, boardResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_BOARD, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_BOARD, null), HttpStatus.OK);
     }
 }

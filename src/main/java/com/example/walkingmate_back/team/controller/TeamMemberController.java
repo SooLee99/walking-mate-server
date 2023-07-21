@@ -1,11 +1,10 @@
 package com.example.walkingmate_back.team.controller;
 
-import com.example.walkingmate_back.main.entity.DefaultRes;
-import com.example.walkingmate_back.main.entity.ResponseMessage;
-import com.example.walkingmate_back.main.entity.StatusEnum;
+import com.example.walkingmate_back.main.response.DefaultRes;
+import com.example.walkingmate_back.main.response.ResponseMessage;
+import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.team.dto.TeamMemberRequestDTO;
 import com.example.walkingmate_back.team.dto.TeamMemberResponseDTO;
-import com.example.walkingmate_back.team.entity.TeamMember;
 import com.example.walkingmate_back.team.service.TeamMemberService;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.service.UserService;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  *    멤버 가입, 삭제
  *
- *   @version          1.00 / 2023.07.20
+ *   @version          1.00 / 2023.07.21
  *   @author           전우진
  */
 
@@ -38,7 +37,7 @@ public class TeamMemberController {
     public ResponseEntity<DefaultRes<TeamMemberResponseDTO>> saveMember(@PathVariable Long teamId, @RequestBody TeamMemberRequestDTO teamMemberRequestDTO){
         // 사용자 확인
         UserEntity user = userService.FindUser(teamMemberRequestDTO.getUserId());
-        if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
+        if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
         // 기존 팀이 없는 경우
         if(teamMemberService.FindTeam(user.getId()) != null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
@@ -48,7 +47,7 @@ public class TeamMemberController {
         if(teamMemberResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_TEAMMEMBER, teamMemberResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
     }
 
     // 팀 멤버 삭제
@@ -60,7 +59,7 @@ public class TeamMemberController {
         if(teamMemberResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.DELETE_TEAMMEMBER, teamMemberResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
     }
 
 

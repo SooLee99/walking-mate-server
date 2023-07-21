@@ -19,7 +19,7 @@ import java.util.List;
  *    운동 기록 등록, 조회 - 날짜별
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.20
+ *   @version          1.00 / 2023.07.21
  *   @author           전우진
  */
 

@@ -3,9 +3,9 @@ package com.example.walkingmate_back.history.controller;
 import com.example.walkingmate_back.history.dto.RunRecordRequestDTO;
 import com.example.walkingmate_back.history.dto.RunRecordResponseDTO;
 import com.example.walkingmate_back.history.service.RunRecordService;
-import com.example.walkingmate_back.main.entity.DefaultRes;
-import com.example.walkingmate_back.main.entity.ResponseMessage;
-import com.example.walkingmate_back.main.entity.StatusEnum;
+import com.example.walkingmate_back.main.response.DefaultRes;
+import com.example.walkingmate_back.main.response.ResponseMessage;
+import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.repository.UserRepository;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ import java.util.List;
 /**
  *    운동 기록 등록, 조회 - 날짜별
  *
- *   @version          1.00 / 2023.07.20
+ *   @version          1.00 / 2023.07.21
  *   @author           전우진
  */
 
@@ -42,7 +42,7 @@ public class RunRecordController {
         if(runRecordResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_RUNRECORD, runRecordResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
     }
 
     // 운동 기록 조회 - 날짜별
@@ -56,7 +56,7 @@ public class RunRecordController {
         if(runRecordResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, runRecordResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_RUNRECORD, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_RUNRECORD, null), HttpStatus.OK);
     }
 
     // 운동 기록 조회
@@ -71,6 +71,6 @@ public class RunRecordController {
         if(runRecordResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, runRecordResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_RUNRECORD, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_RUNRECORD, null), HttpStatus.OK);
     }
 }

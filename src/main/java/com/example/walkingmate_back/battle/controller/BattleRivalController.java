@@ -5,9 +5,9 @@ import com.example.walkingmate_back.battle.dto.BattleRivalUpdateDTO;
 import com.example.walkingmate_back.battle.entity.Battle;
 import com.example.walkingmate_back.battle.service.BattleRivalService;
 import com.example.walkingmate_back.battle.service.BattleService;
-import com.example.walkingmate_back.main.entity.DefaultRes;
-import com.example.walkingmate_back.main.entity.ResponseMessage;
-import com.example.walkingmate_back.main.entity.StatusEnum;
+import com.example.walkingmate_back.main.response.DefaultRes;
+import com.example.walkingmate_back.main.response.ResponseMessage;
+import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.team.entity.TeamMember;
 import com.example.walkingmate_back.team.service.TeamMemberService;
 import com.example.walkingmate_back.user.entity.UserEntity;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  *    대결 라이벌 저장, 걸음 수 수정
  *
- *   @version          1.00 / 2023.07.20
+ *   @version          1.00 / 2023.07.21
  *   @author           전우진
  */
 
@@ -44,28 +44,28 @@ public class BattleRivalController {
     // 대결 라이벌 저장
     @PostMapping("/battleRival/{battleId}")
     public ResponseEntity<DefaultRes<BattleRivalResponseDTO>> saveBattleRival(@PathVariable Long battleId) {
-        String userId = "aaa";
-        UserEntity user = userService.FindUser(userId); // 사용자 확인
-        if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
+        String userId = "bbb";
+        UserEntity user = userService.FindUser(userId);
+        if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
         TeamMember teamMember = teamMemberService.FindTeam(user.getId());
 
         // 팀 소속이 없는 경우
-        if(teamMember.getTeam().getId() == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+        if(teamMember.getTeam().getId() == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
 
         // 팀장이 아닌 경우
-        if(teamMember.isTeamLeader() == false) return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_TEAMLEADER, null), HttpStatus.OK);
+        if(teamMember.isTeamLeader() == false) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAMLEADER, null), HttpStatus.OK);
 
         // 대결이 존재하지 않는 경우
         Battle battle = battleService.FindBattle(battleId);
-        if(battle == null)  return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_BATTLE, null), HttpStatus.OK);
+        if(battle == null)  return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_BATTLE, null), HttpStatus.OK);
 
         BattleRivalResponseDTO battleRivalResponseDTO = battleRivalService.saveBattleRival(battle, teamMember);
 
         if(battleRivalResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_BATTLERIVAL, battleRivalResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.CHECK_TEAM_BATTLE, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.CHECK_TEAM_BATTLE, null), HttpStatus.OK);
     }
 
     // 대결 라이벌 수정 - 걸음 수
@@ -73,7 +73,7 @@ public class BattleRivalController {
     public ResponseEntity<DefaultRes<BattleRivalResponseDTO>> updateBattleRival(@RequestBody BattleRivalUpdateDTO battleRivalUpdateDTO, @PathVariable Long battleId) {
         String userId = "bbb";
         UserEntity user = userService.FindUser(userId);
-        if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
+        if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
         TeamMember teamMember = teamMemberService.FindTeam(user.getId());
         BattleRivalResponseDTO battleRivalResponseDTO = battleRivalService.updateBattleRival(battleRivalUpdateDTO, battleId, teamMember);
@@ -81,6 +81,6 @@ public class BattleRivalController {
         if(battleRivalResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.UPDATE_BATTLERIVAL, battleRivalResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_BATTLE, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_BATTLE, null), HttpStatus.OK);
     }
 }

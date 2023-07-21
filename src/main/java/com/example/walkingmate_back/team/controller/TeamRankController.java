@@ -1,8 +1,8 @@
 package com.example.walkingmate_back.team.controller;
 
-import com.example.walkingmate_back.main.entity.DefaultRes;
-import com.example.walkingmate_back.main.entity.ResponseMessage;
-import com.example.walkingmate_back.main.entity.StatusEnum;
+import com.example.walkingmate_back.main.response.DefaultRes;
+import com.example.walkingmate_back.main.response.ResponseMessage;
+import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.team.dto.TeamRankResponseDTO;
 import com.example.walkingmate_back.team.service.TeamRankService;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  *    팀 전체 랭킹 조회
  *
- *   @version          1.00 / 2023.07.20
+ *   @version          1.00 / 2023.07.21
  *   @author           전우진
  */
 
@@ -39,7 +39,7 @@ public class TeamRankController {
         if(teamRankResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_TEAMRANK, teamRankResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.DB_ERROR, ResponseMessage.NOT_FOUND_TEAMRANK, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAMRANK, null), HttpStatus.OK);
     }
 
 }

@@ -7,7 +7,6 @@ import com.example.walkingmate_back.battle.entity.BattleRival;
 import com.example.walkingmate_back.battle.repository.BattleRepository;
 import com.example.walkingmate_back.battle.repository.BattleRivalRepository;
 import com.example.walkingmate_back.team.entity.TeamMember;
-import com.example.walkingmate_back.user.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
  *    대결 라이벌 저장, 걸음 수 수정
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.20
+ *   @version          1.00 / 2023.07.21
  *   @author           전우진
  */
 
