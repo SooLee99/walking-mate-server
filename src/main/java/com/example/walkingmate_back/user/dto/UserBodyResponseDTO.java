@@ -14,10 +14,13 @@ public class UserBodyResponseDTO {
 
     private int weight;  // 사용자 몸무게
 
+    private int BMI;  // BMI
+
     @Builder
-    public UserBodyResponseDTO(String userId, int weight, int height) {
+    public UserBodyResponseDTO(String userId, int weight, int height, int BMI) {
         this.userId=userId;
         this.weight=weight;
         this.height=height;
+        this.BMI=BMI;
     }
 }

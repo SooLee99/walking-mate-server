@@ -1,5 +1,7 @@
 package com.example.walkingmate_back.history.controller;
 
+import com.example.walkingmate_back.history.dto.HomeResponseDTO;
+import com.example.walkingmate_back.history.dto.RunRecordAVGDTO;
 import com.example.walkingmate_back.history.dto.RunRecordRequestDTO;
 import com.example.walkingmate_back.history.dto.RunRecordResponseDTO;
 import com.example.walkingmate_back.history.service.RunRecordService;
@@ -7,7 +9,6 @@ import com.example.walkingmate_back.main.response.DefaultRes;
 import com.example.walkingmate_back.main.response.ResponseMessage;
 import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.user.entity.UserEntity;
-import com.example.walkingmate_back.user.repository.UserRepository;
 import com.example.walkingmate_back.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,9 @@ import java.text.ParseException;
 import java.util.List;
 
 /**
- *    운동 기록 등록, 조회 - 날짜별
+ *    운동 기록 등록, 조회 - 날짜별, 금일 운동 기록 조회, 평균 운동 기록 조회
  *
- *   @version          1.00 / 2023.07.21
+ *   @version          1.00 / 2023.07.23
  *   @author           전우진
  */
 
@@ -60,7 +61,7 @@ public class RunRecordController {
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_RUNRECORD, null), HttpStatus.OK);
     }
 
-    // 운동 기록 조회
+    // 전체 운동 기록 조회
     @GetMapping({"/list"})
     public ResponseEntity<DefaultRes<List<RunRecordResponseDTO>>> listAllRun() {
         String userId = "aaa";
@@ -71,6 +72,34 @@ public class RunRecordController {
 
         if(runRecordResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, runRecordResponseDTO), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_RUNRECORD, null), HttpStatus.OK);
+    }
+
+    // 금일 운동 기록 조회
+    @GetMapping({"/list/home"})
+    public ResponseEntity<DefaultRes<HomeResponseDTO>> getDateRunHome() {
+        String userId = "aaa";
+        UserEntity user = userService.FindUser(userId);
+
+        HomeResponseDTO homeResponseDTO = runRecordService.getDateRunHome(user.getId());
+
+        if(homeResponseDTO != null)
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, homeResponseDTO), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_RUNRECORD, null), HttpStatus.OK);
+    }
+
+    // 평균 운동 기록 조회
+    @GetMapping({"/list/AVG"})
+    public ResponseEntity<DefaultRes<RunRecordAVGDTO>> getRunAVG() {
+        String userId = "aaa";
+        UserEntity user = userService.FindUser(userId);
+
+        RunRecordAVGDTO runRecordAVGDTO = runRecordService.getRunAVG(user.getId());
+
+        if(runRecordAVGDTO != null)
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, runRecordAVGDTO), HttpStatus.OK);
         else
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_RUNRECORD, null), HttpStatus.OK);
     }
