@@ -1,11 +1,15 @@
 package com.example.walkingmate_back.history.service;
 
+import com.example.walkingmate_back.history.dto.HomeResponseDTO;
+import com.example.walkingmate_back.history.dto.RunRecordAVGDTO;
 import com.example.walkingmate_back.history.dto.RunRecordRequestDTO;
 import com.example.walkingmate_back.history.dto.RunRecordResponseDTO;
 import com.example.walkingmate_back.history.entity.RunRecord;
 import com.example.walkingmate_back.history.repository.RunRecordRepository;
+import com.example.walkingmate_back.user.dto.UserBodyResponseDTO;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.repository.UserRepository;
+import com.example.walkingmate_back.user.service.UserBodyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,10 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *    운동 기록 등록, 조회 - 날짜별
+ *    운동 기록 등록, 조회 - 날짜별, 금일 운동 기록 조회, 평균 운동 기록 조회
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.21
+ *   @version          1.00 / 2023.07.23
  *   @author           전우진
  */
 
@@ -30,6 +34,7 @@ public class RunRecordService {
 
     private final RunRecordRepository runRecordRepository;
     private final UserRepository userRepository;
+    private final UserBodyService userBodyService;
 
     /**
      * 사용자 확인 후 운동 기록 저장
@@ -83,7 +88,7 @@ public class RunRecordService {
     }
 
     /**
-     * 사용자 확인 후 운동 기록 조회
+     * 사용자 확인 후 전체 운동 기록 조회
      * - 전우진 2023.07.14
      */
     public List<RunRecordResponseDTO> getAllRun(String id) {
@@ -105,5 +110,60 @@ public class RunRecordService {
         }
 
         return result;
+    }
+
+    /**
+     * 사용자 확인 후 금일 운동 기록 조회
+     * - 전우진 2023.07.23
+     */
+    public HomeResponseDTO getDateRunHome(String userId) {
+        UserEntity user = userRepository.findById(userId).orElse(null);
+        LocalDate lc = LocalDate.now();
+
+        List<RunRecord> runRecords = runRecordRepository.findByUserIdWithDate(user.getId(), lc);
+        int totalStep = 0;
+        double totalDis = 0;
+        long kcal = 0;
+        for (RunRecord runRecord : runRecords) {
+            totalStep += runRecord.getStep();
+            totalDis += runRecord.getDistance();
+        }
+
+        UserBodyResponseDTO userBodyResponseDTO = userBodyService.getUserBody(userId);
+
+        // METs * 운동시간 * 체중(kg) * 1.05
+        // 가벼운 걷기 운동 METs = 3.0
+        kcal = Math.round(3.0 * userBodyResponseDTO.getWeight() * 1.05);
+        return HomeResponseDTO.builder()
+                .step(totalStep)
+                .distance(totalDis)
+                .kcal(kcal)
+                .build();
+    }
+
+    /**
+     * 사용자 확인 후 평균 운동 기록 조회
+     * - 전우진 2023.07.23
+     */
+    public RunRecordAVGDTO getRunAVG(String userId) {
+        UserEntity user = userRepository.findById(userId).orElse(null);
+
+        List<RunRecord> runRecords = runRecordRepository.findByUserId(user.getId());
+        int totalStep = 0, avgStep = 0;
+        double totalDis = 0, avgDis = 0;
+        int num = 0;
+        for (RunRecord runRecord : runRecords) {
+            totalStep += runRecord.getStep();
+            totalDis += runRecord.getDistance();
+        }
+        num = runRecords.size();
+        avgStep = totalStep / num;
+        avgDis = Math.round((totalDis / num) * 100) / 100.0;
+
+        return RunRecordAVGDTO.builder()
+                .num(num)
+                .step(avgStep)
+                .distance(avgDis)
+                .build();
     }
 }
