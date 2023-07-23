@@ -53,6 +53,9 @@ public class ResponseMessage {
     public static final String WRITE_RUNRECORD = "운동기록 저장 성공";
     public static final String NOT_FOUND_RUNRECORD = "운동기록 조회 실패";
 
+    public static final String WRITE_BUYHISTORY = "코인 구매 성공";
+    public static final String NOT_FOUND_BUYHISTORY = "코인 구매기록 조회 실패";
+
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
 
     public static final String READ_SUCCESS = "데이터베이스 조회 성공";

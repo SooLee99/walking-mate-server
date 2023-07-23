@@ -3,6 +3,7 @@ package com.example.walkingmate_back.battle.service;
 import com.example.walkingmate_back.battle.dto.BattleRequestDTO;
 import com.example.walkingmate_back.battle.dto.BattleResponseDTO;
 import com.example.walkingmate_back.battle.dto.BattleRivalResponseDTO;
+import com.example.walkingmate_back.battle.dto.BattleSearchDTO;
 import com.example.walkingmate_back.battle.entity.Battle;
 import com.example.walkingmate_back.battle.entity.BattleRival;
 import com.example.walkingmate_back.battle.repository.BattleRepository;
@@ -19,10 +20,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- *    대결 생성, 삭제, 단일 조회, 전체 조회
+ *    대결 생성, 삭제, 단일 조회, 전체 조회, 검색
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.21
+ *   @version          1.00 / 2023.07.23
  *   @author           전우진
  */
 
@@ -48,6 +49,7 @@ public class BattleService {
 
         BattleRival result = battleRivalRepository.findByTeamId(teamMember.getTeam().getId());
 
+        String battleCheck = "대결 팀 모집 중";
         // 팀이 대결을 생성하지 않은 경우
         if(result == null) {
             Battle battle = new Battle(date);
@@ -60,6 +62,7 @@ public class BattleService {
                     .id(battle.getId())
                     .startDate(battle.getStartDate())
                     .totalStep(battle.getTotalStep())
+                    .battleCheck(battleCheck)
                     .build();
         } else {
             // 팀이 대결을 생성한 경우
@@ -156,7 +159,40 @@ public class BattleService {
         }
     }
 
+    /**
+     * 대결 검색 조회
+     * - 전우진 2023.07.23
+     */
+    public List<BattleResponseDTO> getSearchBattle(BattleSearchDTO battleSearchDTO) {
+        List<Battle> battles = battleRepository.findAllByBattleRivalsByTeamName(battleSearchDTO.getSearch());
+        List<BattleResponseDTO> result = new ArrayList<>();
+        String battleCheck = "";
+
+        for(Battle battle : battles) {
+
+            List<BattleRivalResponseDTO> battleRivalResponseDTOList = battle.getBattleRivals().stream()
+                    .map(battleRival -> new BattleRivalResponseDTO(battleRival.getTeam().getId(), battleRival.getTeam().getName(), battleRival.getTeam().getPeopleNum(), battleRival.getStep()))
+                    .collect(Collectors.toList());
+
+            if(battleRivalResponseDTOList.size() == 2) {
+                battleCheck = "대결 진행 중";
+            } else battleCheck = "대결 팀 모집 중";
+
+            BattleResponseDTO battleResponseDTO = new BattleResponseDTO(
+                    battle.getId(),
+                    battle.getStartDate(),
+                    battle.getTotalStep(),
+                    battleCheck,
+                    battleRivalResponseDTOList
+            );
+            result.add(battleResponseDTO);
+        }
+
+        return result;
+    }
+
     public Battle FindBattle(Long battleId){
         return battleRepository.findById(battleId).orElse(null);
     }
+
 }

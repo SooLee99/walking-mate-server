@@ -38,10 +38,6 @@ public class UserEntity {
     @Column
     private Date birth; // 사용자 생년월일
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "teamId") // 외래키 설정
-//    private Team team;  // 사용자의 팀 번호
-
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private UserRank userRank;
 
@@ -66,11 +62,4 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<RunRecord> runRecords;
 
-//    public void update(Team team) {
-//        this.team=team;
-//    }
-//
-//    public void deleteTeamMember(Object o) {
-//        this.team=null;
-//    }
 }

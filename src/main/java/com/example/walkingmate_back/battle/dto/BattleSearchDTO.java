@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class BattleSearchDTO {
 
-    private String search;
+    private String search;  // 검색어
 }

@@ -31,6 +31,4 @@ public class BoardResponseDTO {
         this.comments=comments;
     }
 
-
-
 }

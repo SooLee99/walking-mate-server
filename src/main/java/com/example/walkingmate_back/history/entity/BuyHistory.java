@@ -4,14 +4,13 @@ import com.example.walkingmate_back.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Getter
 @Setter
 @ToString
-//@IdClass(BuyHistoryId.class)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "buyHistory")
@@ -35,4 +34,10 @@ public class BuyHistory {
     @Column
     private int coin;  // 구매 코인
 
+    public BuyHistory(UserEntity user, LocalDateTime date, int coin, int money) {
+        this.user=user;
+        this.date=date;
+        this.coin=coin;
+        this.money=money;
+    }
 }

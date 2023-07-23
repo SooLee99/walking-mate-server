@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString(exclude = {"teamMembers", "teamBattleHistorys", "battleRivals"})
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "team")
@@ -29,9 +29,6 @@ public class Team {
 
     @Column
     private String state;  // 팀 경쟁 상태
-
-//    @OneToMany(mappedBy = "team", orphanRemoval = true)
-//    private List<UserEntity> user;
 
     @OneToOne(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private TeamRank teamRank;

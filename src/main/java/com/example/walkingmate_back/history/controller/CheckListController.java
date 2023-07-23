@@ -8,6 +8,8 @@ import com.example.walkingmate_back.main.response.ResponseMessage;
 import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.repository.UserRepository;
+import com.example.walkingmate_back.user.service.UserBodyService;
+import com.example.walkingmate_back.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,11 +29,11 @@ import java.util.List;
 public class CheckListController {
 
     private final CheckListService checkListService;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public CheckListController(CheckListService checkListService, UserRepository userRepository) {
+    public CheckListController(CheckListService checkListService, UserService userService) {
         this.checkListService = checkListService;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     // 체크리스트 추가
@@ -80,10 +82,10 @@ public class CheckListController {
     }
 
     // 체크리스트 조회 - 날짜별
-    @GetMapping({"/list/{date}"})
+    @GetMapping("/list/{date}")
     public ResponseEntity<DefaultRes<List<CheckListResponseDTO>>> listCheckList(@PathVariable String date) {
-        String nickName = "aaa";
-        UserEntity user = userRepository.findById(nickName).orElse(null);
+        String userId = "aaa";
+        UserEntity user = userService.FindUser(userId);
 
         List<CheckListResponseDTO> checkListResponseDTO = checkListService.getDateCheckList(user.getId(), date);
 

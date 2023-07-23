@@ -1,5 +1,6 @@
 package com.example.walkingmate_back.user.entity;
 
+import com.example.walkingmate_back.history.dto.BuyHistoryRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,4 +27,8 @@ public class UserRank {
 
     @Column
     private int coin;  // 사용자 코인
+
+    public void update(BuyHistoryRequestDTO buyHistoryRequestDTO) {
+        this.coin=coin + buyHistoryRequestDTO.getCoin();
+    }
 }

@@ -154,12 +154,11 @@ public class CheckListService {
      * 체크리스트 탐색 후 체크리스트 조회
      * - 전우진 2023.07.13
      */
-    public List<CheckListResponseDTO> getDateCheckList(String id, String date) {
-        UserEntity user = userRepository.findById(id).orElse(null);
+    public List<CheckListResponseDTO> getDateCheckList(String userId, String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         LocalDate lc = LocalDate.parse(date, formatter);
 
-        List<CheckList> checkLists = checkListRepository.findByUserIdWithDate(user.getId(), lc);
+        List<CheckList> checkLists = checkListRepository.findByUserIdWithDate(userId, lc);
         List<CheckListResponseDTO> result = new ArrayList<>();
 
         for (CheckList checkList : checkLists) {

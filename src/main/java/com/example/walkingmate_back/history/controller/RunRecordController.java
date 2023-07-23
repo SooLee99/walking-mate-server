@@ -8,6 +8,7 @@ import com.example.walkingmate_back.main.response.ResponseMessage;
 import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.repository.UserRepository;
+import com.example.walkingmate_back.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,11 +28,11 @@ import java.util.List;
 public class RunRecordController {
 
     private final RunRecordService runRecordService;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public RunRecordController(RunRecordService runRecordService, UserRepository userRepository) {
+    public RunRecordController(RunRecordService runRecordService, UserService userService) {
         this.runRecordService = runRecordService;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     // 운동 기록 추가
@@ -48,8 +49,8 @@ public class RunRecordController {
     // 운동 기록 조회 - 날짜별
     @GetMapping({"/list/{date}"})
     public ResponseEntity<DefaultRes<List<RunRecordResponseDTO>>> listDateRun(@PathVariable String date) {
-        String nickName = "aaa";
-        UserEntity user = userRepository.findById(nickName).orElse(null);
+        String userId = "aaa";
+        UserEntity user = userService.FindUser(userId);
 
         List<RunRecordResponseDTO> runRecordResponseDTO = runRecordService.getDateRun(user.getId(), date);
 
@@ -62,8 +63,8 @@ public class RunRecordController {
     // 운동 기록 조회
     @GetMapping({"/list"})
     public ResponseEntity<DefaultRes<List<RunRecordResponseDTO>>> listAllRun() {
-        String nickName = "aaa";
-        UserEntity user = userRepository.findById(nickName).orElse(null);
+        String userId = "aaa";
+        UserEntity user = userService.FindUser(userId);
 
         List<RunRecordResponseDTO> runRecordResponseDTO = runRecordService.getAllRun(user.getId());
 

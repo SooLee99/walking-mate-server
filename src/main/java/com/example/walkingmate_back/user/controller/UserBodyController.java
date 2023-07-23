@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
  *   @author           전우진
  */
 
-
 //@Controller
 @RestController
 @RequestMapping("/user/userBody")
