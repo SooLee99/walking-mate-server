@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  *    멤버 가입, 삭제
  *
- *   @version          1.00 / 2023.07.21
+ *   @version          1.00 / 2023.07.24
  *   @author           전우진
  */
 
@@ -40,7 +40,7 @@ public class TeamMemberController {
         if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
         // 기존 팀이 없는 경우
-        if(teamMemberService.FindTeam(user.getId()) != null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+        if(teamMemberService.FindTeam(user.getId()) != null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
 
         TeamMemberResponseDTO teamMemberResponseDTO = teamMemberService.saveMember(teamId, user);
 

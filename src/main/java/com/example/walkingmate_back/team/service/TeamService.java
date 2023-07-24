@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  *    팀 생성, 삭제, 단일 조회, 전체 조회, 가입된 팀 정보 조회
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.21
+ *   @version          1.00 / 2023.07.24
  *   @author           전우진
  */
 
@@ -71,9 +71,8 @@ public class TeamService {
      * - 전우진 2023.07.13
      */
     public TeamResponseDTO deleteTeam(Team team, String userId) {
-
         TeamMember teamMember = teamMemberRepository.findByUserId(userId);
-        if (teamMember.isTeamLeader() == true) {
+        if (teamMember.isTeamLeader() == true) {  // 팀 리더인 경우
 
             teamRepository.delete(team);
 
@@ -84,7 +83,7 @@ public class TeamService {
                     .state(team.getState())
                     .build();
         }
-        else {
+        else { // 팀 리더가 아닌 경우
             return null;
         }
     }
@@ -161,7 +160,6 @@ public class TeamService {
      * - 전우진 2023.07.15
      */
     public TeamResponseDTO getUserTeam(String userId) {
-        UserEntity user = userRepository.findById(userId).orElse(null);
         Long teamId = teamMemberRepository.findByUserId(userId).getTeam().getId();
 
         Team team = teamRepository.findById(teamId).orElse(null);

@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  *    대결 생성, 삭제, 단일 조회, 전체 조회, 검색
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.23
+ *   @version          1.00 / 2023.07.24
  *   @author           전우진
  */
 

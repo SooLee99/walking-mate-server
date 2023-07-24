@@ -54,7 +54,9 @@ public class ResponseMessage {
     public static final String NOT_FOUND_RUNRECORD = "운동기록 조회 실패";
 
     public static final String WRITE_BUYHISTORY = "코인 구매 성공";
+    public static final String WRITE_COIN = "코인 사용 성공";
     public static final String NOT_FOUND_BUYHISTORY = "코인 구매기록 조회 실패";
+    public static final String NOT_COIN = "코인 부족";
 
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
 

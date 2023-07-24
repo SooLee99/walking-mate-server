@@ -7,8 +7,6 @@ import com.example.walkingmate_back.main.response.DefaultRes;
 import com.example.walkingmate_back.main.response.ResponseMessage;
 import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.user.entity.UserEntity;
-import com.example.walkingmate_back.user.repository.UserRepository;
-import com.example.walkingmate_back.user.service.UserBodyService;
 import com.example.walkingmate_back.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +18,7 @@ import java.util.List;
 /**
  *    체크리스트 등록, 수정, 삭제, 체크 및 해제, 조회
  *
- *   @version          1.00 / 2023.07.21
+ *   @version          1.00 / 2023.07.24
  *   @author           전우진
  */
 

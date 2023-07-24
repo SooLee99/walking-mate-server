@@ -18,7 +18,7 @@ import java.util.List;
 /**
  *    팀 생성, 삭제, 단일 조회, 전체 조회, 가입된 팀 정보 조회
  *
- *   @version          1.00 / 2023.07.21
+ *   @version          1.00 / 2023.07.24
  *   @author           전우진
  */
 
@@ -62,7 +62,7 @@ public class TeamController {
         if(teamResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.DELETE_TEAM, teamResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAMLEADER, null), HttpStatus.OK);
     }
 
     // 단일 팀 조회 - 멤버 포함

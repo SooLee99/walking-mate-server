@@ -21,7 +21,7 @@ import java.util.List;
 /**
  *    대결 생성, 삭제, 단일 조회, 전체 조회, 검색
  *
- *   @version          1.00 / 2023.07.23
+ *   @version          1.00 / 2023.07.24
  *   @author           전우진
  */
 
@@ -47,7 +47,6 @@ public class BattleController {
         if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
         TeamMember teamMember = teamMemberService.FindTeam(user.getId());
-
         // 팀 소속이 없는 경우
         if(teamMember.getTeam() == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
 

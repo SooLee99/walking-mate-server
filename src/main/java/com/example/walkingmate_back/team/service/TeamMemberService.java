@@ -6,7 +6,6 @@ import com.example.walkingmate_back.team.entity.TeamMember;
 import com.example.walkingmate_back.team.repository.TeamMemberRepository;
 import com.example.walkingmate_back.team.repository.TeamRepository;
 import com.example.walkingmate_back.user.entity.UserEntity;
-import com.example.walkingmate_back.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
  *    멤버 가입, 나가기(삭제)
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.21
+ *   @version          1.00 / 2023.07.24
  *   @author           전우진
  */
 
@@ -26,7 +25,6 @@ public class TeamMemberService {
 
     private final TeamMemberRepository teamMemberRepository;
     private final TeamRepository teamRepository;
-    private final UserRepository userRepository;
 
     /**
      * 사용자, 팀 여부, 팀 확인 후 멤버 가입

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  *    대결 라이벌 저장, 걸음 수 수정
  *
- *   @version          1.00 / 2023.07.21
+ *   @version          1.00 / 2023.07.24
  *   @author           전우진
  */
 
@@ -49,7 +49,6 @@ public class BattleRivalController {
         if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
         TeamMember teamMember = teamMemberService.FindTeam(user.getId());
-
         // 팀 소속이 없는 경우
         if(teamMember.getTeam().getId() == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
 

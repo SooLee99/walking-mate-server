@@ -21,10 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *    운동 기록 등록, 조회 - 날짜별, 금일 운동 기록 조회, 평균 운동 기록 조회
+ *    운동 기록 등록, 조회 - 날짜별, 금일 운동 기록 조회, 평균 운동 기록 조회, 운동 기록 수정
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.23
+ *   @version          1.00 / 2023.07.24
  *   @author           전우진
  */
 
@@ -179,6 +179,10 @@ public class RunRecordService {
                 .build();
     }
 
+    /**
+     * 운동 기록 수정
+     * - 전우진 2023.07.24
+     */
     public RunRecordResponseDTO modifyRun(Long id, RunRecordRequestDTO runRecordRequestDTO) {
        RunRecord runRecord = runRecordRepository.findById(id).orElse(null);
 

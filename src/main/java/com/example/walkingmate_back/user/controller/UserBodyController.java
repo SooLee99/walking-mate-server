@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  *    사용자 신체정보 수정, 조회
  *
- *   @version          1.00 / 2023.07.21
+ *   @version          1.00 / 2023.07.24
  *   @author           전우진
  */
 

@@ -66,8 +66,8 @@ public class BuyHistoryController {
         BuyHistoryResponseDTO buyHistoryResponseDTO = buyHistoryService.modifyBuyHistory(coinRequestDTO, user);
 
         if(buyHistoryResponseDTO != null)
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_BUYHISTORY, buyHistoryResponseDTO), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_COIN, buyHistoryResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_COIN, null), HttpStatus.OK);
     }
 }
