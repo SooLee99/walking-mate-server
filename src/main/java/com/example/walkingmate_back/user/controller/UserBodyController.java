@@ -8,6 +8,7 @@ import com.example.walkingmate_back.user.dto.UserBodyUpdateDTO;
 import com.example.walkingmate_back.user.service.UserBodyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -30,10 +31,8 @@ public class UserBodyController {
 
     // 신체정보 조회, BMI 조회
     @GetMapping("/bodyInfo")
-    public ResponseEntity<DefaultRes<UserBodyResponseDTO>> SpecificationUserBody() {
-        String userId = "aaa";
-
-        UserBodyResponseDTO userBodyResponseDTO = userBodyService.getUserBody(userId);
+    public ResponseEntity<DefaultRes<UserBodyResponseDTO>> SpecificationUserBody(Authentication authentication) {
+        UserBodyResponseDTO userBodyResponseDTO = userBodyService.getUserBody(authentication.getName());
 
         if(userBodyResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, userBodyResponseDTO), HttpStatus.OK);
@@ -44,10 +43,8 @@ public class UserBodyController {
 
     // 신체정보 수정
     @PutMapping("/bodyInfo")
-    public ResponseEntity<DefaultRes<UserBodyResponseDTO>> updateUserBody(@RequestBody UserBodyUpdateDTO userBodyUpdateDTO) {
-        String userId = "aaa";
-
-        UserBodyResponseDTO userBodyResponseDTO = userBodyService.updateUserBody(userBodyUpdateDTO, userId);
+    public ResponseEntity<DefaultRes<UserBodyResponseDTO>> updateUserBody(@RequestBody UserBodyUpdateDTO userBodyUpdateDTO, Authentication authentication) {
+        UserBodyResponseDTO userBodyResponseDTO = userBodyService.updateUserBody(userBodyUpdateDTO, authentication.getName());
 
         if(userBodyResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.UPDATE_USERBODY, userBodyResponseDTO), HttpStatus.OK);

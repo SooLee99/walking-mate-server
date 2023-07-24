@@ -70,22 +70,23 @@ public class TeamService {
      * 팀 확인 후 팀 삭제
      * - 전우진 2023.07.13
      */
-    public TeamResponseDTO deleteTeam(Long teamId) {
-        Team team = teamRepository.findById(teamId).orElse(null);
+    public TeamResponseDTO deleteTeam(Team team, String userId) {
 
-        if(team == null) {
-            // 팀이 존재하지 않는 경우
+        TeamMember teamMember = teamMemberRepository.findByUserId(userId);
+        if (teamMember.isTeamLeader() == true) {
+
+            teamRepository.delete(team);
+
+            return TeamResponseDTO.builder()
+                    .id(team.getId())
+                    .name(team.getName())
+                    .peopleNum(team.getPeopleNum())
+                    .state(team.getState())
+                    .build();
+        }
+        else {
             return null;
         }
-
-        teamRepository.delete(team);
-
-        return TeamResponseDTO.builder()
-                .id(team.getId())
-                .name(team.getName())
-                .peopleNum(team.getPeopleNum())
-                .state(team.getState())
-                .build();
     }
 
     /**
@@ -188,5 +189,9 @@ public class TeamService {
         } else {
             return null;
         }
+    }
+
+    public Team FindTeam(Long teamId){
+        return teamRepository.findById(teamId).orElse(null);
     }
 }

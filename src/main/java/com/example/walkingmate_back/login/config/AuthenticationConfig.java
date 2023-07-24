@@ -30,7 +30,7 @@ public class AuthenticationConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/login", "/api/join").permitAll() // 인증 필요없음
+                .requestMatchers("/api/login", "/api/join", "/buyHistory/**", "/board/**", "/user/**", "/battle/**", "/checkList/**", "/run/**", "/team/**").permitAll() // 인증 필요없음
                 .requestMatchers(HttpMethod.POST, "/api/**").authenticated() // 인증 있어야함
 //                .requestMatchers(HttpMethod.POST, "/api/v1/home/user").hasRole("USER") // USER 권한 있어야함
 //                .requestMatchers(HttpMethod.POST, "/api/v1/home/admin").hasRole("ADMIN") // ADMIN 권한 있어야함

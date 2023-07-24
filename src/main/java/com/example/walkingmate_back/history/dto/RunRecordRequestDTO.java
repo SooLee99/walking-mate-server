@@ -5,8 +5,6 @@ import lombok.Data;
 @Data
 public class RunRecordRequestDTO {
 
-    private String userId;  // 사용자 id
-
     private String date;  // 러닝 날짜
 
     private int step;  // 걸음 수

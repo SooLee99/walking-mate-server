@@ -2,6 +2,7 @@ package com.example.walkingmate_back.board.controller;
 
 import com.example.walkingmate_back.board.dto.BoardCommentRequestDTO;
 import com.example.walkingmate_back.board.dto.BoardCommentResponseDTO;
+import com.example.walkingmate_back.board.entity.BoardComment;
 import com.example.walkingmate_back.board.service.BoardCommentService;
 import com.example.walkingmate_back.main.response.ResponseMessage;
 import com.example.walkingmate_back.main.response.DefaultRes;
@@ -10,12 +11,13 @@ import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 /**
  *    댓글 등록, 수정, 삭제
  *
- *   @version          1.00 / 2023.07.21
+ *   @version          1.00 / 2023.07.24
  *   @author           전우진
  */
 
@@ -34,8 +36,8 @@ public class BoardCommentController {
 
     // 댓글 작성
     @PostMapping("/save")
-    public ResponseEntity<DefaultRes<BoardCommentResponseDTO>> saveComment(@RequestBody BoardCommentRequestDTO boardCommentRequestDTO){
-        UserEntity user = userService.FindUser(boardCommentRequestDTO.getUserId());
+    public ResponseEntity<DefaultRes<BoardCommentResponseDTO>> saveComment(@RequestBody BoardCommentRequestDTO boardCommentRequestDTO, Authentication authentication){
+        UserEntity user = userService.FindUser(authentication.getName());
 
         if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
@@ -49,8 +51,11 @@ public class BoardCommentController {
 
     // 댓글 수정
     @PutMapping("/{id}")
-    public ResponseEntity<DefaultRes<BoardCommentResponseDTO>> updateComment(@PathVariable Long id, @RequestBody BoardCommentRequestDTO boardCommentRequestDTO) {
-        BoardCommentResponseDTO boardCommentResponseDTO = boardCommentService.updateComment(id, boardCommentRequestDTO);
+    public ResponseEntity<DefaultRes<BoardCommentResponseDTO>> updateComment(@PathVariable Long id, @RequestBody BoardCommentRequestDTO boardCommentRequestDTO, Authentication authentication) {
+        BoardComment boardComment = boardCommentService.FindBoardComment(id);
+        if(boardComment == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_BOARDCOMMENT, null), HttpStatus.OK);
+
+        BoardCommentResponseDTO boardCommentResponseDTO = boardCommentService.updateComment(boardComment, boardCommentRequestDTO, authentication.getName());
 
         if(boardCommentResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.UPDATE_BOARDCOMMENT, boardCommentResponseDTO), HttpStatus.OK);
@@ -60,8 +65,11 @@ public class BoardCommentController {
 
     // 댓글 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<DefaultRes<BoardCommentResponseDTO>> deleteComment(@PathVariable Long id) {
-        BoardCommentResponseDTO boardCommentResponseDTO = boardCommentService.deleteComment(id);
+    public ResponseEntity<DefaultRes<BoardCommentResponseDTO>> deleteComment(@PathVariable Long id, Authentication authentication) {
+        BoardComment boardComment = boardCommentService.FindBoardComment(id);
+        if(boardComment == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_BOARDCOMMENT, null), HttpStatus.OK);
+
+        BoardCommentResponseDTO boardCommentResponseDTO = boardCommentService.deleteComment(boardComment, authentication.getName());
 
         if(boardCommentResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.DELETE_BOARDCOMMENT, boardCommentResponseDTO), HttpStatus.OK);

@@ -13,6 +13,7 @@ import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.util.List;
@@ -41,9 +42,8 @@ public class BattleController {
 
     // 대결 생성
     @PostMapping("/new")
-    public ResponseEntity<DefaultRes<BattleResponseDTO>> saveBattle(@RequestBody BattleRequestDTO battleRequestDTO) throws ParseException {
-        String userId = "bbb";
-        UserEntity user = userService.FindUser(userId);
+    public ResponseEntity<DefaultRes<BattleResponseDTO>> saveBattle(@RequestBody BattleRequestDTO battleRequestDTO, Authentication authentication) throws ParseException {
+        UserEntity user = userService.FindUser(authentication.getName());
         if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
         TeamMember teamMember = teamMemberService.FindTeam(user.getId());

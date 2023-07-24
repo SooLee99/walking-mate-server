@@ -72,6 +72,7 @@ public class BattleRivalService {
 
         return BattleRivalResponseDTO.builder()
                 .teamId(battleRival.getTeam().getId())
+                .name(battleRival.getTeam().getName())
                 .step(battleRival.getStep())
                 .build();
     }

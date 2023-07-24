@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
  *    댓글 등록, 수정, 삭제
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.21
+ *   @version          1.00 / 2023.07.24
  *   @author           전우진
  */
 
@@ -58,51 +58,45 @@ public class BoardCommentService {
      * 게시글 탐색 후 댓글 수정
      * - 전우진 2023.07.11
      */
-    public BoardCommentResponseDTO updateComment(Long id, BoardCommentRequestDTO boardCommentRequestDTO) {
-        BoardComment boardComment = boardCommentRepository.findById(id).orElse(null);
+    public BoardCommentResponseDTO updateComment(BoardComment boardComment, BoardCommentRequestDTO boardCommentRequestDTO, String userId) {
 
-        if(boardComment == null) {
-            // 댓글이 존재하지 않는 경우
-            return null;
+        if(userId.equals(boardComment.getUser().getId())) {
+            boardComment.update(boardCommentRequestDTO);
+            boardCommentRepository.save(boardComment);
+
+            return BoardCommentResponseDTO.builder()
+                    .id(boardComment.getId())
+                    .boardId(boardComment.getBoard().getId())
+                    .userId(boardComment.getUser().getId())
+                    .content(boardComment.getContent())
+                    .regTime(boardComment.getRegTime())
+                    .updateTime(boardComment.getUpdateTime())
+                    .build();
         }
-
-        boardComment.update(boardCommentRequestDTO);
-
-        boardCommentRepository.save(boardComment);
-
-        return BoardCommentResponseDTO.builder()
-                .id(boardComment.getId())
-                .boardId(boardComment.getBoard().getId())
-                .userId(boardComment.getUser().getId())
-                .content(boardComment.getContent())
-                .regTime(boardComment.getRegTime())
-                .updateTime(boardComment.getUpdateTime())
-                .build();
+       return null;
     }
 
     /**
      * 게시글 탐색 후 댓글 삭제
      * - 전우진 2023.07.11
      */
-    public BoardCommentResponseDTO deleteComment(Long id) {
-        BoardComment boardComment = boardCommentRepository.findById(id).orElse(null);
+    public BoardCommentResponseDTO deleteComment(BoardComment boardComment, String userId) {
+        if(userId.equals(boardComment.getUser().getId())) {
+            boardCommentRepository.delete(boardComment);
 
-        if(boardComment == null) {
-            // 댓글이 존재하지 않는 경우
-            return null;
+            return BoardCommentResponseDTO.builder()
+                    .id(boardComment.getId())
+                    .boardId(boardComment.getBoard().getId())
+                    .userId(boardComment.getUser().getId())
+                    .content(boardComment.getContent())
+                    .regTime(boardComment.getRegTime())
+                    .updateTime(boardComment.getUpdateTime())
+                    .build();
         }
-
-        boardCommentRepository.delete(boardComment);
-
-        return BoardCommentResponseDTO.builder()
-                .id(boardComment.getId())
-                .boardId(boardComment.getBoard().getId())
-                .userId(boardComment.getUser().getId())
-                .content(boardComment.getContent())
-                .regTime(boardComment.getRegTime())
-                .updateTime(boardComment.getUpdateTime())
-                .build();
+       return null;
     }
 
-
+    public BoardComment FindBoardComment(Long id){
+        return boardCommentRepository.findById(id).orElse(null);
+    }
 }

@@ -9,15 +9,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BuyHistoryResponseDTO {
 
-    private Long id; // 구매 번호 (자동 증가)
+    private Long id; // 번호 (자동 증가)
 
     private String userId;  // 사용자 id
 
-    private String date;  // 구매 날짜
+    private String date;  // 날짜
 
-    private int money;  // 구매 금액
+    private int money;  // 금액
 
-    private int coin;  // 구매 코인
+    private int coin;  // 코인
 
     @Builder
     public BuyHistoryResponseDTO(Long id, String userId, String date, int coin, int money) {

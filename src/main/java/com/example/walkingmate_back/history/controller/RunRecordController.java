@@ -12,6 +12,7 @@ import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.util.List;
@@ -38,8 +39,8 @@ public class RunRecordController {
 
     // 운동 기록 추가
     @PostMapping("/record")
-    public ResponseEntity<DefaultRes<RunRecordResponseDTO>> saveRun(@RequestBody RunRecordRequestDTO runRecordRequestDTO) throws ParseException {
-        RunRecordResponseDTO runRecordResponseDTO = runRecordService.saveRun(runRecordRequestDTO);
+    public ResponseEntity<DefaultRes<RunRecordResponseDTO>> saveRun(@RequestBody RunRecordRequestDTO runRecordRequestDTO, Authentication authentication) throws ParseException {
+        RunRecordResponseDTO runRecordResponseDTO = runRecordService.saveRun(runRecordRequestDTO, authentication.getName());
 
         if(runRecordResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_RUNRECORD, runRecordResponseDTO), HttpStatus.OK);
@@ -49,9 +50,8 @@ public class RunRecordController {
 
     // 운동 기록 조회 - 날짜별
     @GetMapping({"/list/{date}"})
-    public ResponseEntity<DefaultRes<List<RunRecordResponseDTO>>> listDateRun(@PathVariable String date) {
-        String userId = "aaa";
-        UserEntity user = userService.FindUser(userId);
+    public ResponseEntity<DefaultRes<List<RunRecordResponseDTO>>> listDateRun(@PathVariable String date, Authentication authentication) {
+        UserEntity user = userService.FindUser(authentication.getName());
 
         List<RunRecordResponseDTO> runRecordResponseDTO = runRecordService.getDateRun(user.getId(), date);
 
@@ -63,9 +63,8 @@ public class RunRecordController {
 
     // 전체 운동 기록 조회
     @GetMapping({"/list"})
-    public ResponseEntity<DefaultRes<List<RunRecordResponseDTO>>> listAllRun() {
-        String userId = "aaa";
-        UserEntity user = userService.FindUser(userId);
+    public ResponseEntity<DefaultRes<List<RunRecordResponseDTO>>> listAllRun(Authentication authentication) {
+        UserEntity user = userService.FindUser(authentication.getName());
 
         List<RunRecordResponseDTO> runRecordResponseDTO = runRecordService.getAllRun(user.getId());
 
@@ -78,9 +77,8 @@ public class RunRecordController {
 
     // 금일 운동 기록 조회
     @GetMapping({"/list/home"})
-    public ResponseEntity<DefaultRes<HomeResponseDTO>> getDateRunHome() {
-        String userId = "aaa";
-        UserEntity user = userService.FindUser(userId);
+    public ResponseEntity<DefaultRes<HomeResponseDTO>> getDateRunHome(Authentication authentication) {
+        UserEntity user = userService.FindUser(authentication.getName());
 
         HomeResponseDTO homeResponseDTO = runRecordService.getDateRunHome(user.getId());
 
@@ -92,9 +90,8 @@ public class RunRecordController {
 
     // 평균 운동 기록 조회
     @GetMapping({"/list/AVG"})
-    public ResponseEntity<DefaultRes<RunRecordAVGDTO>> getRunAVG() {
-        String userId = "aaa";
-        UserEntity user = userService.FindUser(userId);
+    public ResponseEntity<DefaultRes<RunRecordAVGDTO>> getRunAVG(Authentication authentication) {
+        UserEntity user = userService.FindUser(authentication.getName());
 
         RunRecordAVGDTO runRecordAVGDTO = runRecordService.getRunAVG(user.getId());
 

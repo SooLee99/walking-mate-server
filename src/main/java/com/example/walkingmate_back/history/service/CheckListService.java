@@ -34,8 +34,8 @@ public class CheckListService {
      * 사용자 확인 후 체크리스트 저장
      * - 전우진 2023.07.12
      */
-    public CheckListResponseDTO saveCheckList(CheckListRequestDTO checkListRequestDTO) {
-        UserEntity user = userRepository.findById(checkListRequestDTO.getUserId()).orElse(null);
+    public CheckListResponseDTO saveCheckList(CheckListRequestDTO checkListRequestDTO, String userId) {
+        UserEntity user = userRepository.findById(userId).orElse(null);
         LocalDate now = LocalDate.now();
 
         if(user != null) { // 사용자가 존재하는 경우

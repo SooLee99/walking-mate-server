@@ -2,6 +2,7 @@ package com.example.walkingmate_back.history.service;
 
 import com.example.walkingmate_back.history.dto.BuyHistoryRequestDTO;
 import com.example.walkingmate_back.history.dto.BuyHistoryResponseDTO;
+import com.example.walkingmate_back.history.dto.CoinRequestDTO;
 import com.example.walkingmate_back.history.entity.BuyHistory;
 import com.example.walkingmate_back.history.repository.BuyHistoryRepository;
 import com.example.walkingmate_back.user.entity.UserEntity;
@@ -17,10 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *    코인 구매, 구매내역 조회
+ *    코인 구매, 구매내역 조회, 코인 사용
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.23
+ *   @version          1.00 / 2023.07.24
  *   @author           전우진
  */
 
@@ -37,8 +38,8 @@ public class BuyHistoryService {
      * 코인 구매
      * - 전우진 2023.07.23
      */
-    public BuyHistoryResponseDTO saveBuyHistory(BuyHistoryRequestDTO buyHistoryRequestDTO) {
-        UserEntity user = userRepository.findById(buyHistoryRequestDTO.getUserId()).orElse(null);
+    public BuyHistoryResponseDTO saveBuyHistory(BuyHistoryRequestDTO buyHistoryRequestDTO, String userId) {
+        UserEntity user = userRepository.findById(userId).orElse(null);
         LocalDateTime now = LocalDateTime.now();
 
         if (user != null) { // 사용자가 존재하는 경우
@@ -83,4 +84,33 @@ public class BuyHistoryService {
         }
         return result;
     }
+
+    /**
+     * 코인 사용
+     * - 전우진 2023.07.24
+     */
+    public BuyHistoryResponseDTO modifyBuyHistory(CoinRequestDTO coinRequestDTO, UserEntity user) {
+        LocalDateTime now = LocalDateTime.now();
+
+        UserRank userRank = userRankRepository.findById(user.getId()).orElse(null);
+        if(userRank.getCoin() < coinRequestDTO.getCoin()) {
+            return null;
+        }
+
+        userRank.update(coinRequestDTO);
+        userRankRepository.save(userRank);
+
+        BuyHistory buyHistory = new BuyHistory(user, now, - coinRequestDTO.getCoin(), 0);
+        buyHistoryRepository.save(buyHistory);
+
+        String date = buyHistory.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        return BuyHistoryResponseDTO.builder()
+                .id(buyHistory.getId())
+                .userId(buyHistory.getUser().getId())
+                .date(date)
+                .coin(buyHistory.getCoin())
+                .money(buyHistory.getMoney())
+                .build();
+    }
+
 }

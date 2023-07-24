@@ -1,6 +1,7 @@
 package com.example.walkingmate_back.user.entity;
 
 import com.example.walkingmate_back.history.dto.BuyHistoryRequestDTO;
+import com.example.walkingmate_back.history.dto.CoinRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,4 +32,6 @@ public class UserRank {
     public void update(BuyHistoryRequestDTO buyHistoryRequestDTO) {
         this.coin=coin + buyHistoryRequestDTO.getCoin();
     }
+
+    public void update(CoinRequestDTO coinRequestDTO) {this.coin = coin - coinRequestDTO.getCoin();}
 }

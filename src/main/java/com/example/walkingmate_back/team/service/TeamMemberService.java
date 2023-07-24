@@ -55,7 +55,6 @@ public class TeamMemberService {
      */
     public TeamMemberResponseDTO deleteTeamMember(Long teamId, String userId) {
         Team team = teamRepository.findById(teamId).orElse(null);
-        UserEntity user = userRepository.findById(userId).orElse(null);
 
         if(team == null) {
             // 팀이 존재하지 않을 경우

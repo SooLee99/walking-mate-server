@@ -40,8 +40,8 @@ public class RunRecordService {
      * 사용자 확인 후 운동 기록 저장
      * - 전우진 2023.07.12
      */
-    public RunRecordResponseDTO saveRun(RunRecordRequestDTO runRecordRequestDTO) throws ParseException {
-        UserEntity user = userRepository.findById(runRecordRequestDTO.getUserId()).orElse(null);
+    public RunRecordResponseDTO saveRun(RunRecordRequestDTO runRecordRequestDTO, String userId) throws ParseException {
+        UserEntity user = userRepository.findById(userId).orElse(null);
         LocalDate now = LocalDate.now();
 
         if(user != null) {  // 사용자가 존재하는 경우
@@ -130,10 +130,13 @@ public class RunRecordService {
         }
 
         UserBodyResponseDTO userBodyResponseDTO = userBodyService.getUserBody(userId);
-
+        double time = 0;
         // METs * 운동시간 * 체중(kg) * 1.05
         // 가벼운 걷기 운동 METs = 3.0
-        kcal = Math.round(3.0 * userBodyResponseDTO.getWeight() * 1.05);
+        if(time == 0) {
+            kcal = 0;
+        } else kcal = Math.round(3.0 * userBodyResponseDTO.getWeight() * 1.05);
+
         return HomeResponseDTO.builder()
                 .step(totalStep)
                 .distance(totalDis)

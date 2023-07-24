@@ -2,6 +2,7 @@ package com.example.walkingmate_back.history.controller;
 
 import com.example.walkingmate_back.history.dto.BuyHistoryRequestDTO;
 import com.example.walkingmate_back.history.dto.BuyHistoryResponseDTO;
+import com.example.walkingmate_back.history.dto.CoinRequestDTO;
 import com.example.walkingmate_back.history.service.BuyHistoryService;
 import com.example.walkingmate_back.main.response.DefaultRes;
 import com.example.walkingmate_back.main.response.ResponseMessage;
@@ -10,13 +11,14 @@ import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- *    코인 구매, 구매내역 조회
+ *    코인 구매, 구매내역 조회, 코인 사용
  *
- *   @version          1.00 / 2023.07.23
+ *   @version          1.00 / 2023.07.24
  *   @author           전우진
  */
 
@@ -35,8 +37,8 @@ public class BuyHistoryController {
 
     // 코인 구매
     @PostMapping("/save")
-    public ResponseEntity<DefaultRes<BuyHistoryResponseDTO>> saveBuyHistory(@RequestBody BuyHistoryRequestDTO buyHistoryRequestDTO) {
-        BuyHistoryResponseDTO buyHistoryResponseDTO = buyHistoryService.saveBuyHistory(buyHistoryRequestDTO);
+    public ResponseEntity<DefaultRes<BuyHistoryResponseDTO>> saveBuyHistory(@RequestBody BuyHistoryRequestDTO buyHistoryRequestDTO, Authentication authentication) {
+        BuyHistoryResponseDTO buyHistoryResponseDTO = buyHistoryService.saveBuyHistory(buyHistoryRequestDTO, authentication.getName());
 
         if(buyHistoryResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_BUYHISTORY, buyHistoryResponseDTO), HttpStatus.OK);
@@ -46,9 +48,8 @@ public class BuyHistoryController {
 
     // 코인 구매내역 조회
     @GetMapping("/list")
-    public ResponseEntity<DefaultRes<List<BuyHistoryResponseDTO>>> listBuyHistory() {
-        String userId = "aaa";
-        UserEntity user = userService.FindUser(userId);
+    public ResponseEntity<DefaultRes<List<BuyHistoryResponseDTO>>> listBuyHistory(Authentication authentication) {
+        UserEntity user = userService.FindUser(authentication.getName());
 
         List<BuyHistoryResponseDTO> buyHistoryResponseDTO = buyHistoryService.getBuyHistory(user.getId());
 
@@ -58,4 +59,15 @@ public class BuyHistoryController {
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_BUYHISTORY, null), HttpStatus.OK);
     }
 
+    // 코인 사용
+    @PutMapping("/coin")
+    public ResponseEntity<DefaultRes<BuyHistoryResponseDTO>> modifyBuyHistory(@RequestBody CoinRequestDTO coinRequestDTO, Authentication authentication) {
+        UserEntity user = userService.FindUser(authentication.getName());
+        BuyHistoryResponseDTO buyHistoryResponseDTO = buyHistoryService.modifyBuyHistory(coinRequestDTO, user);
+
+        if(buyHistoryResponseDTO != null)
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_BUYHISTORY, buyHistoryResponseDTO), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
+    }
 }

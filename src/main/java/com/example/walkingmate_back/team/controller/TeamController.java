@@ -5,11 +5,13 @@ import com.example.walkingmate_back.main.response.ResponseMessage;
 import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.team.dto.TeamRequestDTO;
 import com.example.walkingmate_back.team.dto.TeamResponseDTO;
+import com.example.walkingmate_back.team.entity.Team;
 import com.example.walkingmate_back.team.service.TeamService;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -35,9 +37,8 @@ public class TeamController {
 
     // 팀 생성
     @PostMapping("/save")
-    public ResponseEntity<DefaultRes<TeamResponseDTO>> saveTeam(@RequestBody TeamRequestDTO teamRequestDTO){
-        String userId = "aaa";
-        UserEntity user = userService.FindUser(userId);
+    public ResponseEntity<DefaultRes<TeamResponseDTO>> saveTeam(@RequestBody TeamRequestDTO teamRequestDTO, Authentication authentication){
+        UserEntity user = userService.FindUser(authentication.getName());
         if(user == null)  return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
         TeamResponseDTO teamResponseDTO = teamService.saveTeam(teamRequestDTO, user);
@@ -50,8 +51,13 @@ public class TeamController {
 
     // 팀 삭제
     @DeleteMapping("/{teamId}")
-    public ResponseEntity<DefaultRes<TeamResponseDTO>> deleteTeam(@PathVariable Long teamId) {
-        TeamResponseDTO teamResponseDTO = teamService.deleteTeam(teamId);
+    public ResponseEntity<DefaultRes<TeamResponseDTO>> deleteTeam(@PathVariable Long teamId, Authentication authentication) {
+        UserEntity user = userService.FindUser(authentication.getName());
+        if(user == null)  return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
+
+        Team team = teamService.FindTeam(teamId);
+        if(team == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+        TeamResponseDTO teamResponseDTO = teamService.deleteTeam(team, user.getId());
 
         if(teamResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.DELETE_TEAM, teamResponseDTO), HttpStatus.OK);
@@ -83,9 +89,8 @@ public class TeamController {
 
     // 가입된 팀 정보 조회 - 랭킹 포함
     @GetMapping("/list/userTeam")
-    public ResponseEntity<DefaultRes<TeamResponseDTO>> SpecificationUserTeam() {
-        String userId = "aaa";
-        TeamResponseDTO teamResponseDTO = teamService.getUserTeam(userId);
+    public ResponseEntity<DefaultRes<TeamResponseDTO>> SpecificationUserTeam(Authentication authentication) {
+        TeamResponseDTO teamResponseDTO = teamService.getUserTeam(authentication.getName());
 
         if(teamResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, teamResponseDTO), HttpStatus.OK);

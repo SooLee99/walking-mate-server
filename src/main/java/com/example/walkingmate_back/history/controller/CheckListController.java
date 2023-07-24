@@ -12,6 +12,7 @@ import com.example.walkingmate_back.user.service.UserBodyService;
 import com.example.walkingmate_back.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,8 +39,8 @@ public class CheckListController {
 
     // 체크리스트 추가
     @PostMapping("/save")
-    public ResponseEntity<DefaultRes<CheckListResponseDTO>> saveCheckList(@RequestBody CheckListRequestDTO checkListRequestDTO) {
-        CheckListResponseDTO checkListResponseDTO = checkListService.saveCheckList(checkListRequestDTO);
+    public ResponseEntity<DefaultRes<CheckListResponseDTO>> saveCheckList(@RequestBody CheckListRequestDTO checkListRequestDTO, Authentication authentication) {
+        CheckListResponseDTO checkListResponseDTO = checkListService.saveCheckList(checkListRequestDTO, authentication.getName());
 
         if(checkListResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_CHECKLIST, checkListResponseDTO), HttpStatus.OK);
@@ -83,9 +84,8 @@ public class CheckListController {
 
     // 체크리스트 조회 - 날짜별
     @GetMapping("/list/{date}")
-    public ResponseEntity<DefaultRes<List<CheckListResponseDTO>>> listCheckList(@PathVariable String date) {
-        String userId = "aaa";
-        UserEntity user = userService.FindUser(userId);
+    public ResponseEntity<DefaultRes<List<CheckListResponseDTO>>> listCheckList(@PathVariable String date, Authentication authentication) {
+        UserEntity user = userService.FindUser(authentication.getName());
 
         List<CheckListResponseDTO> checkListResponseDTO = checkListService.getDateCheckList(user.getId(), date);
 

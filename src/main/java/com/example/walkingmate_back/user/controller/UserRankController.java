@@ -7,6 +7,7 @@ import com.example.walkingmate_back.user.dto.UserRankResponseDTO;
 import com.example.walkingmate_back.user.service.UserRankService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,9 +33,8 @@ public class UserRankController {
 
     // 개인 랭킹 조회
     @GetMapping("/personal")
-    public ResponseEntity<DefaultRes<UserRankResponseDTO>> SpecificationUserRank() {
-        String userId = "aaa";
-        UserRankResponseDTO userRankResponseDTO = userRankService.getUserRank(userId);
+    public ResponseEntity<DefaultRes<UserRankResponseDTO>> SpecificationUserRank(Authentication authentication) {
+        UserRankResponseDTO userRankResponseDTO = userRankService.getUserRank(authentication.getName());
 
         if(userRankResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, userRankResponseDTO), HttpStatus.OK);

@@ -83,7 +83,6 @@ public class BattleService {
         }
 
         // 대결상대 모두 삭제
-
         battleRepository.delete(battle);
 
         return BattleResponseDTO.builder()

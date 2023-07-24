@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  *    게시글 등록, 수정, 삭제, 단일 조회, 전체 조회
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.21
+ *   @version          1.00 / 2023.07.24
  *   @author           전우진
  */
 
@@ -39,8 +39,8 @@ public class BoardService {
      * 사용자 확인 후 게시글 저장
      * - 전우진 2023.07.10
      */
-    public BoardResponseDTO saveBoard(BoardRequestDTO boardRequestDTO) {
-        UserEntity user = userRepository.findById(boardRequestDTO.getUserId()).orElse(null);
+    public BoardResponseDTO saveBoard(BoardRequestDTO boardRequestDTO, String userId) {
+        UserEntity user = userRepository.findById(userId).orElse(null);
 
         if(user != null) { // 사용자가 존재하는 경우
             Board board = new Board(user, boardRequestDTO.getTitle(), boardRequestDTO.getContent());
@@ -62,46 +62,38 @@ public class BoardService {
      * 게시글 탐색 후 게시글 수정
      * - 전우진 2023.07.10
      */
-    public BoardResponseDTO updateBoard(Long id, BoardUpdateDTO boardUpdateDTO) {
+    public BoardResponseDTO updateBoard(Board board, BoardUpdateDTO boardUpdateDTO, String userId) {
 
-        Board board = boardRepository.findById(id).orElse(null);
+        if(userId.equals(board.getUser().getId())) {
+            board.update(boardUpdateDTO);
+            boardRepository.save(board);
 
-        if (board == null) {
-            // 게시글이 존재하지 않는 경우
-            return null;
+            return BoardResponseDTO.builder()
+                    .id(board.getId())
+                    .userId(board.getUser().getId())
+                    .title(board.getTitle())
+                    .content(board.getContent())
+                    .build();
         }
-
-        board.update(boardUpdateDTO);
-        boardRepository.save(board);
-
-        return BoardResponseDTO.builder()
-                .id(board.getId())
-                .userId(board.getUser().getId())
-                .title(board.getTitle())
-                .content(board.getContent())
-                .build();
+        return null;
     }
 
     /**
      * 게시글 탐색 후 게시글 삭제
      * - 전우진 2023.07.10
      */
-    public BoardResponseDTO deleteBoard(Long id) {
-        Board board = boardRepository.findById(id).orElse(null);
+    public BoardResponseDTO deleteBoard(Board board, String userId) {
+        if(userId.equals(board.getUser().getId())) {
+            boardRepository.delete(board);
 
-        if (board == null) {
-            // 게시글이 존재하지 않는 경우
-            return null;
+            return BoardResponseDTO.builder()
+                    .id(board.getId())
+                    .userId(board.getUser().getId())
+                    .title(board.getTitle())
+                    .content(board.getContent())
+                    .build();
         }
-
-        boardRepository.delete(board);
-
-        return BoardResponseDTO.builder()
-                .id(board.getId())
-                .userId(board.getUser().getId())
-                .title(board.getTitle())
-                .content(board.getContent())
-                .build();
+        return null;
     }
 
     /**
@@ -165,5 +157,9 @@ public class BoardService {
         }
 
         return result;
+    }
+
+    public Board FindBoard(Long id){
+        return boardRepository.findById(id).orElse(null);
     }
 }

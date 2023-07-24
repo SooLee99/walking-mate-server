@@ -14,6 +14,7 @@ import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -43,9 +44,8 @@ public class BattleRivalController {
 
     // 대결 라이벌 저장
     @PostMapping("/battleRival/{battleId}")
-    public ResponseEntity<DefaultRes<BattleRivalResponseDTO>> saveBattleRival(@PathVariable Long battleId) {
-        String userId = "bbb";
-        UserEntity user = userService.FindUser(userId);
+    public ResponseEntity<DefaultRes<BattleRivalResponseDTO>> saveBattleRival(@PathVariable Long battleId,  Authentication authentication) {
+        UserEntity user = userService.FindUser(authentication.getName());
         if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
         TeamMember teamMember = teamMemberService.FindTeam(user.getId());
@@ -70,9 +70,8 @@ public class BattleRivalController {
 
     // 대결 라이벌 수정 - 걸음 수
     @PutMapping("/battleRival/{battleId}")
-    public ResponseEntity<DefaultRes<BattleRivalResponseDTO>> updateBattleRival(@RequestBody BattleRivalUpdateDTO battleRivalUpdateDTO, @PathVariable Long battleId) {
-        String userId = "bbb";
-        UserEntity user = userService.FindUser(userId);
+    public ResponseEntity<DefaultRes<BattleRivalResponseDTO>> updateBattleRival(@RequestBody BattleRivalUpdateDTO battleRivalUpdateDTO, @PathVariable Long battleId, Authentication authentication) {
+        UserEntity user = userService.FindUser(authentication.getName());
         if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
         TeamMember teamMember = teamMemberService.FindTeam(user.getId());
