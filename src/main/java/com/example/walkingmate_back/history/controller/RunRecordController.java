@@ -100,4 +100,15 @@ public class RunRecordController {
         else
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_RUNRECORD, null), HttpStatus.OK);
     }
+
+    // 운동 기록 수정
+    @PutMapping("/record/{id}")
+    public ResponseEntity<DefaultRes<RunRecordResponseDTO>> modifyRun(@PathVariable Long id, @RequestBody RunRecordRequestDTO runRecordRequestDTO) throws ParseException {
+        RunRecordResponseDTO runRecordResponseDTO = runRecordService.modifyRun(id, runRecordRequestDTO);
+
+        if(runRecordResponseDTO != null)
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_RUNRECORD, runRecordResponseDTO), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
+    }
 }

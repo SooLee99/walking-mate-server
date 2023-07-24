@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -50,6 +51,7 @@ public class RunRecordService {
 
             String date = runRecord.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
             return RunRecordResponseDTO.builder()
+                    .id(runRecord.getId())
                     .userId(runRecord.getUser().getId())
                     .date(date)
                     .step(runRecord.getStep())
@@ -75,6 +77,7 @@ public class RunRecordService {
 
         for (RunRecord runRecord : runRecords) {
             RunRecordResponseDTO runRecordResponseDTO = new RunRecordResponseDTO(
+                runRecord.getId(),
                 runRecord.getUser().getId(),
                 runRecord.getDate().toString(),
                 runRecord.getStep(),
@@ -99,6 +102,7 @@ public class RunRecordService {
 
         for (RunRecord runRecord : runRecords) {
             RunRecordResponseDTO runRecordResponseDTO = new RunRecordResponseDTO(
+                    runRecord.getId(),
                     runRecord.getUser().getId(),
                     runRecord.getDate().toString(),
                     runRecord.getStep(),
@@ -123,19 +127,24 @@ public class RunRecordService {
         List<RunRecord> runRecords = runRecordRepository.findByUserIdWithDate(user.getId(), lc);
         int totalStep = 0;
         double totalDis = 0;
-        long kcal = 0;
+        long kcal = 0, m = 0;
+        double time = 0.0;
+        Duration duration;
         for (RunRecord runRecord : runRecords) {
             totalStep += runRecord.getStep();
             totalDis += runRecord.getDistance();
+            duration = Duration.between(runRecord.getRegTime(), runRecord.getUpdateTime());
+            m += duration.toMinutes();
         }
 
         UserBodyResponseDTO userBodyResponseDTO = userBodyService.getUserBody(userId);
-        double time = 0;
+        time = (double) m / 60;
+
         // METs * 운동시간 * 체중(kg) * 1.05
         // 가벼운 걷기 운동 METs = 3.0
-        if(time == 0) {
+        if(time < 0) {
             kcal = 0;
-        } else kcal = Math.round(3.0 * userBodyResponseDTO.getWeight() * 1.05);
+        } else kcal = Math.round(3.0 * time * userBodyResponseDTO.getWeight() * 1.05);
 
         return HomeResponseDTO.builder()
                 .step(totalStep)
@@ -168,5 +177,25 @@ public class RunRecordService {
                 .step(avgStep)
                 .distance(avgDis)
                 .build();
+    }
+
+    public RunRecordResponseDTO modifyRun(Long id, RunRecordRequestDTO runRecordRequestDTO) {
+       RunRecord runRecord = runRecordRepository.findById(id).orElse(null);
+
+       if(runRecord == null) return null;
+
+       runRecord.update(runRecordRequestDTO);
+       runRecordRepository.save(runRecord);
+
+       String date = runRecord.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+       return RunRecordResponseDTO.builder()
+               .id(runRecord.getId())
+               .userId(runRecord.getUser().getId())
+               .date(date)
+               .step(runRecord.getStep())
+               .distance(runRecord.getDistance())
+               .build();
+
+
     }
 }

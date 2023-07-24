@@ -1,5 +1,6 @@
 package com.example.walkingmate_back.history.entity;
 
+import com.example.walkingmate_back.history.dto.RunRecordRequestDTO;
 import com.example.walkingmate_back.main.entity.BaseTimeEntity;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import jakarta.persistence.*;
@@ -39,5 +40,10 @@ public class RunRecord extends BaseTimeEntity {
         this.date=now;
         this.step=step;
         this.distance=distance;
+    }
+
+    public void update(RunRecordRequestDTO runRecordRequestDTO) {
+        this.step = step + runRecordRequestDTO.getStep();
+        this.distance = distance + runRecordRequestDTO.getDistance();
     }
 }
