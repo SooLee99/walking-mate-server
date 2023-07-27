@@ -12,8 +12,7 @@ public class BoardCommentRequestDTO {
     @NotBlank(message = "내용은 필수 항목입니다.")
     private String content;  // 내용
 
-    public BoardCommentRequestDTO(Long id, Long boardId, String content) {
-        this.id=id;
+    public BoardCommentRequestDTO(Long boardId, String content) {
         this.boardId=boardId;
         this.content=content;
     }
