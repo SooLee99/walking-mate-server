@@ -1,17 +1,21 @@
-package com.example.walkingmate_back.board.repository;
+package com.example.walkingmate_back.history.repository;
 
-import com.example.walkingmate_back.board.entity.BoardComment;
+import com.example.walkingmate_back.board.repository.BoardCommentRepository;
+import com.example.walkingmate_back.history.entity.CheckList;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class BoardCommentRepositoryTest {
+class CheckListRepositoryTest {
 
     @Autowired
-    BoardCommentRepository boardCommentRepository;
+    CheckListRepository checkListRepository;
 
     @BeforeAll
     static void beforeAll() {
@@ -38,14 +42,13 @@ class BoardCommentRepositoryTest {
     }
 
     @Test
-    @DisplayName("댓글을 반환하는지 확인")
-    public void boardCommentListTest() {
-        System.out.println("## boardCommentListTest 시작 ##");
+    @DisplayName("날짜별 사용자 체크리스트 조회 테스트")
+    void findByUserIdWithDate() {
+        System.out.println("## findByUserIdWithDate 시작 ##");
         System.out.println();
 
-        List<BoardComment> result = boardCommentRepository.findAll();
+        List<CheckList> result = checkListRepository.findByUserIdWithDate("aaa", LocalDate.now());
 
-        assertEquals(result.size(), 1);
+        assertEquals(result.size(), 4);
     }
-
 }

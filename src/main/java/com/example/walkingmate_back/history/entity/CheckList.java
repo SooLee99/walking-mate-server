@@ -45,9 +45,8 @@ public class CheckList {
 
     }
 
-    public CheckList update(CheckListRequestDTO checkListRequestDTO, LocalDate date) {
+    public CheckList update(CheckListRequestDTO checkListRequestDTO) {
         this.content=checkListRequestDTO.getContent();
-        this.date=date;
         return this;
     }
 }

@@ -63,14 +63,13 @@ public class CheckListService {
      */
     public CheckListResponseDTO updateCheckList(Long listId, CheckListRequestDTO checkListRequestDTO) {
         CheckList checkList = checkListRepository.findById(listId).orElse(null);
-        LocalDate now = LocalDate.now();
 
         if(checkList == null) {
             // 체크리스트가 존재하지 않는 경우
             return null;
         }
 
-        checkList.update(checkListRequestDTO, now);
+        checkList.update(checkListRequestDTO);
 
         checkListRepository.save(checkList);
 
