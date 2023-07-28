@@ -16,6 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class RunRecordServiceTest {
 
+    private String userId = "aaa";
+
     @Autowired
     RunRecordService runRecordService;
 
@@ -53,8 +55,6 @@ class RunRecordServiceTest {
         runRecordRequestDTO.setDistance(10);
         runRecordRequestDTO.setStep(1000);
 
-        String userId = "aaa";
-
         RunRecordResponseDTO saveRun = runRecordService.saveRun(runRecordRequestDTO, userId);
 
         assertEquals(saveRun.getUserId(), userId);
@@ -69,7 +69,6 @@ class RunRecordServiceTest {
         System.out.println("## saveRunTest 시작 ##");
         System.out.println();
 
-        String userId = "aaa";
         String date = "20230728";
 
         List<RunRecordResponseDTO> getDateRun = runRecordService.getDateRun(userId, date);
@@ -83,8 +82,6 @@ class RunRecordServiceTest {
         System.out.println("## saveRunTest 시작 ##");
         System.out.println();
 
-        String userId = "aaa";
-
         List<RunRecordResponseDTO> getAllRun = runRecordService.getAllRun(userId);
 
         assertEquals(getAllRun.size(), 5);
@@ -95,8 +92,6 @@ class RunRecordServiceTest {
     void getDateRunHomeTest() {
         System.out.println("## saveRunTest 시작 ##");
         System.out.println();
-
-        String userId = "aaa";
 
         HomeResponseDTO getDateRunHome = runRecordService.getDateRunHome(userId);
 
@@ -110,8 +105,6 @@ class RunRecordServiceTest {
     void getRunAVGTest() {
         System.out.println("## saveRunTest 시작 ##");
         System.out.println();
-
-        String userId = "aaa";
 
         RunRecordAVGDTO getRunAVG = runRecordService.getRunAVG(userId);
 

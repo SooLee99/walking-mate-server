@@ -14,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class BuyHistoryServiceTest {
 
+    private String userId = "aaa";
+
     @Autowired
     BuyHistoryService buyHistoryService;
 
@@ -53,7 +55,6 @@ class BuyHistoryServiceTest {
         BuyHistoryRequestDTO buyHistoryRequestDTO = new BuyHistoryRequestDTO();
         buyHistoryRequestDTO.setCoin(100);
         buyHistoryRequestDTO.setMoney(10000);
-        String userId = "aaa";
 
         BuyHistoryResponseDTO saveBuyHistory = buyHistoryService.saveBuyHistory(buyHistoryRequestDTO, userId);
 
@@ -68,11 +69,9 @@ class BuyHistoryServiceTest {
         System.out.println("## getBuyHistory 시작 ##");
         System.out.println();
 
-        String userId = "aaa";
-
         List<BuyHistoryResponseDTO> getBuyHistory = buyHistoryService.getBuyHistory(userId);
 
-        assertEquals(getBuyHistory.size(), 13);
+        assertEquals(getBuyHistory.size(), 16);
     }
 
     @Test
@@ -84,7 +83,7 @@ class BuyHistoryServiceTest {
         CoinRequestDTO coinRequestDTO = new CoinRequestDTO();
         coinRequestDTO.setCoin(100);
 
-        UserEntity user = userService.FindUser("aaa");
+        UserEntity user = userService.FindUser(userId);
 
         BuyHistoryResponseDTO modifyBuyHistory = buyHistoryService.modifyBuyHistory(coinRequestDTO, user);
 

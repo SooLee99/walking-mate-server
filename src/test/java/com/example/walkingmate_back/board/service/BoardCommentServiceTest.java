@@ -12,6 +12,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class BoardCommentServiceTest {
 
+    public UserEntity user() {
+        UserEntity user = new UserEntity();
+        user.setId("bbb");
+
+        return user;
+    }
+
     @Autowired
     BoardCommentService boardCommentService;
 
@@ -46,13 +53,11 @@ class BoardCommentServiceTest {
         System.out.println();
 
         BoardCommentRequestDTO boardCommentRequestDTO = new BoardCommentRequestDTO(12L, "commentContent1");
-        UserEntity user = new UserEntity();
-        user.setId("bbb");
 
-        BoardCommentResponseDTO saveComment = boardCommentService.saveComment(boardCommentRequestDTO, user);
+        BoardCommentResponseDTO saveComment = boardCommentService.saveComment(boardCommentRequestDTO, user());
 
         assertEquals(saveComment.getBoardId(), boardCommentRequestDTO.getBoardId());
-        assertEquals(saveComment.getUserId(), user.getId());
+        assertEquals(saveComment.getUserId(), user().getId());
         assertEquals(saveComment.getContent(), boardCommentRequestDTO.getContent());
     }
 
@@ -62,12 +67,10 @@ class BoardCommentServiceTest {
         System.out.println("## updateCommentTest 시작 ##");
         System.out.println();
 
-        BoardComment boardComment = boardCommentService.FindBoardComment(6L);
+        BoardComment boardComment = boardCommentService.FindBoardComment(8L);
         BoardCommentRequestDTO boardCommentRequestDTO = new BoardCommentRequestDTO(12L, "updateContent2");
-        UserEntity user = new UserEntity();
-        user.setId("bbb");
 
-        BoardCommentResponseDTO updateComment = boardCommentService.updateComment(boardComment, boardCommentRequestDTO, user.getId());
+        BoardCommentResponseDTO updateComment = boardCommentService.updateComment(boardComment, boardCommentRequestDTO, user().getId());
 
         assertEquals(updateComment.getId(), boardComment.getId());
         assertEquals(updateComment.getBoardId(), boardCommentRequestDTO.getBoardId());
@@ -80,15 +83,13 @@ class BoardCommentServiceTest {
         System.out.println("## deleteCommentTest 시작 ##");
         System.out.println();
 
-        BoardComment boardComment = boardCommentService.FindBoardComment(6L);
-        UserEntity user = new UserEntity();
-        user.setId("bbb");
+        BoardComment boardComment = boardCommentService.FindBoardComment(8L);
 
-        BoardCommentResponseDTO deleteComment = boardCommentService.deleteComment(boardComment, user.getId());
+        BoardCommentResponseDTO deleteComment = boardCommentService.deleteComment(boardComment, user().getId());
 
         assertEquals(deleteComment.getId(), boardComment.getId());
         assertEquals(deleteComment.getBoardId(), boardComment.getBoard().getId());
-        assertEquals(deleteComment.getUserId(), user.getId());
+        assertEquals(deleteComment.getUserId(), user().getId());
         assertEquals(deleteComment.getContent(), boardComment.getContent());
     }
 
