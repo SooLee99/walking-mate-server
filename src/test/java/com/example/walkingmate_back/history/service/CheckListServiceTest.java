@@ -2,15 +2,12 @@ package com.example.walkingmate_back.history.service;
 
 import com.example.walkingmate_back.history.dto.CheckListRequestDTO;
 import com.example.walkingmate_back.history.dto.CheckListResponseDTO;
-import com.example.walkingmate_back.history.repository.CheckListRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest

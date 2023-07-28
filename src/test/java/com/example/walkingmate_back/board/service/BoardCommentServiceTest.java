@@ -2,13 +2,11 @@ package com.example.walkingmate_back.board.service;
 
 import com.example.walkingmate_back.board.dto.BoardCommentRequestDTO;
 import com.example.walkingmate_back.board.dto.BoardCommentResponseDTO;
-import com.example.walkingmate_back.board.dto.BoardResponseDTO;
 import com.example.walkingmate_back.board.entity.BoardComment;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest

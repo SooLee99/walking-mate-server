@@ -1,6 +1,6 @@
 package com.example.walkingmate_back.history.repository;
 
-import com.example.walkingmate_back.history.entity.CheckList;
+import com.example.walkingmate_back.history.entity.RunRecord;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,10 +9,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class CheckListRepositoryTest {
+class RunRecordRepositoryTest {
 
     @Autowired
-    CheckListRepository checkListRepository;
+    RunRecordRepository runRecordRepository;
 
     @BeforeAll
     static void beforeAll() {
@@ -39,13 +39,24 @@ class CheckListRepositoryTest {
     }
 
     @Test
-    @DisplayName("날짜별 사용자 체크리스트 조회 테스트")
+    @DisplayName("사용자의 금일 운동 기록 조회 테스트")
     void findByUserIdWithDate() {
-        System.out.println("## findByUserIdWithDate 시작 ##");
+        System.out.println("## saveRunTest 시작 ##");
         System.out.println();
 
-        List<CheckList> result = checkListRepository.findByUserIdWithDate("aaa", LocalDate.now());
+        List<RunRecord> result = runRecordRepository.findByUserIdWithDate("aaa", LocalDate.now());
 
-        assertEquals(result.size(), 4);
+        assertEquals(result.size(), 1);
+    }
+
+    @Test
+    @DisplayName("사용자의 운동 기록 조회 테스트")
+    void findByUserId() {
+        System.out.println("## saveRunTest 시작 ##");
+        System.out.println();
+
+        List<RunRecord> result = runRecordRepository.findByUserId("aaa");
+
+        assertEquals(result.size(), 5);
     }
 }

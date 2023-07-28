@@ -1,13 +1,10 @@
 package com.example.walkingmate_back.history.repository;
 
-import com.example.walkingmate_back.board.repository.BoardCommentRepository;
 import com.example.walkingmate_back.history.entity.BuyHistory;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest

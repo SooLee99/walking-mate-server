@@ -89,7 +89,7 @@ public class RunRecordController {
     }
 
     // 평균 운동 기록 조회
-    @GetMapping({"/list/AVG"})
+    @GetMapping({"/avgList"})
     public ResponseEntity<DefaultRes<RunRecordAVGDTO>> getRunAVG(Authentication authentication) {
         UserEntity user = userService.FindUser(authentication.getName());
 

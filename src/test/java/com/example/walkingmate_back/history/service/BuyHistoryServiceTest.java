@@ -1,6 +1,5 @@
 package com.example.walkingmate_back.history.service;
 
-import com.example.walkingmate_back.board.repository.BoardCommentRepository;
 import com.example.walkingmate_back.history.dto.BuyHistoryRequestDTO;
 import com.example.walkingmate_back.history.dto.BuyHistoryResponseDTO;
 import com.example.walkingmate_back.history.dto.CoinRequestDTO;
@@ -9,9 +8,7 @@ import com.example.walkingmate_back.user.service.UserService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
