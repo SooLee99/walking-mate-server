@@ -66,7 +66,7 @@ class RunRecordServiceTest {
     @Test
     @DisplayName("날짜별 운동 기록 조회 테스트")
     void getDateRunTest() {
-        System.out.println("## saveRunTest 시작 ##");
+        System.out.println("## getDateRunTest 시작 ##");
         System.out.println();
 
         String date = "20230728";
@@ -79,7 +79,7 @@ class RunRecordServiceTest {
     @Test
     @DisplayName("평균 운동 기록 조회 테스트")
     void getAllRunTest() {
-        System.out.println("## saveRunTest 시작 ##");
+        System.out.println("## getAllRunTest 시작 ##");
         System.out.println();
 
         List<RunRecordResponseDTO> getAllRun = runRecordService.getAllRun(userId);
@@ -90,7 +90,7 @@ class RunRecordServiceTest {
     @Test
     @DisplayName("금일 운동 기록 조회 테스트")
     void getDateRunHomeTest() {
-        System.out.println("## saveRunTest 시작 ##");
+        System.out.println("## getDateRunHomeTest 시작 ##");
         System.out.println();
 
         HomeResponseDTO getDateRunHome = runRecordService.getDateRunHome(userId);
@@ -103,7 +103,7 @@ class RunRecordServiceTest {
     @Test
     @DisplayName("평균 운동 기록 조회 테스트")
     void getRunAVGTest() {
-        System.out.println("## saveRunTest 시작 ##");
+        System.out.println("## getRunAVGTest 시작 ##");
         System.out.println();
 
         RunRecordAVGDTO getRunAVG = runRecordService.getRunAVG(userId);
@@ -116,7 +116,7 @@ class RunRecordServiceTest {
     @Test
     @DisplayName("운동 기록 수정 테스트")
     void modifyRunTest() {
-        System.out.println("## saveRunTest 시작 ##");
+        System.out.println("## modifyRunTest 시작 ##");
         System.out.println();
 
         Long id = 7L;

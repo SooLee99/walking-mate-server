@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 public class TeamService {
 
     private final TeamRepository teamRepository;
-    private final UserRepository userRepository;
     private final TeamMemberRepository teamMemberRepository;
     private final TeamRankRepository teamRankRepository;
 

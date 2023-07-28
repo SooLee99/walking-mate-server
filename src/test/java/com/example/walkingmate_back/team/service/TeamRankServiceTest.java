@@ -1,18 +1,17 @@
-package com.example.walkingmate_back.history.repository;
+package com.example.walkingmate_back.team.service;
 
-import com.example.walkingmate_back.history.entity.RunRecord;
+import com.example.walkingmate_back.team.dto.TeamRankResponseDTO;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import java.time.LocalDate;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class RunRecordRepositoryTest {
+class TeamRankServiceTest {
 
     @Autowired
-    RunRecordRepository runRecordRepository;
+    TeamRankService teamRankService;
 
     @BeforeAll
     static void beforeAll() {
@@ -39,24 +38,13 @@ class RunRecordRepositoryTest {
     }
 
     @Test
-    @DisplayName("사용자의 금일 운동 기록 조회 테스트")
-    void findByUserIdWithDateTest() {
-        System.out.println("## findByUserIdWithDateTest 시작 ##");
+    @DisplayName("팀 랭킹 조회 테스트")
+    void getAllRankTest() {
+        System.out.println("## getAllRankTest 시작 ##");
         System.out.println();
 
-        List<RunRecord> result = runRecordRepository.findByUserIdWithDate("aaa", LocalDate.now());
+        List<TeamRankResponseDTO> getAllRank = teamRankService.getAllRank();
 
-        assertEquals(result.size(), 1);
-    }
-
-    @Test
-    @DisplayName("사용자의 운동 기록 조회 테스트")
-    void findByUserIdTest() {
-        System.out.println("## findByUserIdTest 시작 ##");
-        System.out.println();
-
-        List<RunRecord> result = runRecordRepository.findByUserId("aaa");
-
-        assertEquals(result.size(), 5);
+         assertEquals(getAllRank.size(), 2);
     }
 }
