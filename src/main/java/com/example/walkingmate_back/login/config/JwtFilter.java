@@ -21,42 +21,44 @@ import java.util.List;
 public class JwtFilter extends OncePerRequestFilter {
     private final LoginService loginService;
     private final String secretKey;
-    // 인증받기 위한 내부Filter - 여기를 통해야 들어갈 수 있다.
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // request에서 토큰 추출
+
         final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
         log.info("authorization : {}", authorization);
-        // Token이 없다면 그냥 반환시킴
+
         if(authorization == null){
             log.error("[접근불가] authorization이 없습니다.");
             filterChain.doFilter(request, response);
             return;
         }
-        // Token 꺼내기
         String token = authorization;
-        // Token Expired 되었는지 여부
+
+        // TODO
+        //
 //        if(JwtUtil.isExpired(token, secretKey)){
 //            log.error("token이 만료 되었습니다.");
 //            filterChain.doFilter(request, response);
 //            return;
 //        }
-        // UserName Token에서 꺼내기
+
+        // Token에서 UserName추출
         String userName = JwtUtil.getUserName(token, secretKey);
         log.info("userName:{}", userName);
-        // 권한 부여
+
         UsernamePasswordAuthenticationToken authenticationToken;
         if(userName.equals("admin")) {
-            // id가 admin이면 관리가(ADMIN)권한 부여
+            // 관리자(ADMIN)권한 부여
             authenticationToken = new UsernamePasswordAuthenticationToken
                     (userName, null, List.of(new SimpleGrantedAuthority("ADMIN")));
         }else {
-            // 아니라면 일반 사용자(USER)권한 부여
+            // 일반 사용자(USER)권한 부여
             authenticationToken = new UsernamePasswordAuthenticationToken
                     (userName, null, List.of(new SimpleGrantedAuthority("USER")));
         }
         log.info("Role : {}", authenticationToken.getAuthorities());
-        // Detail을 넣어줍니다.
+
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         filterChain.doFilter(request, response);
     }

@@ -1,12 +1,13 @@
-package com.example.walkingmate_back.login.dto;
+package com.example.walkingmate_back.login.domain;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 public class LoginRequest {
-    private String userName;
+    private String userId;
     private String password;
 }
