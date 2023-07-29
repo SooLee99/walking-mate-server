@@ -39,7 +39,7 @@ public class TeamController {
     @PostMapping("/save")
     public ResponseEntity<DefaultRes<TeamResponseDTO>> saveTeam(@RequestBody TeamRequestDTO teamRequestDTO, Authentication authentication){
         UserEntity user = userService.FindUser(authentication.getName());
-        if(user == null)  return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
+        if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
         TeamResponseDTO teamResponseDTO = teamService.saveTeam(teamRequestDTO, user);
 

@@ -30,6 +30,8 @@ public class ResponseMessage {
     public static final String NOT_FOUND_TEAM = "팀 조회 실패";
     public static final String NOT_FOUND_TEAMLEADER = "팀장이 아닌 경우";
 
+    public static final String WRITE_TEAMBATTLE = "팀 대결 기록 저장 성공";
+
     public static final String WRITE_TEAMRANK = "팀 랭킹 저장 성공";
     public static final String NOT_FOUND_TEAMRANK = "팀 랭킹 조회 실패";
 

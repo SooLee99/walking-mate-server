@@ -3,6 +3,7 @@ package com.example.walkingmate_back.team.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -23,11 +24,18 @@ public class TeamBattleHistory {
     private Team team;  // 팀 id
 
     @Column
-    private Date battleDate;  // 대결 날짜
+    private LocalDate battleDate;  // 대결 날짜
 
     @Column
     private boolean victory; // 승리 여부
 
     @Column
     private int betStep;  // 대결 걸음 수
+
+    public TeamBattleHistory(Team team, LocalDate battleDate, int betStep, boolean victory) {
+        this.team=team;
+        this.battleDate=battleDate;
+        this.betStep=betStep;
+        this.victory=victory;
+    }
 }
