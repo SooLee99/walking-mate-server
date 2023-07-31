@@ -52,7 +52,7 @@ class BattleRivalServiceTest {
         System.out.println("## saveBattleRivaTest 시작 ##");
         System.out.println();
 
-        Battle battle = battleService.FindBattle(10L);
+        Battle battle = battleService.FindBattle(14L);
         TeamMember teamMember = teamMemberService.FindTeam("bbb");
 
         BattleRivalResponseDTO saveBattleRival = battleRivalService.saveBattleRival(battle, teamMember);
@@ -69,13 +69,13 @@ class BattleRivalServiceTest {
 
         BattleRivalUpdateDTO battleRivalUpdateDTO = new BattleRivalUpdateDTO();
         battleRivalUpdateDTO.setStep(100);
-        TeamMember teamMember = teamMemberService.FindTeam("bbb");
-        Long battleId = 10L;
+        TeamMember teamMember = teamMemberService.FindTeam("aaa");
+        Long battleId = 14L;
 
         BattleRivalResponseDTO updateBattleRival = battleRivalService.updateBattleRival(battleRivalUpdateDTO, battleId, teamMember);
 
-        assertEquals(updateBattleRival.getTeamId(), 7L);
-        assertEquals(updateBattleRival.getTeamName(), "bbb의 팀");
+        assertEquals(updateBattleRival.getTeamId(), 8L);
+        assertEquals(updateBattleRival.getTeamName(), "aaa의 팀");
         assertEquals(updateBattleRival.getStep(), 100);
     }
 }

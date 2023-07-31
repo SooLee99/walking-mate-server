@@ -10,12 +10,13 @@ import com.example.walkingmate_back.team.entity.TeamMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDate;
 
 /**
  *    대결 라이벌 저장, 걸음 수 수정
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.21
+ *   @version          1.00 / 2023.07.31
  *   @author           전우진
  */
 
@@ -32,13 +33,16 @@ public class BattleRivalService {
      * - 전우진 2023.07.19
      */
     public BattleRivalResponseDTO saveBattleRival(Battle battle, TeamMember teamMember) {
-
+        LocalDate lc = LocalDate.now();
         BattleRival result = battleRivalRepository.findByTeamId(teamMember.getTeam().getId());
 
         // 팀이 대결에 참여하지 않은 경우
         if(result == null) {
             BattleRival battleRival = new BattleRival(battle, teamMember.getTeam());
             battleRivalRepository.save(battleRival);
+
+            battle.update(lc);
+            battleRepository.save(battle);
 
             return BattleRivalResponseDTO.builder()
                     .teamId(battleRival.getTeam().getId())

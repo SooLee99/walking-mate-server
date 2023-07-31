@@ -18,12 +18,12 @@ public class TeamBattleResponseDTO {
 
     private LocalDate battleDate;  // 대결 날짜
 
-    private boolean victory; // 승리 여부
+    private String victory; // 승리 여부
 
     private int betStep;  // 대결 걸음 수
 
     @Builder
-    public TeamBattleResponseDTO(Long id, Team team, LocalDate battleDate, boolean victory, int betStep) {
+    public TeamBattleResponseDTO(Long id, Team team, LocalDate battleDate, String victory, int betStep) {
         this.id=id;
         this.team=team;
         this.battleDate=battleDate;

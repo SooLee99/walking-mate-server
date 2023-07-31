@@ -44,14 +44,14 @@ public class TeamBattleHistoryService {
         LocalDate date = LocalDate.parse(dateStr, formatter);
 
         if(team != null) {
-            TeamBattleHistory teamBattleHistory = new TeamBattleHistory(team, date, teamBattleRequestDTO.getBetStep(), teamBattleRequestDTO.isVictory());
+            TeamBattleHistory teamBattleHistory = new TeamBattleHistory(team, date, teamBattleRequestDTO.getBetStep(), teamBattleRequestDTO.getVictory());
             teamBattleHistoryRepository.save(teamBattleHistory);
             return TeamBattleResponseDTO.builder()
                     .id(teamBattleHistory.getId())
                     .team(teamBattleRequestDTO.getTeam())
                     .battleDate(teamBattleHistory.getBattleDate())
                     .betStep(teamBattleHistory.getBetStep())
-                    .victory(teamBattleRequestDTO.isVictory())
+                    .victory(teamBattleRequestDTO.getVictory())
                     .build();
         } else {
             // 기존 팀이 이미 있으므로 생성 불가
@@ -74,7 +74,7 @@ public class TeamBattleHistoryService {
                     teamBattleHistory.getId(),
                     teamBattleHistory.getTeam(),
                     teamBattleHistory.getBattleDate(),
-                    teamBattleHistory.isVictory(),
+                    teamBattleHistory.getVictory().toString(),
                     teamBattleHistory.getBetStep()
             );
             result.add(teamBattleResponseDTO);

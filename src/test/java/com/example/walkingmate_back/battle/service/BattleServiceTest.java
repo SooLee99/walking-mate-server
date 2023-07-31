@@ -53,14 +53,12 @@ class BattleServiceTest {
         System.out.println();
 
         BattleRequestDTO battleRequestDTO = new BattleRequestDTO();
-        battleRequestDTO.setStartDate("20230729");
 
         TeamMember teamMember = teamMemberService.FindTeam("aaa");
 
         BattleResponseDTO saveBattle = battleService.saveBattle(battleRequestDTO, teamMember);
 
         assertEquals(saveBattle.getTotalStep(), 0);
-        assertEquals(saveBattle.getStartDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")), battleRequestDTO.getStartDate());
     }
 
     @Test
@@ -93,13 +91,13 @@ class BattleServiceTest {
         System.out.println("## getBattleTest 시작 ##");
         System.out.println();
 
-        Long battleId = 10L;
+        Long battleId = 13L;
 
         BattleResponseDTO getBattle = battleService.getBattle(battleId);
 
         assertEquals(getBattle.getId(), battleId);
         assertEquals(getBattle.getTotalStep(), 0);
-        assertEquals(getBattle.getStartDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")), "20230729");
+        assertEquals(getBattle.getStartDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")), "20230731");
     }
 
     @Test
@@ -114,5 +112,18 @@ class BattleServiceTest {
         List<BattleResponseDTO> getSearchBattle = battleService.getSearchBattle(battleSearchDTO);
 
         assertEquals(getSearchBattle.size(), 1);
+    }
+
+    @Test
+    @DisplayName("대결 종료 테스트")
+    void finishBattleTest() {
+        System.out.println("## finishBattleTest 시작 ##");
+        System.out.println();
+
+        Long battleId = 14L;
+
+        BattleResponseDTO finishBattle = battleService.finishBattle(battleId);
+
+        assertEquals(finishBattle.getId(), battleId);
     }
 }

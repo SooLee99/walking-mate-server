@@ -34,4 +34,8 @@ public class UserRank {
     }
 
     public void update(CoinRequestDTO coinRequestDTO) {this.coin = coin - coinRequestDTO.getCoin();}
+
+    public void update(int coin) {
+        this.coin = this.coin + coin;
+    }
 }

@@ -2,6 +2,7 @@ package com.example.walkingmate_back.team.service;
 
 import com.example.walkingmate_back.team.dto.TeamBattleRequestDTO;
 import com.example.walkingmate_back.team.dto.TeamBattleResponseDTO;
+import com.example.walkingmate_back.team.entity.BattleHistoryEnum;
 import com.example.walkingmate_back.team.entity.Team;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,7 @@ class TeamBattleHistoryServiceTest {
         teamBattleRequestDTO.setTeam(team);
         teamBattleRequestDTO.setBattleDate("20230730");
         teamBattleRequestDTO.setBetStep(1000);
-        teamBattleRequestDTO.setVictory(true);
+        teamBattleRequestDTO.setVictory(BattleHistoryEnum.WIN.toString());
 
         TeamBattleResponseDTO saveBattle = teamBattleHistoryService.saveBattle(teamBattleRequestDTO);
 

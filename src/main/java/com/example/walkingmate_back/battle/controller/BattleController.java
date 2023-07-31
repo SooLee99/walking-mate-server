@@ -19,9 +19,9 @@ import java.text.ParseException;
 import java.util.List;
 
 /**
- *    대결 생성, 삭제, 단일 조회, 전체 조회, 검색
+ *    대결 생성, 삭제, 단일 조회, 전체 조회, 검색, 종료
  *
- *   @version          1.00 / 2023.07.24
+ *   @version          1.00 / 2023.07.31
  *   @author           전우진
  */
 
@@ -105,4 +105,14 @@ public class BattleController {
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_BATTLE, null), HttpStatus.OK);
     }
 
+    // 대결 종료
+    @DeleteMapping("/finish/{battleId}")
+    public ResponseEntity<DefaultRes<BattleResponseDTO>> finishBattle(@PathVariable Long battleId) {
+        BattleResponseDTO battleResponseDTO = battleService.finishBattle(battleId);
+
+        if(battleResponseDTO != null)
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.DELETE_BATTLE, battleResponseDTO), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_BATTLE, null), HttpStatus.OK);
+    }
 }

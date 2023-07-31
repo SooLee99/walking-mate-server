@@ -36,4 +36,8 @@ public class Battle {
     public void update(BattleRivalUpdateDTO battleRivalUpdateDTO) {
         this.totalStep=totalStep+battleRivalUpdateDTO.getStep();
     }
+
+    public void update(LocalDate localDate) {
+        this.startDate=localDate;
+    }
 }

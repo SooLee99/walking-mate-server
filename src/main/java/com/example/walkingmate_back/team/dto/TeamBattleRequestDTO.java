@@ -11,7 +11,7 @@ public class TeamBattleRequestDTO {
 
     private String battleDate;  // 대결 날짜
 
-    private boolean victory; // 승리 여부
+    private String victory; // 승리 여부
 
     private int betStep;  // 대결 걸음 수
 }

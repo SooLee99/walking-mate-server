@@ -26,16 +26,16 @@ public class TeamBattleHistory {
     @Column
     private LocalDate battleDate;  // 대결 날짜
 
-    @Column
-    private boolean victory; // 승리 여부
+    @Enumerated(EnumType.STRING)
+    private BattleHistoryEnum victory; // 승리 여부
 
     @Column
     private int betStep;  // 대결 걸음 수
 
-    public TeamBattleHistory(Team team, LocalDate battleDate, int betStep, boolean victory) {
+    public TeamBattleHistory(Team team, LocalDate battleDate, int betStep, String victory) {
         this.team=team;
         this.battleDate=battleDate;
         this.betStep=betStep;
-        this.victory=victory;
+        this.victory=BattleHistoryEnum.valueOf(victory.toString());
     }
 }
