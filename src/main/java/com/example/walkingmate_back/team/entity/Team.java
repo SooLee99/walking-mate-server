@@ -1,10 +1,8 @@
 package com.example.walkingmate_back.team.entity;
 
 import com.example.walkingmate_back.battle.entity.BattleRival;
-import com.example.walkingmate_back.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.List;
 
 @Entity
@@ -25,6 +23,9 @@ public class Team {
     private String name;  // 팀 이름
 
     @Column
+    private String intro;  // 팀 소개
+
+    @Column
     private int peopleNum;  // 팀 인원
 
     @Column
@@ -42,11 +43,10 @@ public class Team {
     @OneToMany(mappedBy = "team", orphanRemoval = true)
     private List<BattleRival> battleRivals;
 
-    public Team(String name, int peopleNum, String state) {
+    public Team(String name, String intro, int peopleNum, String state) {
         this.name=name;
+        this.intro=intro;
         this.peopleNum=peopleNum;
         this.state=state;
     }
-
-
 }

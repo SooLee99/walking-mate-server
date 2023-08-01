@@ -51,13 +51,15 @@ class TeamServiceTest {
         System.out.println();
 
         TeamRequestDTO teamRequestDTO = new TeamRequestDTO();
-        teamRequestDTO.setName("ccc의 팀");
+        teamRequestDTO.setName("bbb의 팀");
+        teamRequestDTO.setIntro("안녕하세용");
         teamRequestDTO.setPeopleNum(4);
 
-        UserEntity user = userService.FindUser("ccc");
+        UserEntity user = userService.FindUser("bbb");
 
         TeamResponseDTO saveTeam = teamService.saveTeam(teamRequestDTO, user);
 
+        assertEquals(saveTeam.getIntro(), teamRequestDTO.getIntro());
         assertEquals(saveTeam.getPeopleNum(), teamRequestDTO.getPeopleNum());
         assertEquals(saveTeam.getName(), teamRequestDTO.getName());
     }
@@ -68,11 +70,12 @@ class TeamServiceTest {
         System.out.println("## deleteTeamTest 시작 ##");
         System.out.println();
 
-        Team team = teamService.FindTeam(9L);
-        String userId = "ccc";
+        Team team = teamService.FindTeam(7L);
+        String userId = "bbb";
 
         TeamResponseDTO deleteTeam = teamService.deleteTeam(team, userId);
 
+        assertEquals(deleteTeam.getIntro(), team.getIntro());
         assertEquals(deleteTeam.getPeopleNum(), team.getPeopleNum());
         assertEquals(deleteTeam.getName(), team.getName());
     }
@@ -83,11 +86,12 @@ class TeamServiceTest {
         System.out.println("## getTeamTest 시작 ##");
         System.out.println();
 
-        Long teamId = 8L;
+        Long teamId = 10L;
 
         TeamResponseDTO getTeam = teamService.getTeam(teamId);
 
-        assertEquals(getTeam.getName(), "aaa의 팀");
+        assertEquals(getTeam.getName(), "bbb의 팀");
+        assertEquals(getTeam.getIntro(), "안녕하세용");
         assertEquals(getTeam.getId(), teamId);
         assertEquals(getTeam.getPeopleNum(), 4);
     }
@@ -109,11 +113,12 @@ class TeamServiceTest {
         System.out.println("## getUserTeamTest 시작 ##");
         System.out.println();
 
-        String userId = "aaa";
+        String userId = "bbb";
 
         TeamResponseDTO getUserTeam = teamService.getUserTeam(userId);
 
-        assertEquals(getUserTeam.getName(), "aaa의 팀");
-        assertEquals(getUserTeam.getId(), 8L);
+        assertEquals(getUserTeam.getName(), "bbb의 팀");
+        assertEquals(getUserTeam.getIntro(), "안녕하세용");
+        assertEquals(getUserTeam.getId(), 10L);
     }
 }

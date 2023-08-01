@@ -32,7 +32,7 @@ public class ResponseMessage {
 
     public static final String WRITE_TEAMBATTLE = "팀 대결 기록 저장 성공";
 
-    public static final String WRITE_TEAMRANK = "팀 랭킹 저장 성공";
+    public static final String READ_TEAMRANK = "팀 랭킹 조회 성공";
     public static final String NOT_FOUND_TEAMRANK = "팀 랭킹 조회 실패";
 
     public static final String WRITE_TEAMMEMBER = "팀 멤버 가입 성공";

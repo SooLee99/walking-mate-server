@@ -11,7 +11,6 @@ import com.example.walkingmate_back.team.repository.TeamMemberRepository;
 import com.example.walkingmate_back.team.repository.TeamRankRepository;
 import com.example.walkingmate_back.team.repository.TeamRepository;
 import com.example.walkingmate_back.user.entity.UserEntity;
-import com.example.walkingmate_back.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +22,7 @@ import java.util.stream.Collectors;
  *    팀 생성, 삭제, 단일 조회, 전체 조회, 가입된 팀 정보 조회
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.24
+ *   @version          1.00 / 2023.08.01
  *   @author           전우진
  */
 
@@ -42,7 +41,7 @@ public class TeamService {
      */
     public TeamResponseDTO saveTeam(TeamRequestDTO teamRequestDTO, UserEntity user) {
         if(teamMemberRepository.findByUserId(user.getId()) == null) {  // 기존 팀이 없는 경우
-            Team team = new Team(teamRequestDTO.getName(), teamRequestDTO.getPeopleNum(), "모집");
+            Team team = new Team(teamRequestDTO.getName(), teamRequestDTO.getIntro(), teamRequestDTO.getPeopleNum(), "모집");
             teamRepository.save(team);
 
             // 팀 가입 - 리더
@@ -56,6 +55,7 @@ public class TeamService {
             return TeamResponseDTO.builder()
                     .id(team.getId())
                     .name(team.getName())
+                    .intro(team.getIntro())
                     .peopleNum(team.getPeopleNum())
                     .state(team.getState())
                     .build();
@@ -78,6 +78,7 @@ public class TeamService {
             return TeamResponseDTO.builder()
                     .id(team.getId())
                     .name(team.getName())
+                    .intro(team.getIntro())
                     .peopleNum(team.getPeopleNum())
                     .state(team.getState())
                     .build();
@@ -109,6 +110,7 @@ public class TeamService {
             return TeamResponseDTO.builder()
                     .id(team.getId())
                     .name(team.getName())
+                    .intro(team.getIntro())
                     .peopleNum(team.getPeopleNum())
                     .state(team.getState())
                     .teamMemberResponseDTOList(teamMemberResponseDTOList)
@@ -141,6 +143,7 @@ public class TeamService {
             TeamResponseDTO teamResponseDTO = new TeamResponseDTO(
                     team.getId(),
                     team.getName(),
+                    team.getIntro(),
                     team.getPeopleNum(),
                     team.getState(),
                     teamRankResponseDTO,
@@ -178,6 +181,7 @@ public class TeamService {
             return TeamResponseDTO.builder()
                     .id(team.getId())
                     .name(team.getName())
+                    .intro(team.getIntro())
                     .peopleNum(team.getPeopleNum())
                     .state(team.getState())
                     .teamMemberResponseDTOList(teamMemberResponseDTOList)

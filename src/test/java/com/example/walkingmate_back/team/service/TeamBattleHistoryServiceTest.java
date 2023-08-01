@@ -76,6 +76,6 @@ class TeamBattleHistoryServiceTest {
 
         List<TeamBattleResponseDTO> getTeamBattle = teamBattleHistoryService.getTeamBattle(teamId);
 
-        assertEquals(getTeamBattle.size(), 3);
+        assertEquals(getTeamBattle.size(), 6);
     }
 }

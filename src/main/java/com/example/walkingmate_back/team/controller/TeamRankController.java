@@ -16,7 +16,7 @@ import java.util.List;
 /**
  *    팀 전체 랭킹 조회
  *
- *   @version          1.00 / 2023.07.21
+ *   @version          1.00 / 2023.08.01
  *   @author           전우진
  */
 
@@ -37,7 +37,7 @@ public class TeamRankController {
         List<TeamRankResponseDTO> teamRankResponseDTO =  teamRankService.getAllRank();
 
         if(teamRankResponseDTO != null)
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_TEAMRANK, teamRankResponseDTO), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_TEAMRANK, teamRankResponseDTO), HttpStatus.OK);
         else
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAMRANK, null), HttpStatus.OK);
     }
