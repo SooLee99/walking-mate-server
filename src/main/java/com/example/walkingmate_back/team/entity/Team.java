@@ -3,6 +3,8 @@ package com.example.walkingmate_back.team.entity;
 import com.example.walkingmate_back.battle.entity.BattleRival;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -31,6 +33,9 @@ public class Team {
     @Column
     private String state;  // 팀 경쟁 상태
 
+    @Column
+    private LocalDate date; // 팀 생성 날짜
+
     @OneToOne(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private TeamRank teamRank;
 
@@ -43,10 +48,11 @@ public class Team {
     @OneToMany(mappedBy = "team", orphanRemoval = true)
     private List<BattleRival> battleRivals;
 
-    public Team(String name, String intro, int peopleNum, String state) {
+    public Team(String name, String intro, int peopleNum, String state, LocalDate lc) {
         this.name=name;
         this.intro=intro;
         this.peopleNum=peopleNum;
         this.state=state;
+        this.date=lc;
     }
 }

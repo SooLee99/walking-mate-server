@@ -14,6 +14,9 @@ import com.example.walkingmate_back.user.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,7 +44,9 @@ public class TeamService {
      */
     public TeamResponseDTO saveTeam(TeamRequestDTO teamRequestDTO, UserEntity user) {
         if(teamMemberRepository.findByUserId(user.getId()) == null) {  // 기존 팀이 없는 경우
-            Team team = new Team(teamRequestDTO.getName(), teamRequestDTO.getIntro(), teamRequestDTO.getPeopleNum(), "모집");
+            LocalDate lc = LocalDate.now();
+
+            Team team = new Team(teamRequestDTO.getName(), teamRequestDTO.getIntro(), teamRequestDTO.getPeopleNum(), "모집", lc);
             teamRepository.save(team);
 
             // 팀 가입 - 리더
@@ -58,6 +63,7 @@ public class TeamService {
                     .intro(team.getIntro())
                     .peopleNum(team.getPeopleNum())
                     .state(team.getState())
+                    .date(team.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")))
                     .build();
         } else {
             // 기존 팀이 이미 있으므로 생성 불가
@@ -81,6 +87,7 @@ public class TeamService {
                     .intro(team.getIntro())
                     .peopleNum(team.getPeopleNum())
                     .state(team.getState())
+                    .date(team.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")))
                     .build();
         }
         else { // 팀 리더가 아닌 경우
@@ -113,6 +120,7 @@ public class TeamService {
                     .intro(team.getIntro())
                     .peopleNum(team.getPeopleNum())
                     .state(team.getState())
+                    .date(team.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")))
                     .teamMemberResponseDTOList(teamMemberResponseDTOList)
                     .teamRankResponseDTO(teamRankResponseDTO)
                     .build();
@@ -146,6 +154,7 @@ public class TeamService {
                     team.getIntro(),
                     team.getPeopleNum(),
                     team.getState(),
+                    team.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")),
                     teamRankResponseDTO,
                     teamMemberResponseDTOList
             );
@@ -184,6 +193,7 @@ public class TeamService {
                     .intro(team.getIntro())
                     .peopleNum(team.getPeopleNum())
                     .state(team.getState())
+                    .date(team.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")))
                     .teamMemberResponseDTOList(teamMemberResponseDTOList)
                     .teamRankResponseDTO(teamRankResponseDTO)
                     .build();

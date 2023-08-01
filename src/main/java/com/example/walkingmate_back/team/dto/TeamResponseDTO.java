@@ -20,16 +20,19 @@ public class TeamResponseDTO {
 
     private String state;  // 팀 경쟁 상태
 
+    private String date;  // 팀 생성 날짜
+
     List<TeamMemberResponseDTO> teamMembers = new ArrayList<>(); // 댓글 리스트
     TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO();
 
     @Builder
-    public TeamResponseDTO(Long id, String name, String intro, int peopleNum, String state, TeamRankResponseDTO teamRankResponseDTO, List<TeamMemberResponseDTO> teamMemberResponseDTOList) {
+    public TeamResponseDTO(Long id, String name, String intro, int peopleNum, String state, String date, TeamRankResponseDTO teamRankResponseDTO, List<TeamMemberResponseDTO> teamMemberResponseDTOList) {
         this.id=id;
         this.name=name;
         this.intro=intro;
         this.peopleNum=peopleNum;
         this.state=state;
+        this.date=date;
         this.teamRankResponseDTO=teamRankResponseDTO;
         this.teamMembers=teamMemberResponseDTOList;
     }
