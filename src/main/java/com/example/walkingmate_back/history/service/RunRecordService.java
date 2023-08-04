@@ -24,7 +24,7 @@ import java.util.List;
  *    운동 기록 등록, 조회 - 날짜별, 금일 운동 기록 조회, 평균 운동 기록 조회, 운동 기록 수정
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.24
+ *   @version          1.00 / 2023.08.04
  *   @author           전우진
  */
 
@@ -46,7 +46,7 @@ public class RunRecordService {
         LocalDate now = LocalDate.now();
 
         if(user != null) {  // 사용자가 존재하는 경우
-            RunRecord runRecord = new RunRecord(user, now, runRecordRequestDTO.getStep(), runRecordRequestDTO.getDistance());
+            RunRecord runRecord = new RunRecord(user, now, runRecordRequestDTO.getStep(), runRecordRequestDTO.getDistance(), runRecordRequestDTO.getTime());
             runRecordRepository.save(runRecord);
 
             String date = runRecord.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
@@ -56,6 +56,7 @@ public class RunRecordService {
                     .date(date)
                     .step(runRecord.getStep())
                     .distance(runRecord.getDistance())
+                    .time(runRecord.getTime())
                     .build();
         } else {
             // 사용자가 존재하지 않는 경우
@@ -82,6 +83,7 @@ public class RunRecordService {
                 runRecord.getDate().toString(),
                 runRecord.getStep(),
                 runRecord.getDistance(),
+                runRecord.getTime(),
                 runRecord.getRegTime(),
                 runRecord.getUpdateTime()
             );
@@ -107,6 +109,7 @@ public class RunRecordService {
                     runRecord.getDate().toString(),
                     runRecord.getStep(),
                     runRecord.getDistance(),
+                    runRecord.getTime(),
                     runRecord.getRegTime(),
                     runRecord.getUpdateTime()
             );
@@ -198,8 +201,7 @@ public class RunRecordService {
                .date(date)
                .step(runRecord.getStep())
                .distance(runRecord.getDistance())
+               .time(runRecord.getTime())
                .build();
-
-
     }
 }

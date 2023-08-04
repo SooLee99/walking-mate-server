@@ -32,7 +32,7 @@ public class TeamMemberService {
      */
     public TeamMemberResponseDTO saveMember(Long teamId, UserEntity user) {
         Team team = teamRepository.findById(teamId).orElse(null);
-        if(team != null) { // 팀이 존재하는 경우
+        if(team.getTeamMembers().size() != team.getPeopleNum()) {
             TeamMember teamMember = new TeamMember(user, team, false);
             teamMemberRepository.save(teamMember);
 
@@ -42,7 +42,7 @@ public class TeamMemberService {
                     .teamLeader(teamMember.isTeamLeader())
                     .build();
         } else {
-            // 팀이 존재하지 않을 경우
+            // 팀 인원 초과
             return null;
         }
     }

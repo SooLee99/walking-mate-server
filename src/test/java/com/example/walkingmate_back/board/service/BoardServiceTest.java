@@ -109,9 +109,10 @@ public class BoardServiceTest {
         System.out.println();
 
         Long id = 12L;
+        String userId = "aaa";
         Board board = boardRepository.findById(id).orElse(null);
 
-        BoardResponseDTO getOneBoard = boardService.getBoard(id);
+        BoardResponseDTO getOneBoard = boardService.getBoard(id, userId);
 
         assertEquals(getOneBoard.getId(), board.getId());
         assertEquals(getOneBoard.getUserId(), board.getUser().getId());
@@ -126,7 +127,8 @@ public class BoardServiceTest {
         System.out.println();
 
         int page = 1;
-        List<BoardResponseDTO> allBoard = boardService.getAllBoard(page);
+        String userId = "aaa";
+        List<BoardResponseDTO> allBoard = boardService.getAllBoard(page, userId);
 
         assertEquals(allBoard.size(), 6);
     }

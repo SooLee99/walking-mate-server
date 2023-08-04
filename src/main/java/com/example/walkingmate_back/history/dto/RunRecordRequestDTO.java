@@ -9,4 +9,5 @@ public class RunRecordRequestDTO {
 
     private double distance;  // 거리
 
+    private long time;  // 시간
 }

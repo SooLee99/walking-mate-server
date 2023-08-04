@@ -5,6 +5,7 @@ import com.example.walkingmate_back.main.response.ResponseMessage;
 import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.team.dto.TeamRequestDTO;
 import com.example.walkingmate_back.team.dto.TeamResponseDTO;
+import com.example.walkingmate_back.team.dto.TeamSearchDTO;
 import com.example.walkingmate_back.team.entity.Team;
 import com.example.walkingmate_back.team.service.TeamService;
 import com.example.walkingmate_back.user.entity.UserEntity;
@@ -16,9 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- *    팀 생성, 삭제, 단일 조회, 전체 조회, 가입된 팀 정보 조회
+ *    팀 생성, 삭제, 단일 조회, 전체 조회, 가입된 팀 정보 조회, 팀 검색 조회
  *
- *   @version          1.00 / 2023.07.24
+ *   @version          1.00 / 2023.08.04
  *   @author           전우진
  */
 
@@ -91,6 +92,17 @@ public class TeamController {
     @GetMapping("/list/userTeam")
     public ResponseEntity<DefaultRes<TeamResponseDTO>> SpecificationUserTeam(Authentication authentication) {
         TeamResponseDTO teamResponseDTO = teamService.getUserTeam(authentication.getName());
+
+        if(teamResponseDTO != null)
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, teamResponseDTO), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+    }
+
+    // 팀 검색 조회
+    @GetMapping("/list/search")
+    public ResponseEntity<DefaultRes<List<TeamResponseDTO>>> searchTeam(@RequestBody TeamSearchDTO teamSearchDTO) {
+        List<TeamResponseDTO> teamResponseDTO = teamService.getSearchTeam(teamSearchDTO);
 
         if(teamResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, teamResponseDTO), HttpStatus.OK);

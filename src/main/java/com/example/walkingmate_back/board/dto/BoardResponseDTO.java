@@ -20,15 +20,21 @@ public class BoardResponseDTO {
     
     private String content;  // 내용
 
+    private int recommend; // 좋아요
+
+    private boolean isrecommend;
+
     List<BoardCommentResponseDTO> comments = new ArrayList<>(); // 댓글 리스트
 
     @Builder
-    public BoardResponseDTO(Long id, String userId, String title, String content, LocalDateTime regTime, LocalDateTime updateTime, List<BoardCommentResponseDTO> comments) {
+    public BoardResponseDTO(Long id, String userId, String title, String content, int recommend, LocalDateTime regTime, LocalDateTime updateTime,  boolean isrecommend, List<BoardCommentResponseDTO> comments) {
         this.id=id;
         this.userId=userId;
         this.title=title;
         this.content=content;
         this.comments=comments;
+        this.recommend=recommend;
+        this.isrecommend=isrecommend;
     }
 
 }

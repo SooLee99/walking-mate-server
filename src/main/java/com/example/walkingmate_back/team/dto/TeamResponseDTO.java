@@ -16,7 +16,9 @@ public class TeamResponseDTO {
 
     private String intro;  // 팀 소개
 
-    private int peopleNum;  // 팀 인원
+    private int teamNum; // 팀 인원
+
+    private int peopleNum;  // 가입된 인원
 
     private String state;  // 팀 경쟁 상태
 
@@ -26,10 +28,11 @@ public class TeamResponseDTO {
     TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO();
 
     @Builder
-    public TeamResponseDTO(Long id, String name, String intro, int peopleNum, String state, String date, TeamRankResponseDTO teamRankResponseDTO, List<TeamMemberResponseDTO> teamMemberResponseDTOList) {
+    public TeamResponseDTO(Long id, String name, String intro, int teamNum, int peopleNum, String state, String date, TeamRankResponseDTO teamRankResponseDTO, List<TeamMemberResponseDTO> teamMemberResponseDTOList) {
         this.id=id;
         this.name=name;
         this.intro=intro;
+        this.teamNum=teamNum;
         this.peopleNum=peopleNum;
         this.state=state;
         this.date=date;

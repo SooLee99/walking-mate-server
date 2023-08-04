@@ -5,6 +5,8 @@ import com.example.walkingmate_back.main.entity.BaseTimeEntity;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.sql.Time;
 import java.time.LocalDate;
 
 @Entity
@@ -30,16 +32,21 @@ public class RunRecord extends BaseTimeEntity {
     @Column
     private int step;  // 걸음 수
 
+    @Column
+    private long time;  // 러닝 시간
+
     // 시간은 따로 BaseTime으로 빼둠
 
     @Column
     private double distance;  // 거리
 
-    public RunRecord(UserEntity userEntity, LocalDate now, int step, double distance) {
-        this.user=userEntity;
+
+    public RunRecord(UserEntity user, LocalDate now, int step, double distance, long time) {
+        this.user=user;
         this.date=now;
         this.step=step;
         this.distance=distance;
+        this.time=time;
     }
 
     public void update(RunRecordRequestDTO runRecordRequestDTO) {

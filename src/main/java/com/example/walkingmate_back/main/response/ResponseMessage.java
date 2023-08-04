@@ -15,6 +15,8 @@ public class ResponseMessage {
     public static final String DELETE_BOARDCOMMENT = "댓글 삭제 성공";
     public static final String NOT_FOUND_BOARDCOMMENT = "댓글 조회 실패";
 
+    public static final String WRITE_RECOMMEND = "좋아요 저장 성공";
+
     public static final String WRITE_BATTLE = "대결 생성 성공";
     public static final String DELETE_BATTLE = "대결 삭제 성공";
     public static final String NOT_WRITE_BATTLE = "대결 생성 불가";
@@ -27,6 +29,7 @@ public class ResponseMessage {
     public static final String WRITE_TEAM = "팀 생성 성공";
     public static final String NOT_WRITE_TEAM = "팀 생성 불가";
     public static final String DELETE_TEAM = "팀 삭제 성공";
+    public static final String MAX_TEAM = "팀 인원 초과";
     public static final String NOT_FOUND_TEAM = "팀 조회 실패";
     public static final String NOT_FOUND_TEAMLEADER = "팀장이 아닌 경우";
 

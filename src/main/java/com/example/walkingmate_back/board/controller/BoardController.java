@@ -18,7 +18,7 @@ import java.util.Optional;
 /**
  *    게시글 등록, 수정, 삭제, 단일 조회, 전체 조회
  *
- *   @version          1.00 / 2023.07.24
+ *   @version          1.00 / 2023.08.04
  *   @author           전우진
  */
 
@@ -74,8 +74,8 @@ public class BoardController {
 
     // 단일 게시글 조회 - 댓글 포함
     @GetMapping("/{id}")
-    public ResponseEntity<DefaultRes<BoardResponseDTO>> SpecificationBoard(@PathVariable Long id) {
-        BoardResponseDTO boardResponseDTO = boardService.getBoard(id);
+    public ResponseEntity<DefaultRes<BoardResponseDTO>> SpecificationBoard(@PathVariable Long id, Authentication authentication) {
+        BoardResponseDTO boardResponseDTO = boardService.getBoard(id, authentication.getName());
 
         if(boardResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, boardResponseDTO), HttpStatus.OK);
@@ -85,14 +85,15 @@ public class BoardController {
 
     // 게시글 전체 조회 - 댓글 포함
     @GetMapping({"/list", "/list/{page}"})
-    public ResponseEntity<DefaultRes<List<BoardResponseDTO>>> listBoard(@PathVariable Optional<Integer> page) {
+    public ResponseEntity<DefaultRes<List<BoardResponseDTO>>> listBoard(@PathVariable Optional<Integer> page, Authentication authentication) {
         int pageNumber = page.orElse(1);
 
-        List<BoardResponseDTO> boardResponseDTO = boardService.getAllBoard(pageNumber);
+        List<BoardResponseDTO> boardResponseDTO = boardService.getAllBoard(pageNumber, authentication.getName());
 
         if(boardResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, boardResponseDTO), HttpStatus.OK);
         else
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_BOARD, null), HttpStatus.OK);
     }
+
 }

@@ -19,12 +19,15 @@ public class RunRecordResponseDTO {
 
     private double distance;  // 거리
 
+    private long time; // 시간
+
     @Builder
-    public RunRecordResponseDTO(Long id, String userId, String date, int step, double distance, LocalDateTime regTime, LocalDateTime updateTime) {
+    public RunRecordResponseDTO(Long id, String userId, String date, int step, double distance, long time, LocalDateTime regTime, LocalDateTime updateTime) {
         this.id=id;
         this.userId=userId;
         this.date=date;
         this.step=step;
         this.distance=distance;
+        this.time=time;
     }
 }

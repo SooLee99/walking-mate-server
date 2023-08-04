@@ -35,6 +35,14 @@ public class Board extends BaseTimeEntity {
     @Column
     private String content;  // 내용
 
+    @Column(columnDefinition = "int default 0")
+    private int recommend; // 좋아요
+
+    @JsonIgnore
+    @BatchSize(size = 500)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Recommend> recommends;  // 좋아요 리스트
+
     @JsonIgnore
     @BatchSize(size = 500)
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)

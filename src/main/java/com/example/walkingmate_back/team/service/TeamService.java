@@ -1,9 +1,6 @@
 package com.example.walkingmate_back.team.service;
 
-import com.example.walkingmate_back.team.dto.TeamMemberResponseDTO;
-import com.example.walkingmate_back.team.dto.TeamRankResponseDTO;
-import com.example.walkingmate_back.team.dto.TeamRequestDTO;
-import com.example.walkingmate_back.team.dto.TeamResponseDTO;
+import com.example.walkingmate_back.team.dto.*;
 import com.example.walkingmate_back.team.entity.Team;
 import com.example.walkingmate_back.team.entity.TeamMember;
 import com.example.walkingmate_back.team.entity.TeamRank;
@@ -14,7 +11,6 @@ import com.example.walkingmate_back.user.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -22,10 +18,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- *    팀 생성, 삭제, 단일 조회, 전체 조회, 가입된 팀 정보 조회
+ *    팀 생성, 삭제, 단일 조회, 전체 조회, 가입된 팀 정보 조회, 팀 검색 조회
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.08.01
+ *   @version          1.00 / 2023.08.04
  *   @author           전우진
  */
 
@@ -61,7 +57,8 @@ public class TeamService {
                     .id(team.getId())
                     .name(team.getName())
                     .intro(team.getIntro())
-                    .peopleNum(team.getPeopleNum())
+                    .teamNum(team.getPeopleNum())
+                    .peopleNum(0)
                     .state(team.getState())
                     .date(team.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")))
                     .build();
@@ -118,7 +115,8 @@ public class TeamService {
                     .id(team.getId())
                     .name(team.getName())
                     .intro(team.getIntro())
-                    .peopleNum(team.getPeopleNum())
+                    .teamNum(team.getPeopleNum())
+                    .peopleNum(teamMemberResponseDTOList.size())
                     .state(team.getState())
                     .date(team.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")))
                     .teamMemberResponseDTOList(teamMemberResponseDTOList)
@@ -153,6 +151,7 @@ public class TeamService {
                     team.getName(),
                     team.getIntro(),
                     team.getPeopleNum(),
+                    teamMemberResponseDTOList.size(),
                     team.getState(),
                     team.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")),
                     teamRankResponseDTO,
@@ -191,7 +190,8 @@ public class TeamService {
                     .id(team.getId())
                     .name(team.getName())
                     .intro(team.getIntro())
-                    .peopleNum(team.getPeopleNum())
+                    .teamNum(team.getPeopleNum())
+                    .peopleNum(teamMemberResponseDTOList.size())
                     .state(team.getState())
                     .date(team.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")))
                     .teamMemberResponseDTOList(teamMemberResponseDTOList)
@@ -200,6 +200,43 @@ public class TeamService {
         } else {
             return null;
         }
+    }
+
+    /**
+     * 팀 검색 조회
+     * - 전우진 2023.08.04
+     */
+    public List<TeamResponseDTO> getSearchTeam(TeamSearchDTO teamSearchDTO) {
+        List<Team> teams = teamRepository.findAllByName(teamSearchDTO.getSearch());
+        List<TeamResponseDTO> result = new ArrayList<>();
+
+        for(Team team : teams) {
+
+            List<TeamMemberResponseDTO> teamMemberResponseDTOList = team.getTeamMembers().stream()
+                    .map(teamMember -> new TeamMemberResponseDTO(teamMember.getUser().getId(), teamMember.getTeam().getId(), teamMember.isTeamLeader()))
+                    .collect(Collectors.toList());
+
+            // 랭킹
+            TeamRank teamRanks = team.getTeamRank();
+            TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO(teamRanks.getTeam().getId(), teamRanks.getCoin(), teamRanks.getTear());
+
+            TeamResponseDTO teamResponseDTO = new TeamResponseDTO(
+                    team.getId(),
+                    team.getName(),
+                    team.getIntro(),
+                    team.getPeopleNum(),
+                    teamMemberResponseDTOList.size(),
+                    team.getState(),
+                    team.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")),
+                    teamRankResponseDTO,
+                    teamMemberResponseDTOList
+            );
+
+            result.add(teamResponseDTO);
+
+        }
+
+        return result;
     }
 
     public Team FindTeam(Long teamId){

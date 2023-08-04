@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  *    게시글 등록, 수정, 삭제, 단일 조회, 전체 조회
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.24
+ *   @version          1.00 / 2023.08.04
  *   @author           전우진
  */
 
@@ -51,6 +51,7 @@ public class BoardService {
                     .userId(board.getUser().getId())
                     .title(board.getTitle())
                     .content(board.getContent())
+                    .recommend(board.getRecommend())
                     .build();
         } else {
             // 사용자가 존재하지 않는 경우
@@ -73,6 +74,7 @@ public class BoardService {
                     .userId(board.getUser().getId())
                     .title(board.getTitle())
                     .content(board.getContent())
+                    .recommend(board.getRecommend())
                     .build();
         }
         return null;
@@ -91,6 +93,7 @@ public class BoardService {
                     .userId(board.getUser().getId())
                     .title(board.getTitle())
                     .content(board.getContent())
+                    .recommend(board.getRecommend())
                     .build();
         }
         return null;
@@ -100,7 +103,7 @@ public class BoardService {
      * 단일 게시글 조회, 댓글 리턴
      * - 전우진 2023.07.11
      */
-    public BoardResponseDTO getBoard(Long id) {
+    public BoardResponseDTO getBoard(Long id, String userId) {
         Board board = boardRepository.findById(id).orElse(null);
 
         if(board != null) { // 게시글이 존재하는 경우
@@ -116,12 +119,16 @@ public class BoardService {
                     .userId(board.getUser().getId())
                     .title(board.getTitle())
                     .content(board.getContent())
+                    .recommend(board.getRecommend())
                     .regTime(board.getRegTime())
                     .updateTime(board.getUpdateTime())
+                    .isrecommend(board.getRecommends().stream().anyMatch(recommend -> recommend.getUser().getId().equals(userId)))
                     .comments(commentDTOList)
                     .build();
+
         } else {
             // 게시글이 존재하지 않는 경우
+
             return null;
         }
     }
@@ -130,7 +137,7 @@ public class BoardService {
      * 게시글 페이징 후 최근 값부터 댓글 포함 리턴
      * - 전우진 2023.07.11
      */
-    public List<BoardResponseDTO> getAllBoard(int page) {
+    public List<BoardResponseDTO> getAllBoard(int page, String userId) {
 
         Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("id").descending());
 
@@ -148,8 +155,10 @@ public class BoardService {
                     board.getUser().getId(),
                     board.getTitle(),
                     board.getContent(),
+                    board.getRecommend(),
                     board.getRegTime(),
                     board.getUpdateTime(),
+                    board.getRecommends().stream().anyMatch(recommend -> recommend.getUser().getId().equals(userId)),
                     commentDTOList
             );
 
