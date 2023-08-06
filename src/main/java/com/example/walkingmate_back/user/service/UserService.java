@@ -24,6 +24,10 @@ public class UserService {
 
     private final EntityManager entityManager;
 
+    public UserEntity FindUser(String userId){
+        return userRepository.findById(userId).orElse(null);
+    }
+
     public UserResponse passwordUpdate(String userId, String oldPw, String newPw) {
         log.info("userId:{}, oldPw:{}, newPw:{}", userId, oldPw, newPw);
 
