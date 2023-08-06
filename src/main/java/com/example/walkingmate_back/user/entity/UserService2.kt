@@ -1,18 +1,20 @@
-package com.example.walkingmate_back.user.service
+package com.example.walkingmate_back.user.entity
 
 import com.example.walkingmate_back.user.dto.UserResponse
 import com.example.walkingmate_back.user.entity.UserEntity
 import com.example.walkingmate_back.user.repository.UserRepository
 import jakarta.persistence.EntityManager
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean
 import org.springframework.stereotype.Service
 import java.util.*
 
-class UserService2(
+@Service
+class UserService2 @Autowired constructor(
 
         private val userRepository: UserRepository,
-        private var userResponse: UserResponse,
-        private val entityManeger: EntityManager
+        private var userResponse: UserResponse
+
 ){
 
     fun userInfo(userId: String?): Optional<UserEntity> {
@@ -24,13 +26,11 @@ class UserService2(
     fun updateInfo(userId: String, newUser: UserEntity): UserResponse {
 
         // TODO user-info update
-        val oldUser: UserEntity = entityManeger.find(UserEntity::class.java, userId)
-
-        oldUser.name = newUser?.name?: oldUser.name
-        oldUser.birth = newUser?.birth?: oldUser.birth
-        oldUser.phone = newUser?.phone?: oldUser.phone
-        oldUser.userBody.height = newUser?.userBody?.height?: oldUser.userBody.height
-        oldUser.userBody.weight = newUser?.userBody?.weight?: oldUser.userBody.weight
+        val oldUser = userRepository.findById(userId).get()
+        oldUser.name = newUser.name
+        oldUser.birth = newUser.birth
+        oldUser.phone = newUser.phone
+        userRepository.save(oldUser)
 
         userResponse.data.code = userResponse.success
         userResponse.data.userId = userId

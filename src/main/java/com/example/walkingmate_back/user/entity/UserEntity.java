@@ -32,13 +32,13 @@ public class UserEntity {
     private String pw; // 사용자 pw
 
     @Column
-    private String name; // 사용자 이름
+    String name; // 사용자 이름
 
     @Column
-    private String phone; // 사용자 전화번호
+    String phone; // 사용자 전화번호
 
     @Column
-    private Date birth; // 사용자 생년월일
+    Date birth; // 사용자 생년월일
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private UserRank userRank;

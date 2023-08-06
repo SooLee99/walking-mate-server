@@ -6,6 +6,7 @@ import com.example.walkingmate_back.user.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,32 +23,36 @@ public class UserService {
 
     private UserResponse userResponse;
 
-    private final EntityManager entityManager;
+    public UserEntity FindUser(String userId){
+        return userRepository.findById(userId).orElse(null);
+    }
 
     public UserResponse passwordUpdate(String userId, String oldPw, String newPw) {
         log.info("userId:{}, oldPw:{}, newPw:{}", userId, oldPw, newPw);
 
         userResponse = new UserResponse();
 
-        UserEntity user = entityManager.find(UserEntity.class, userId);
-        if (user != null) {
-            userResponse.data.userId = user.getId();
+        Optional<UserEntity> user = userRepository.findById(userId);
+        user.ifPresentOrElse(
+                userEntity -> {
+            userResponse.data.userId = userEntity.getId();
 
-            if((user.getPw()).equals(oldPw)) {
+            if (userEntity.getPw().equals(oldPw)) {
                 // TODO password update
-                user.setPw(newPw);
+                userEntity.setPw(newPw);
+                userRepository.save(userEntity);
 
                 userResponse.data.code = userResponse.success;
                 userResponse.data.message = "password update";
-                return userResponse;
+            } else{
+                userResponse.data.message = "password wrong";
+                userResponse.data.code = userResponse.fail;
             }
-            userResponse.data.message = "password wrong";
-            userResponse.data.code = userResponse.fail;
-            return userResponse;
-        }
-        userResponse.data.message = "user not found";
-        userResponse.data.code = userResponse.fail;
-
+        }, () -> {
+               userResponse.data.message = "user not found";
+               userResponse.data.code = userResponse.fail;
+            }
+        );
         return userResponse;
     }
 

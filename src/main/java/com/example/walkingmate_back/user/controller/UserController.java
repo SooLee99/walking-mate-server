@@ -1,15 +1,10 @@
 package com.example.walkingmate_back.user.controller;
 
-import com.example.walkingmate_back.login.utils.JwtUtil;
 import com.example.walkingmate_back.user.dto.UserResponse;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.service.UserService;
-import com.example.walkingmate_back.user.service.UserService2;
-import lombok.AllArgsConstructor;
+import com.example.walkingmate_back.user.entity.UserService2;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;

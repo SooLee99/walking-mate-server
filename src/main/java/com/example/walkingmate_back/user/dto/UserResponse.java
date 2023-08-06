@@ -1,5 +1,8 @@
 package com.example.walkingmate_back.user.dto;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class UserResponse {
 
     public Data data = new Data();
