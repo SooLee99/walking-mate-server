@@ -2,12 +2,14 @@ package com.example.walkingmate_back.board.service;
 
 import com.example.walkingmate_back.board.dto.BoardCommentRequestDTO;
 import com.example.walkingmate_back.board.dto.BoardCommentResponseDTO;
+import com.example.walkingmate_back.board.dto.BoardCommentUpdateDTO;
+import com.example.walkingmate_back.board.dto.BoardUpdateDTO;
 import com.example.walkingmate_back.board.entity.BoardComment;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class BoardCommentServiceTest {
@@ -52,11 +54,12 @@ class BoardCommentServiceTest {
         System.out.println("## saveCommentTest 시작 ##");
         System.out.println();
 
-        BoardCommentRequestDTO boardCommentRequestDTO = new BoardCommentRequestDTO(12L, "commentContent1");
+        BoardCommentRequestDTO boardCommentRequestDTO = new BoardCommentRequestDTO();
+        boardCommentRequestDTO.setContent("commentContent1");
 
-        BoardCommentResponseDTO saveComment = boardCommentService.saveComment(boardCommentRequestDTO, user());
+        BoardCommentResponseDTO saveComment = boardCommentService.saveCommemt(boardCommentRequestDTO, user(), 12L);
 
-        assertEquals(saveComment.getBoardId(), boardCommentRequestDTO.getBoardId());
+        assertEquals(saveComment.getBoardId(), 12L);
         assertEquals(saveComment.getUserId(), user().getId());
         assertEquals(saveComment.getContent(), boardCommentRequestDTO.getContent());
     }
@@ -68,13 +71,13 @@ class BoardCommentServiceTest {
         System.out.println();
 
         BoardComment boardComment = boardCommentService.FindBoardComment(8L);
-        BoardCommentRequestDTO boardCommentRequestDTO = new BoardCommentRequestDTO(12L, "updateContent2");
+        BoardCommentUpdateDTO boardCommentUpdateDTO = new BoardCommentUpdateDTO();
+        boardCommentUpdateDTO.setContent("commentContent1");
 
-        BoardCommentResponseDTO updateComment = boardCommentService.updateComment(boardComment, boardCommentRequestDTO, user().getId());
+        BoardCommentResponseDTO updateComment = boardCommentService.updateComment(boardComment, boardCommentUpdateDTO, user().getId());
 
         assertEquals(updateComment.getId(), boardComment.getId());
-        assertEquals(updateComment.getBoardId(), boardCommentRequestDTO.getBoardId());
-        assertEquals(updateComment.getContent(), boardCommentRequestDTO.getContent());
+        assertEquals(updateComment.getContent(), boardCommentUpdateDTO.getContent());
     }
 
     @Test

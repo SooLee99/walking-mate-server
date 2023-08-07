@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BoardCommentRepository extends JpaRepository<BoardComment, Long> {
 
+    void deleteAllByParentId(Long id);
+
 }

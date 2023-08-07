@@ -39,16 +39,4 @@ public class RecommendController {
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
     }
 
-//    @PostMapping("/save/{id}")
-//    public ResponseEntity<DefaultRes<BoardResponseDTO>> saveRecommend(@PathVariable Long id) {
-//
-//        String userId = "aaa";
-//
-//        BoardResponseDTO boardResponseDTO = recommendService.saveRecommend(id, userId);
-//
-//        if(boardResponseDTO != null)
-//            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_RECOMMEND, boardResponseDTO), HttpStatus.OK);
-//        else
-//            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
-//    }
 }

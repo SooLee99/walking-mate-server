@@ -1,10 +1,12 @@
 package com.example.walkingmate_back.board.entity;
 
-import com.example.walkingmate_back.board.dto.BoardCommentRequestDTO;
+import com.example.walkingmate_back.board.dto.BoardCommentUpdateDTO;
 import com.example.walkingmate_back.main.entity.BaseTimeEntity;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -12,7 +14,6 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "boardComment")
 public class BoardComment extends BaseTimeEntity {
 
     @Id
@@ -24,6 +25,10 @@ public class BoardComment extends BaseTimeEntity {
     @JoinColumn(name = "boardId") // 외래키 설정
     private Board board;  // 게시판 번호
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parentId")
+    private BoardComment parent;
+
     // 시간 빼둠
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,15 +38,21 @@ public class BoardComment extends BaseTimeEntity {
     @Column
     private String content;  // 내용
 
-    public BoardComment(Board board, UserEntity user, String content) {
-        this.board=board;
+    @OneToMany(mappedBy = "parent", orphanRemoval = true)
+    private List<BoardComment> children = new ArrayList<>();
+
+    public BoardComment(UserEntity user, Board board, String content) {
         this.user=user;
+        this.board=board;
         this.content=content;
     }
 
-    // 댓글 수정
-    public BoardComment update(BoardCommentRequestDTO boardCommentRequestDTO) {
-        this.content=boardCommentRequestDTO.getContent();
+    public void updateParent(BoardComment parentComment) {
+        this.parent=parentComment;
+    }
+
+    public BoardComment update(BoardCommentUpdateDTO boardCommentUpdateDTO) {
+        this.content=boardCommentUpdateDTO.getContent();
         return this;
     }
 }
