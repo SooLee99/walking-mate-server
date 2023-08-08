@@ -169,10 +169,9 @@ public class TeamService {
      * 가입된 팀 정보 조회 - 랭킹 포함
      * - 전우진 2023.07.15
      */
-    public TeamResponseDTO getUserTeam(String userId) {
-        Long teamId = teamMemberRepository.findByUserId(userId).getTeam().getId();
+    public TeamResponseDTO getUserTeam(TeamMember tm) {
 
-        Team team = teamRepository.findById(teamId).orElse(null);
+        Team team = teamRepository.findById(tm.getTeam().getId()).orElse(null);
 
         if(team != null) {  // 팀이 존재하는 경우
 

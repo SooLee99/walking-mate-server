@@ -45,7 +45,7 @@ public class BattleService {
      * 사용자, 팀 리더 확인 후 대결 생성
      * - 전우진 2023.07.17
      */
-    public BattleResponseDTO saveBattle(BattleRequestDTO battleRequestDTO, TeamMember teamMember) throws ParseException {
+    public BattleResponseDTO saveBattle(TeamMember teamMember) throws ParseException {
 
         BattleRival result = battleRivalRepository.findByTeamId(teamMember.getTeam().getId());
 

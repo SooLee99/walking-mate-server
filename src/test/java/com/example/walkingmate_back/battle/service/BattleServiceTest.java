@@ -52,11 +52,9 @@ class BattleServiceTest {
         System.out.println("## saveBattleTest 시작 ##");
         System.out.println();
 
-        BattleRequestDTO battleRequestDTO = new BattleRequestDTO();
-
         TeamMember teamMember = teamMemberService.FindTeam("aaa");
 
-        BattleResponseDTO saveBattle = battleService.saveBattle(battleRequestDTO, teamMember);
+        BattleResponseDTO saveBattle = battleService.saveBattle(teamMember);
 
         assertEquals(saveBattle.getTotalStep(), 0);
     }

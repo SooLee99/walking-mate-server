@@ -7,7 +7,7 @@ import java.util.Date;
 @Data
 public class TeamBattleRequestDTO {
 
-    private Team team;  // 팀 id
+    private Long teamId;  // 팀 id
 
     private String battleDate;  // 대결 날짜
 

@@ -46,6 +46,8 @@ public class BattleRivalService {
 
             return BattleRivalResponseDTO.builder()
                     .teamId(battleRival.getTeam().getId())
+                    .name(battleRival.getTeam().getName())
+                    .peopleNum(battleRival.getTeam().getPeopleNum())
                     .step(battleRival.getStep())
                     .build();
         } else {
@@ -77,6 +79,7 @@ public class BattleRivalService {
         return BattleRivalResponseDTO.builder()
                 .teamId(battleRival.getTeam().getId())
                 .name(battleRival.getTeam().getName())
+                .peopleNum(battleRival.getTeam().getPeopleNum())
                 .step(battleRival.getStep())
                 .build();
     }

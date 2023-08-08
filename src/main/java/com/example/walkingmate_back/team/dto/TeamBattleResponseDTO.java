@@ -14,7 +14,7 @@ public class TeamBattleResponseDTO {
 
     private Long id; // 팀 대결 기록 번호 (자동 증가)
 
-    private Team team;  // 팀 id
+    private Long teamId;  // 팀 id
 
     private LocalDate battleDate;  // 대결 날짜
 
@@ -23,9 +23,9 @@ public class TeamBattleResponseDTO {
     private int betStep;  // 대결 걸음 수
 
     @Builder
-    public TeamBattleResponseDTO(Long id, Team team, LocalDate battleDate, String victory, int betStep) {
+    public TeamBattleResponseDTO(Long id, Long teamId, LocalDate battleDate, String victory, int betStep) {
         this.id=id;
-        this.team=team;
+        this.teamId=teamId;
         this.battleDate=battleDate;
         this.victory=victory;
         this.betStep=betStep;

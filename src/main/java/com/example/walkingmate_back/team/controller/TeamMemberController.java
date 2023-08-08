@@ -42,8 +42,8 @@ public class TeamMemberController {
         UserEntity user = userService.FindUser(authentication.getName());
         if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
-        // 기존 팀이 없는 경우
-        if(teamMemberService.FindTeam(user.getId()) == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+        // 기존 팀이 있는 경우
+        if(teamMemberService.FindTeam(user.getId()) != null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_WRITE_TEAMMEMBER, null), HttpStatus.OK);
 
         // 팀 확인
         if(teamService.FindTeam(teamId) == null)  return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);

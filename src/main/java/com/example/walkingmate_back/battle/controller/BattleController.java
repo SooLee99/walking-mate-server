@@ -42,18 +42,18 @@ public class BattleController {
 
     // 대결 생성
     @PostMapping("/new")
-    public ResponseEntity<DefaultRes<BattleResponseDTO>> saveBattle(@RequestBody BattleRequestDTO battleRequestDTO, Authentication authentication) throws ParseException {
+    public ResponseEntity<DefaultRes<BattleResponseDTO>> saveBattle(Authentication authentication) throws ParseException {
         UserEntity user = userService.FindUser(authentication.getName());
         if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
         TeamMember teamMember = teamMemberService.FindTeam(user.getId());
         // 팀 소속이 없는 경우
-        if(teamMember.getTeam() == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+        if(teamMember == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
 
         // 팀장이 아닌 경우
         if(teamMember.isTeamLeader() == false) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAMLEADER, null), HttpStatus.OK);
 
-        BattleResponseDTO battleResponseDTO = battleService.saveBattle(battleRequestDTO, teamMember);
+        BattleResponseDTO battleResponseDTO = battleService.saveBattle(teamMember);
 
         if(battleResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_BATTLE, battleResponseDTO), HttpStatus.OK);

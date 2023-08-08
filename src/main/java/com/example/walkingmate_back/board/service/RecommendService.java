@@ -33,17 +33,40 @@ public class RecommendService {
      * - 전우진 2023.08.04
      */
     public BoardResponseDTO saveRecommend(Long boardId, String userId) {
-        // 좋아요 존재 여부
-        boolean existingRecommend = recommendRepository.existsByBoardIdAndUserId(boardId, userId);
+        Board board = boardRepository.findById(boardId).orElse(null);
+        if(board != null) {
+            // 좋아요 존재 여부
+            boolean existingRecommend = recommendRepository.existsByBoardIdAndUserId(boardId, userId);
 
-        // 존재하는 경우 - 좋아요 - 1
-        if(existingRecommend) {
-            Board board = boardRepository.findById(boardId).orElse(null);
-            if(board != null) {
-                board.setRecommend(board.getRecommend() - 1);
+            // 존재하는 경우 - 좋아요 - 1
+            if(existingRecommend) {
+
+                if(board != null) {
+                    board.setRecommend(board.getRecommend() - 1);
+                }
+
+                recommendRepository.deleteByBoardIdAndUserId(boardId, userId);
+
+                return BoardResponseDTO.builder()
+                        .id(board.getId())
+                        .userId(board.getUser().getId())
+                        .title(board.getTitle())
+                        .content(board.getContent())
+                        .recommend(board.getRecommend())
+                        .build();
             }
 
-            recommendRepository.deleteByBoardIdAndUserId(boardId, userId);
+            // 존재하지 않는 경우 - 좋아요 + 1
+            UserEntity user = userRepository.findById(userId).orElse(null);
+
+            if(user == null || board == null) {
+                return null;
+            }
+
+            board.setRecommend(board.getRecommend() + 1);
+
+            Recommend newRecommend = new Recommend(user, board);
+            recommendRepository.save(newRecommend);
 
             return BoardResponseDTO.builder()
                     .id(board.getId())
@@ -52,27 +75,8 @@ public class RecommendService {
                     .content(board.getContent())
                     .recommend(board.getRecommend())
                     .build();
-        }
-
-        // 존재하지 않는 경우 - 좋아요 + 1
-        UserEntity user = userRepository.findById(userId).orElse(null);
-        Board board = boardRepository.findById(boardId).orElse(null);
-
-        if(user == null || board == null) {
+        } else {
             return null;
         }
-
-        board.setRecommend(board.getRecommend() + 1);
-
-        Recommend newRecommend = new Recommend(user, board);
-        recommendRepository.save(newRecommend);
-
-        return BoardResponseDTO.builder()
-                .id(board.getId())
-                .userId(board.getUser().getId())
-                .title(board.getTitle())
-                .content(board.getContent())
-                .recommend(board.getRecommend())
-                .build();
     }
 }

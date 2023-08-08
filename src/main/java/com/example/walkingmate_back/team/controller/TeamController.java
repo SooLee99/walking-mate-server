@@ -7,6 +7,8 @@ import com.example.walkingmate_back.team.dto.TeamRequestDTO;
 import com.example.walkingmate_back.team.dto.TeamResponseDTO;
 import com.example.walkingmate_back.team.dto.TeamSearchDTO;
 import com.example.walkingmate_back.team.entity.Team;
+import com.example.walkingmate_back.team.entity.TeamMember;
+import com.example.walkingmate_back.team.service.TeamMemberService;
 import com.example.walkingmate_back.team.service.TeamService;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.service.UserService;
@@ -30,10 +32,12 @@ public class TeamController {
 
     private final TeamService teamService;
     private final UserService userService;
+    private final TeamMemberService teamMemberService;
 
-    public TeamController(TeamService teamService, UserService userService) {
+    public TeamController(TeamService teamService, UserService userService, TeamMemberService teamMemberService) {
         this.teamService = teamService;
         this.userService = userService;
+        this.teamMemberService = teamMemberService;
     }
 
     // 팀 생성
@@ -91,7 +95,12 @@ public class TeamController {
     // 가입된 팀 정보 조회 - 랭킹 포함
     @GetMapping("/list/userTeam")
     public ResponseEntity<DefaultRes<TeamResponseDTO>> SpecificationUserTeam(Authentication authentication) {
-        TeamResponseDTO teamResponseDTO = teamService.getUserTeam(authentication.getName());
+
+        // 가입된 팀이 없는 경우
+        TeamMember teamMember = teamMemberService.FindTeam(authentication.getName());
+        if(teamMember == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+
+        TeamResponseDTO teamResponseDTO = teamService.getUserTeam(teamMember);
 
         if(teamResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, teamResponseDTO), HttpStatus.OK);

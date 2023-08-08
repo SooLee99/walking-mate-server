@@ -68,7 +68,6 @@ public class RunRecordController {
 
         List<RunRecordResponseDTO> runRecordResponseDTO = runRecordService.getAllRun(user.getId());
 
-
         if(runRecordResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, runRecordResponseDTO), HttpStatus.OK);
         else
@@ -109,6 +108,6 @@ public class RunRecordController {
         if(runRecordResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_RUNRECORD, runRecordResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_RUNRECORD, null), HttpStatus.OK);
     }
 }

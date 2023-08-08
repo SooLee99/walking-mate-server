@@ -32,6 +32,7 @@ public class ResponseMessage {
     public static final String MAX_TEAM = "팀 인원 초과";
     public static final String NOT_FOUND_TEAM = "팀 조회 실패";
     public static final String NOT_FOUND_TEAMLEADER = "팀장이 아닌 경우";
+    public static final String NOT_WRITE_TEAMMEMBER = "기존 팀 존재";
 
     public static final String WRITE_TEAMBATTLE = "팀 대결 기록 저장 성공";
 

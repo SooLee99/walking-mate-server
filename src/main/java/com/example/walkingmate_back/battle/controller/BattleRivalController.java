@@ -50,7 +50,7 @@ public class BattleRivalController {
 
         TeamMember teamMember = teamMemberService.FindTeam(user.getId());
         // 팀 소속이 없는 경우
-        if(teamMember.getTeam().getId() == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+        if(teamMember == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
 
         // 팀장이 아닌 경우
         if(teamMember.isTeamLeader() == false) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAMLEADER, null), HttpStatus.OK);

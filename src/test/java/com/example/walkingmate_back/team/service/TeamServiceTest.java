@@ -3,6 +3,7 @@ package com.example.walkingmate_back.team.service;
 import com.example.walkingmate_back.team.dto.TeamRequestDTO;
 import com.example.walkingmate_back.team.dto.TeamResponseDTO;
 import com.example.walkingmate_back.team.entity.Team;
+import com.example.walkingmate_back.team.entity.TeamMember;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.service.UserService;
 import org.junit.jupiter.api.*;
@@ -19,6 +20,9 @@ class TeamServiceTest {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    TeamMemberService teamMemberService;
 
     @BeforeAll
     static void beforeAll() {
@@ -115,7 +119,9 @@ class TeamServiceTest {
 
         String userId = "bbb";
 
-        TeamResponseDTO getUserTeam = teamService.getUserTeam(userId);
+        TeamMember teamMember = teamMemberService.FindTeam(userId);
+
+        TeamResponseDTO getUserTeam = teamService.getUserTeam(teamMember);
 
         assertEquals(getUserTeam.getName(), "bbb의 팀");
         assertEquals(getUserTeam.getIntro(), "안녕하세용");

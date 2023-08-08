@@ -1,6 +1,7 @@
 package com.example.walkingmate_back.team.entity;
 
 import com.example.walkingmate_back.battle.entity.BattleRival;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -42,9 +43,11 @@ public class Team {
     @OneToMany(mappedBy = "team", orphanRemoval = true)
     private List<TeamMember> teamMembers;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "team", orphanRemoval = true)
     private List<TeamBattleHistory> teamBattleHistorys;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "team", orphanRemoval = true)
     private List<BattleRival> battleRivals;
 

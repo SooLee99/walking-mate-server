@@ -35,7 +35,7 @@ public class TeamBattleHistoryService {
      * - 전우진 2023.07.29
      */
     public TeamBattleResponseDTO saveBattle(TeamBattleRequestDTO teamBattleRequestDTO) {
-        Team team = teamRepository.findById(teamBattleRequestDTO.getTeam().getId()).orElse(null);
+        Team team = teamRepository.findById(teamBattleRequestDTO.getTeamId()).orElse(null);
         // 문자열
         String dateStr = teamBattleRequestDTO.getBattleDate();
         // 포맷터
@@ -48,7 +48,7 @@ public class TeamBattleHistoryService {
             teamBattleHistoryRepository.save(teamBattleHistory);
             return TeamBattleResponseDTO.builder()
                     .id(teamBattleHistory.getId())
-                    .team(teamBattleRequestDTO.getTeam())
+                    .teamId(teamBattleRequestDTO.getTeamId())
                     .battleDate(teamBattleHistory.getBattleDate())
                     .betStep(teamBattleHistory.getBetStep())
                     .victory(teamBattleRequestDTO.getVictory())
@@ -72,7 +72,7 @@ public class TeamBattleHistoryService {
 
             TeamBattleResponseDTO teamBattleResponseDTO = new TeamBattleResponseDTO(
                     teamBattleHistory.getId(),
-                    teamBattleHistory.getTeam(),
+                    teamBattleHistory.getTeam().getId(),
                     teamBattleHistory.getBattleDate(),
                     teamBattleHistory.getVictory().toString(),
                     teamBattleHistory.getBetStep()

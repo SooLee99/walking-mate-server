@@ -171,6 +171,9 @@ public class CheckListService {
             result.add(checkListResponseDTO);
         }
 
+        if(result.size() == 0) {
+            return null;
+        }
         return result;
 
     }
