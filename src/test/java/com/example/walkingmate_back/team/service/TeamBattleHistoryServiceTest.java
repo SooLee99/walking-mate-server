@@ -53,14 +53,14 @@ class TeamBattleHistoryServiceTest {
 
         Team team = teamService.FindTeam(8L);
         TeamBattleRequestDTO teamBattleRequestDTO = new TeamBattleRequestDTO();
-        teamBattleRequestDTO.setTeam(team);
+        teamBattleRequestDTO.setTeamId(team.getId());
         teamBattleRequestDTO.setBattleDate("20230730");
         teamBattleRequestDTO.setBetStep(1000);
         teamBattleRequestDTO.setVictory(BattleHistoryEnum.WIN.toString());
 
         TeamBattleResponseDTO saveBattle = teamBattleHistoryService.saveBattle(teamBattleRequestDTO);
 
-        assertEquals(saveBattle.getTeam(), teamBattleRequestDTO.getTeam());
+        assertEquals(saveBattle.getTeamId(), teamBattleRequestDTO.getTeamId());
         assertEquals(saveBattle.getBattleDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")), teamBattleRequestDTO.getBattleDate());
         assertEquals(saveBattle.getBetStep(), teamBattleRequestDTO.getBetStep());
 
