@@ -14,5 +14,7 @@ public interface RunRecordRepository extends JpaRepository<RunRecord, Long> {
     List<RunRecord> findByUserIdWithDate(@Param("userId")String id, @Param("date") LocalDate date);
 
     // 사용자 아이디로 기록 조회
+    List<RunRecord> findByUserIdOrderByDateDesc(String id);
+
     List<RunRecord> findByUserId(String id);
 }

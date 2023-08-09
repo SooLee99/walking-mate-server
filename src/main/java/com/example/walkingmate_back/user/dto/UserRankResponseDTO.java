@@ -14,10 +14,13 @@ public class UserRankResponseDTO {
 
     private int coin;  // 사용자 코인
 
+    private int runNum;  // 러닝 횟수
+
     @Builder
-    public UserRankResponseDTO(String userId, int coin, String tear) {
+    public UserRankResponseDTO(String userId, int coin, String tear, int runNum) {
         this.userId=userId;
         this.coin=coin;
         this.tear=tear;
+        this.runNum=runNum;
     }
 }

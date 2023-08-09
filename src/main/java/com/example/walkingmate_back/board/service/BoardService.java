@@ -49,6 +49,8 @@ public class BoardService {
                     .userId(board.getUser().getId())
                     .title(board.getTitle())
                     .content(board.getContent())
+                    .regTime(board.getRegTime())
+                    .updateTime(board.getUpdateTime())
                     .recommend(board.getRecommend())
                     .build();
         } else {
@@ -72,6 +74,8 @@ public class BoardService {
                     .userId(board.getUser().getId())
                     .title(board.getTitle())
                     .content(board.getContent())
+                    .regTime(board.getRegTime())
+                    .updateTime(board.getUpdateTime())
                     .recommend(board.getRecommend())
                     .build();
         }
@@ -91,6 +95,8 @@ public class BoardService {
                     .userId(board.getUser().getId())
                     .title(board.getTitle())
                     .content(board.getContent())
+                    .regTime(board.getRegTime())
+                    .updateTime(board.getUpdateTime())
                     .recommend(board.getRecommend())
                     .build();
         }
@@ -123,9 +129,9 @@ public class BoardService {
                     .userId(board.getUser().getId())
                     .title(board.getTitle())
                     .content(board.getContent())
-                    .recommend(board.getRecommend())
                     .regTime(board.getRegTime())
                     .updateTime(board.getUpdateTime())
+                    .recommend(board.getRecommend())
                     .isrecommend(board.getRecommends().stream().anyMatch(recommend -> recommend.getUser().getId().equals(userId)))
                     .comments(commentDTOList)
                     .build();
@@ -164,9 +170,9 @@ public class BoardService {
                     board.getUser().getId(),
                     board.getTitle(),
                     board.getContent(),
-                    board.getRecommend(),
                     board.getRegTime(),
                     board.getUpdateTime(),
+                    board.getRecommend(),
                     board.getRecommends().stream().anyMatch(recommend -> recommend.getUser().getId().equals(userId)),
                     commentDTOList
             );

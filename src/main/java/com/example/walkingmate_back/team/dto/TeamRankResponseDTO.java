@@ -14,10 +14,13 @@ public class TeamRankResponseDTO {
 
     private int coin;  // 팀 코인
 
+    private int winNum;  // 이긴 횟수
+
     @Builder
-    public TeamRankResponseDTO(Long teamId, int coin, String tear) {
+    public TeamRankResponseDTO(Long teamId, int coin, String tear, int winNum) {
         this.teamId=teamId;
         this.coin=coin;
         this.tear=tear;
+        this.winNum=winNum;
     }
 }

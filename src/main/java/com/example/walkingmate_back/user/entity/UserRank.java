@@ -29,6 +29,9 @@ public class UserRank {
     @Column
     private int coin;  // 사용자 코인
 
+    @Column
+    private int runNum; // 러닝 횟수
+
     public void update(BuyHistoryRequestDTO buyHistoryRequestDTO) {
         this.coin=coin + buyHistoryRequestDTO.getCoin();
     }
@@ -37,5 +40,11 @@ public class UserRank {
 
     public void update(int coin) {
         this.coin = this.coin + coin;
+    }
+
+    public void update(String tear) { this.tear = tear; }
+
+    public void updateRunNum() {
+        this.runNum = runNum + 1;
     }
 }

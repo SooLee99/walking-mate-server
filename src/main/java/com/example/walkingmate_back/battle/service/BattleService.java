@@ -1,6 +1,5 @@
 package com.example.walkingmate_back.battle.service;
 
-import com.example.walkingmate_back.battle.dto.BattleRequestDTO;
 import com.example.walkingmate_back.battle.dto.BattleResponseDTO;
 import com.example.walkingmate_back.battle.dto.BattleRivalResponseDTO;
 import com.example.walkingmate_back.battle.dto.BattleSearchDTO;
@@ -11,7 +10,9 @@ import com.example.walkingmate_back.battle.repository.BattleRivalRepository;
 import com.example.walkingmate_back.team.entity.BattleHistoryEnum;
 import com.example.walkingmate_back.team.entity.TeamBattleHistory;
 import com.example.walkingmate_back.team.entity.TeamMember;
+import com.example.walkingmate_back.team.entity.TeamRank;
 import com.example.walkingmate_back.team.repository.TeamBattleHistoryRepository;
+import com.example.walkingmate_back.team.repository.TeamRankRepository;
 import com.example.walkingmate_back.user.entity.UserRank;
 import com.example.walkingmate_back.user.repository.UserRankRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
  *    대결 생성, 삭제, 단일 조회, 전체 조회, 검색, 종료
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.31
+ *   @version          1.00 / 2023.08.09
  *   @author           전우진
  */
 
@@ -40,6 +41,7 @@ public class BattleService {
     private final BattleRivalRepository battleRivalRepository;
     private final TeamBattleHistoryRepository teamBattleHistoryRepository;
     private final UserRankRepository userRankRepository;
+    private final TeamRankRepository teamRankRepository;
 
     /**
      * 사용자, 팀 리더 확인 후 대결 생성
@@ -213,17 +215,21 @@ public class BattleService {
             teamBattleHistory = new TeamBattleHistory(battle.getBattleRivals().get(0).getTeam(), lc, battle.getBattleRivals().get(0).getStep(), BattleHistoryEnum.TIE.toString());
             teamBattleHistoryRepository.save(teamBattleHistory);
 
-            int num = battle.getBattleRivals().get(0).getTeam().getPeopleNum() + battle.getBattleRivals().get(1).getTeam().getPeopleNum();
-            int step = battle.getTotalStep() / num;
-            for(int i=0; i<battle.getBattleRivals().get(0).getTeam().getTeamMembers().size(); i++) {
-                UserRank userRank = userRankRepository.findById(battle.getBattleRivals().get(0).getTeam().getTeamMembers().get(i).getUser().getId()).orElse(null);
-                userRank.update(step);
-                userRankRepository.save(userRank);
-            }
-            for(int i=0; i<battle.getBattleRivals().get(1).getTeam().getTeamMembers().size(); i++) {
-                UserRank userRank = userRankRepository.findById(battle.getBattleRivals().get(1).getTeam().getTeamMembers().get(i).getUser().getId()).orElse(null);
-                userRank.update(step);
-                userRankRepository.save(userRank);
+            if(battle.getTotalStep() != 0) {
+
+                int num = battle.getBattleRivals().get(0).getTeam().getPeopleNum() + battle.getBattleRivals().get(1).getTeam().getPeopleNum();
+                int step = battle.getTotalStep() / 100;
+                int coin = step / num;
+                for (int i = 0; i < battle.getBattleRivals().get(0).getTeam().getTeamMembers().size(); i++) {
+                    UserRank userRank = userRankRepository.findById(battle.getBattleRivals().get(0).getTeam().getTeamMembers().get(i).getUser().getId()).orElse(null);
+                    userRank.update(coin);
+                    userRankRepository.save(userRank);
+                }
+                for (int i = 0; i < battle.getBattleRivals().get(1).getTeam().getTeamMembers().size(); i++) {
+                    UserRank userRank = userRankRepository.findById(battle.getBattleRivals().get(1).getTeam().getTeamMembers().get(i).getUser().getId()).orElse(null);
+                    userRank.update(coin);
+                    userRankRepository.save(userRank);
+                }
             }
         } else {
             a = battle.getBattleRivals().get(0).getStep() > battle.getBattleRivals().get(1).getStep() ? 0 : 1;
@@ -231,13 +237,18 @@ public class BattleService {
             TeamBattleHistory teamBattleHistory = new TeamBattleHistory(battle.getBattleRivals().get(a).getTeam(), lc, battle.getBattleRivals().get(a).getStep(), BattleHistoryEnum.WIN.toString());
             teamBattleHistoryRepository.save(teamBattleHistory);
 
+            TeamRank teamRank = teamRankRepository.findById(battle.getBattleRivals().get(a).getTeam().getId()).orElse(null);
+            teamRank.updateWinNum();
+            teamRankRepository.save(teamRank);
+
             teamBattleHistory = new TeamBattleHistory(battle.getBattleRivals().get(a == 0 ? 1 : 0).getTeam(), lc, battle.getBattleRivals().get(a == 0 ? 1 : 0).getStep(), BattleHistoryEnum.LOSE.toString());
             teamBattleHistoryRepository.save(teamBattleHistory);
 
-            int step = battle.getTotalStep() / battle.getBattleRivals().get(a).getTeam().getPeopleNum();
+            int step = battle.getTotalStep() / 100;
+            int coin = step / battle.getBattleRivals().get(a).getTeam().getPeopleNum();
             for(int i=0; i<battle.getBattleRivals().get(a).getTeam().getTeamMembers().size(); i++) {
                 UserRank userRank = userRankRepository.findById(battle.getBattleRivals().get(a).getTeam().getTeamMembers().get(i).getUser().getId()).orElse(null);
-                userRank.update(step);
+                userRank.update(coin);
                 userRankRepository.save(userRank);
             }
         }

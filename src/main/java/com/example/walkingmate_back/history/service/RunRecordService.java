@@ -8,6 +8,8 @@ import com.example.walkingmate_back.history.entity.RunRecord;
 import com.example.walkingmate_back.history.repository.RunRecordRepository;
 import com.example.walkingmate_back.user.dto.UserBodyResponseDTO;
 import com.example.walkingmate_back.user.entity.UserEntity;
+import com.example.walkingmate_back.user.entity.UserRank;
+import com.example.walkingmate_back.user.repository.UserRankRepository;
 import com.example.walkingmate_back.user.repository.UserRepository;
 import com.example.walkingmate_back.user.service.UserBodyService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +26,7 @@ import java.util.List;
  *    운동 기록 등록, 조회 - 날짜별, 금일 운동 기록 조회, 평균 운동 기록 조회, 운동 기록 수정
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.08.04
+ *   @version          1.00 / 2023.08.09
  *   @author           전우진
  */
 
@@ -36,6 +38,7 @@ public class RunRecordService {
     private final RunRecordRepository runRecordRepository;
     private final UserRepository userRepository;
     private final UserBodyService userBodyService;
+    private final UserRankRepository userRankRepository;
 
     /**
      * 사용자 확인 후 운동 기록 저장
@@ -48,6 +51,10 @@ public class RunRecordService {
         if(user != null) {  // 사용자가 존재하는 경우
             RunRecord runRecord = new RunRecord(user, now, runRecordRequestDTO.getStep(), runRecordRequestDTO.getDistance(), runRecordRequestDTO.getTime());
             runRecordRepository.save(runRecord);
+
+            UserRank userRank = userRankRepository.findById(user.getId()).orElse(null);
+            userRank.updateRunNum();
+            userRankRepository.save(userRank);
 
             String date = runRecord.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
             return RunRecordResponseDTO.builder()
@@ -99,7 +106,7 @@ public class RunRecordService {
     public List<RunRecordResponseDTO> getAllRun(String id) {
         UserEntity user = userRepository.findById(id).orElse(null);
 
-        List<RunRecord> runRecords = runRecordRepository.findByUserId(user.getId());
+        List<RunRecord> runRecords = runRecordRepository.findByUserIdOrderByDateDesc(user.getId());
         List<RunRecordResponseDTO> result = new ArrayList<>();
 
         for (RunRecord runRecord : runRecords) {

@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  *    팀 생성, 삭제, 단일 조회, 전체 조회, 가입된 팀 정보 조회, 팀 검색 조회
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.08.04
+ *   @version          1.00 / 2023.08.09
  *   @author           전우진
  */
 
@@ -33,6 +33,7 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final TeamMemberRepository teamMemberRepository;
     private final TeamRankRepository teamRankRepository;
+    private final TeamRankService teamRankService;
 
     /**
      * 사용자 확인 후 팀 생성
@@ -50,7 +51,7 @@ public class TeamService {
             teamMemberRepository.save(teamMember);
 
             // 팀 랭킹 추가
-            TeamRank teamRank = new TeamRank(team.getId(), 0, "실버");
+            TeamRank teamRank = new TeamRank(team.getId(), 0, "아이언", 0);
             teamRankRepository.save(teamRank);
 
             return TeamResponseDTO.builder()
@@ -99,6 +100,8 @@ public class TeamService {
     public TeamResponseDTO getTeam(Long teamId) {
         Team team = teamRepository.findById(teamId).orElse(null);
 
+        teamRankService.updateTeamRank(team.getId());
+
         if(team != null) { // 팀이 존재하는 경우
             // 멤버
             List<TeamMember> teamMembers = team.getTeamMembers();
@@ -109,7 +112,7 @@ public class TeamService {
 
             // 랭킹
             TeamRank teamRanks = team.getTeamRank();
-            TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO(teamRanks.getTeam().getId(), teamRanks.getCoin(), teamRanks.getTear());
+            TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO(teamRanks.getTeam().getId(), teamRanks.getCoin(), teamRanks.getTear(), teamRanks.getWinNum());
 
             return TeamResponseDTO.builder()
                     .id(team.getId())
@@ -144,7 +147,7 @@ public class TeamService {
 
             // 랭킹
             TeamRank teamRanks = team.getTeamRank();
-            TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO(teamRanks.getTeam().getId(), teamRanks.getCoin(), teamRanks.getTear());
+            TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO(teamRanks.getTeam().getId(), teamRanks.getCoin(), teamRanks.getTear(), teamRanks.getWinNum());
 
             TeamResponseDTO teamResponseDTO = new TeamResponseDTO(
                     team.getId(),
@@ -183,7 +186,7 @@ public class TeamService {
 
             // 랭킹
             TeamRank teamRanks = team.getTeamRank();
-            TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO(teamRanks.getTeam().getId(), teamRanks.getCoin(), teamRanks.getTear());
+            TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO(teamRanks.getTeam().getId(), teamRanks.getCoin(), teamRanks.getTear(), teamRanks.getWinNum());
 
             return TeamResponseDTO.builder()
                     .id(team.getId())
@@ -217,7 +220,7 @@ public class TeamService {
 
             // 랭킹
             TeamRank teamRanks = team.getTeamRank();
-            TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO(teamRanks.getTeam().getId(), teamRanks.getCoin(), teamRanks.getTear());
+            TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO(teamRanks.getTeam().getId(), teamRanks.getCoin(), teamRanks.getTear(), teamRanks.getWinNum());
 
             TeamResponseDTO teamResponseDTO = new TeamResponseDTO(
                     team.getId(),

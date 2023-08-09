@@ -9,6 +9,7 @@ import com.example.walkingmate_back.team.dto.TeamSearchDTO;
 import com.example.walkingmate_back.team.entity.Team;
 import com.example.walkingmate_back.team.entity.TeamMember;
 import com.example.walkingmate_back.team.service.TeamMemberService;
+import com.example.walkingmate_back.team.service.TeamRankService;
 import com.example.walkingmate_back.team.service.TeamService;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.service.UserService;
@@ -21,7 +22,7 @@ import java.util.List;
 /**
  *    팀 생성, 삭제, 단일 조회, 전체 조회, 가입된 팀 정보 조회, 팀 검색 조회
  *
- *   @version          1.00 / 2023.08.04
+ *   @version          1.00 / 2023.08.09
  *   @author           전우진
  */
 
@@ -33,11 +34,13 @@ public class TeamController {
     private final TeamService teamService;
     private final UserService userService;
     private final TeamMemberService teamMemberService;
+    private final TeamRankService teamRankService;
 
-    public TeamController(TeamService teamService, UserService userService, TeamMemberService teamMemberService) {
+    public TeamController(TeamService teamService, UserService userService, TeamMemberService teamMemberService, TeamRankService teamRankService) {
         this.teamService = teamService;
         this.userService = userService;
         this.teamMemberService = teamMemberService;
+        this.teamRankService = teamRankService;
     }
 
     // 팀 생성
@@ -99,6 +102,8 @@ public class TeamController {
         // 가입된 팀이 없는 경우
         TeamMember teamMember = teamMemberService.FindTeam(authentication.getName());
         if(teamMember == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+
+        teamRankService.updateTeamRank(teamMember.getTeam().getId());
 
         TeamResponseDTO teamResponseDTO = teamService.getUserTeam(teamMember);
 

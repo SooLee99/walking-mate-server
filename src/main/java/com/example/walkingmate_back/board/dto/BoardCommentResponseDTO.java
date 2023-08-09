@@ -19,6 +19,10 @@ public class BoardCommentResponseDTO {
 
     private String content;  // 내용
 
+    private LocalDateTime regTime; // 작성 시간
+
+    private LocalDateTime updateTime; // 수정 시간
+
     private Long parentId; // 댓글 아이디
 
     private List<BoardCommentResponseDTO> children = new ArrayList<>();
@@ -31,6 +35,8 @@ public class BoardCommentResponseDTO {
         this.content=content;
         this.parentId=parentId;
         this.children=children;
+        this.regTime=regTime;
+        this.updateTime=updateTime;
     }
 
     public BoardCommentResponseDTO(Long id, Long boardId, String userId, String content, Long parentId, LocalDateTime regTime, LocalDateTime updateTime) {
@@ -39,6 +45,8 @@ public class BoardCommentResponseDTO {
         this.userId=userId;
         this.content=content;
         this.parentId=parentId;
+        this.regTime=regTime;
+        this.updateTime=updateTime;
     }
 
 }
