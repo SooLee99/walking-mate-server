@@ -6,17 +6,15 @@ import com.example.walkingmate_back.history.dto.RunRecordRequestDTO;
 import com.example.walkingmate_back.history.dto.RunRecordResponseDTO;
 import com.example.walkingmate_back.history.entity.RunRecord;
 import com.example.walkingmate_back.history.repository.RunRecordRepository;
-import com.example.walkingmate_back.user.dto.UserBodyResponseDTO;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.entity.UserRank;
 import com.example.walkingmate_back.user.repository.UserRankRepository;
 import com.example.walkingmate_back.user.repository.UserRepository;
-import com.example.walkingmate_back.user.service.UserBodyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
-import java.time.Duration;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -26,7 +24,7 @@ import java.util.List;
  *    운동 기록 등록, 조회 - 날짜별, 금일 운동 기록 조회, 평균 운동 기록 조회, 운동 기록 수정
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.08.09
+ *   @version          1.00 / 2023.08.20
  *   @author           전우진
  */
 
@@ -37,8 +35,8 @@ public class RunRecordService {
 
     private final RunRecordRepository runRecordRepository;
     private final UserRepository userRepository;
-    private final UserBodyService userBodyService;
     private final UserRankRepository userRankRepository;
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * 사용자 확인 후 운동 기록 저장
@@ -49,7 +47,7 @@ public class RunRecordService {
         LocalDate now = LocalDate.now();
 
         if(user != null) {  // 사용자가 존재하는 경우
-            RunRecord runRecord = new RunRecord(user, now, runRecordRequestDTO.getStep(), runRecordRequestDTO.getDistance(), runRecordRequestDTO.getTime());
+            RunRecord runRecord = new RunRecord(user, now, runRecordRequestDTO.getStep(), runRecordRequestDTO.getDistance(), runRecordRequestDTO.getKcal(), runRecordRequestDTO.getTime(), runRecordRequestDTO.getStartTime());
             runRecordRepository.save(runRecord);
 
             UserRank userRank = userRankRepository.findById(user.getId()).orElse(null);
@@ -60,10 +58,12 @@ public class RunRecordService {
             return RunRecordResponseDTO.builder()
                     .id(runRecord.getId())
                     .userId(runRecord.getUser().getId())
+                    .kcal(runRecord.getKcal())
                     .date(date)
                     .step(runRecord.getStep())
                     .distance(runRecord.getDistance())
                     .time(runRecord.getTime())
+                    .startTime(runRecord.getStartTime().toString())
                     .build();
         } else {
             // 사용자가 존재하지 않는 경우
@@ -87,12 +87,13 @@ public class RunRecordService {
             RunRecordResponseDTO runRecordResponseDTO = new RunRecordResponseDTO(
                 runRecord.getId(),
                 runRecord.getUser().getId(),
+                runRecord.getKcal(),
                 runRecord.getDate().toString(),
                 runRecord.getStep(),
                 runRecord.getDistance(),
                 runRecord.getTime(),
-                runRecord.getRegTime(),
-                runRecord.getUpdateTime()
+                runRecord.getStartTime().toString(),
+                runRecord.getEndTime()
             );
             result.add(runRecordResponseDTO);
         }
@@ -113,12 +114,13 @@ public class RunRecordService {
             RunRecordResponseDTO runRecordResponseDTO = new RunRecordResponseDTO(
                     runRecord.getId(),
                     runRecord.getUser().getId(),
+                    runRecord.getKcal(),
                     runRecord.getDate().toString(),
                     runRecord.getStep(),
                     runRecord.getDistance(),
                     runRecord.getTime(),
-                    runRecord.getRegTime(),
-                    runRecord.getUpdateTime()
+                    runRecord.getStartTime().toString(),
+                    runRecord.getEndTime()
             );
             result.add(runRecordResponseDTO);
         }
@@ -137,29 +139,18 @@ public class RunRecordService {
         List<RunRecord> runRecords = runRecordRepository.findByUserIdWithDate(user.getId(), lc);
         int totalStep = 0;
         double totalDis = 0;
-        long kcal = 0, m = 0;
-        double time = 0.0;
-        Duration duration;
+        long totalKcal = 0;
+
         for (RunRecord runRecord : runRecords) {
             totalStep += runRecord.getStep();
             totalDis += runRecord.getDistance();
-            duration = Duration.between(runRecord.getRegTime(), runRecord.getUpdateTime());
-            m += duration.toMinutes();
+            totalKcal += runRecord.getKcal();
         }
-
-        UserBodyResponseDTO userBodyResponseDTO = userBodyService.getUserBody(userId);
-        time = (double) m / 60;
-
-        // METs * 운동시간 * 체중(kg) * 1.05
-        // 가벼운 걷기 운동 METs = 3.0
-        if(time < 0) {
-            kcal = 0;
-        } else kcal = Math.round(3.0 * time * userBodyResponseDTO.getWeight() * 1.05);
 
         return HomeResponseDTO.builder()
                 .step(totalStep)
                 .distance(totalDis)
-                .kcal(kcal)
+                .kcal(totalKcal)
                 .build();
     }
 
@@ -205,10 +196,13 @@ public class RunRecordService {
        return RunRecordResponseDTO.builder()
                .id(runRecord.getId())
                .userId(runRecord.getUser().getId())
-               .date(date)
+               .kcal(runRecord.getKcal())
+               .date( date)
                .step(runRecord.getStep())
                .distance(runRecord.getDistance())
                .time(runRecord.getTime())
+               .startTime(runRecord.getStartTime().toString())
+               .endTime(runRecord.getEndTime())
                .build();
     }
 }

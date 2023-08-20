@@ -10,6 +10,12 @@ public class BattleRivalResponseDTO {
 
     private Long teamId;  // 팀 id
 
+    private String leaderName; // 팀장 이름
+
+    private String tear;  // 팀 티어
+
+    private String intro; // 팀 소개
+
     private String teamName;  // 팀 이름
 
     private int peopleNum;  // 팀 인원
@@ -17,9 +23,12 @@ public class BattleRivalResponseDTO {
     private int step;  // 걸음 수
 
     @Builder
-    public BattleRivalResponseDTO(Long teamId, String name, int peopleNum, int step) {
+    public BattleRivalResponseDTO(Long teamId, String leaderName, String tear, String intro, String teamName, int peopleNum, int step) {
         this.teamId=teamId;
-        this.teamName=name;
+        this.leaderName=leaderName;
+        this.tear=tear;
+        this.intro=intro;
+        this.teamName=teamName;
         this.peopleNum=peopleNum;
         this.step=step;
     }

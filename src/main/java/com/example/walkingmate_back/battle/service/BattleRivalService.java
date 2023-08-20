@@ -16,7 +16,7 @@ import java.time.LocalDate;
  *    대결 라이벌 저장, 걸음 수 수정
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.31
+ *   @version          1.00 / 2023.08.20
  *   @author           전우진
  */
 
@@ -46,7 +46,7 @@ public class BattleRivalService {
 
             return BattleRivalResponseDTO.builder()
                     .teamId(battleRival.getTeam().getId())
-                    .name(battleRival.getTeam().getName())
+                    .teamName(battleRival.getTeam().getName())
                     .peopleNum(battleRival.getTeam().getPeopleNum())
                     .step(battleRival.getStep())
                     .build();
@@ -78,7 +78,7 @@ public class BattleRivalService {
 
         return BattleRivalResponseDTO.builder()
                 .teamId(battleRival.getTeam().getId())
-                .name(battleRival.getTeam().getName())
+                .teamName(battleRival.getTeam().getName())
                 .peopleNum(battleRival.getTeam().getPeopleNum())
                 .step(battleRival.getStep())
                 .build();

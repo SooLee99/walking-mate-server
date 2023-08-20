@@ -4,6 +4,7 @@ import com.example.walkingmate_back.battle.dto.BattleRivalUpdateDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -24,20 +25,23 @@ public class Battle {
     private LocalDate startDate;  // 시작 날짜
 
     @Column
+    private Date createdDate; // 생성 날짜
+
+    @Column
     private int totalStep;  // 대결 걸음 수
 
     @OneToMany(mappedBy = "battle", orphanRemoval = true)
     private List<BattleRival> battleRivals;
 
-    public Battle(LocalDate startDate) {
-        this.startDate = startDate;
+    public Battle(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public void update(BattleRivalUpdateDTO battleRivalUpdateDTO) {
         this.totalStep=totalStep+battleRivalUpdateDTO.getStep();
     }
 
-    public void update(LocalDate localDate) {
-        this.startDate=localDate;
+    public void update(LocalDate date) {
+        this.startDate=date;
     }
 }

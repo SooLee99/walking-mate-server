@@ -14,6 +14,8 @@ public class BattleResponseDTO {
 
     private LocalDate startDate;  // 시작 날짜
 
+    private String createdDate;  // 생성 날짜
+
     private int totalStep;  // 대결 걸음 수
 
     private String battleCheck;  // 대결 진행 여부
@@ -21,9 +23,10 @@ public class BattleResponseDTO {
     private List<BattleRivalResponseDTO> battleRivals;
 
     @Builder
-    public BattleResponseDTO(Long id, LocalDate startDate, int totalStep, String battleCheck, List<BattleRivalResponseDTO> battleRivalResponseDTOList) {
+    public BattleResponseDTO(Long id, LocalDate startDate, String createdDate, int totalStep, String battleCheck, List<BattleRivalResponseDTO> battleRivalResponseDTOList) {
         this.id=id;
         this.startDate=startDate;
+        this.createdDate=createdDate;
         this.totalStep=totalStep;
         this.battleCheck=battleCheck;
         this.battleRivals=battleRivalResponseDTOList;

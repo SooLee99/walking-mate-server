@@ -1,5 +1,6 @@
 package com.example.walkingmate_back.battle.service;
 
+import com.example.walkingmate_back.battle.dto.BattleRequestDTO;
 import com.example.walkingmate_back.battle.dto.BattleResponseDTO;
 import com.example.walkingmate_back.battle.dto.BattleRivalResponseDTO;
 import com.example.walkingmate_back.battle.dto.BattleSearchDTO;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,7 @@ import java.util.stream.Collectors;
  *    대결 생성, 삭제, 단일 조회, 전체 조회, 검색, 종료
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.08.09
+ *   @version          1.00 / 2023.08.20
  *   @author           전우진
  */
 
@@ -42,19 +44,20 @@ public class BattleService {
     private final TeamBattleHistoryRepository teamBattleHistoryRepository;
     private final UserRankRepository userRankRepository;
     private final TeamRankRepository teamRankRepository;
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * 사용자, 팀 리더 확인 후 대결 생성
      * - 전우진 2023.07.17
      */
-    public BattleResponseDTO saveBattle(TeamMember teamMember) throws ParseException {
+    public BattleResponseDTO saveBattle(BattleRequestDTO battleRequestDTO, TeamMember teamMember) throws ParseException {
 
         BattleRival result = battleRivalRepository.findByTeamId(teamMember.getTeam().getId());
 
         String battleCheck = "대결 팀 모집 중";
         // 팀이 대결을 생성하지 않은 경우
         if(result == null) {
-            Battle battle = new Battle();
+            Battle battle = new Battle(format.parse(battleRequestDTO.getCreatedDate()));
             battleRepository.save(battle);
 
             BattleRival battleRival = new BattleRival(battle, teamMember.getTeam());
@@ -63,6 +66,7 @@ public class BattleService {
             return BattleResponseDTO.builder()
                     .id(battle.getId())
                     .startDate(battle.getStartDate())
+                    .createdDate(format.format(battle.getCreatedDate()))
                     .totalStep(battle.getTotalStep())
                     .battleCheck(battleCheck)
                     .build();
@@ -76,7 +80,7 @@ public class BattleService {
      * 대결 확인 후 대결 삭제
      * - 전우진 2023.07.17
      */
-    public BattleResponseDTO deleteBattle(Long battleId) {
+    public BattleResponseDTO deleteBattle(Long battleId) throws ParseException {
         Battle battle = battleRepository.findById(battleId).orElse(null);
 
         if(battle == null) {
@@ -90,6 +94,7 @@ public class BattleService {
         return BattleResponseDTO.builder()
                 .id(battle.getId())
                 .startDate(battle.getStartDate())
+                .createdDate(format.format(battle.getCreatedDate()))
                 .totalStep(battle.getTotalStep())
                 .build();
     }
@@ -98,7 +103,7 @@ public class BattleService {
      * 대결 확인 후 대결 전체 조회
      * - 전우진 2023.07.17
      */
-    public List<BattleResponseDTO> getAllBattle() {
+    public List<BattleResponseDTO> getAllBattle() throws ParseException {
         List<Battle> battles = battleRepository.findAll();
         List<BattleResponseDTO> result = new ArrayList<>();
         String battleCheck = "";
@@ -106,7 +111,7 @@ public class BattleService {
         for(Battle battle : battles) {
 
             List<BattleRivalResponseDTO> battleRivalResponseDTOList = battle.getBattleRivals().stream()
-                    .map(battleRival -> new BattleRivalResponseDTO(battleRival.getTeam().getId(), battleRival.getTeam().getName(), battleRival.getTeam().getPeopleNum(), battleRival.getStep()))
+                    .map(battleRival -> new BattleRivalResponseDTO(battleRival.getTeam().getId(), battleRival.getTeam().getTeamMembers().get(0).getUser().getName(), battleRival.getTeam().getTeamRank().getTear(), battleRival.getTeam().getIntro(), battleRival.getTeam().getName(), battleRival.getTeam().getPeopleNum(), battleRival.getStep()))
                     .collect(Collectors.toList());
 
             if(battleRivalResponseDTOList.size() == 2) {
@@ -116,6 +121,7 @@ public class BattleService {
             BattleResponseDTO battleResponseDTO = new BattleResponseDTO(
                     battle.getId(),
                     battle.getStartDate(),
+                    format.format(battle.getCreatedDate()),
                     battle.getTotalStep(),
                     battleCheck,
                     battleRivalResponseDTOList
@@ -131,7 +137,7 @@ public class BattleService {
      * - 전우진 2023.07.17
      */
 
-    public BattleResponseDTO getBattle(Long battleId) {
+    public BattleResponseDTO getBattle(Long battleId) throws ParseException {
         Battle battle = battleRepository.findById(battleId).orElse(null);
 
         if(battle != null) {  // 대결이 존재하는 경우
@@ -139,9 +145,10 @@ public class BattleService {
 
             List<BattleRival> battleRivals = battle.getBattleRivals();
 
-            List<BattleRivalResponseDTO> battleRivalResponseDTOList = battleRivals.stream()
-                    .map(battleRival -> new BattleRivalResponseDTO(battleRival.getTeam().getId(), battleRival.getTeam().getName(), battleRival.getTeam().getPeopleNum(), battleRival.getStep()))
+            List<BattleRivalResponseDTO> battleRivalResponseDTOList = battle.getBattleRivals().stream()
+                    .map(battleRival -> new BattleRivalResponseDTO(battleRival.getTeam().getId(), battleRival.getTeam().getTeamMembers().get(0).getUser().getName(), battleRival.getTeam().getTeamRank().getTear(), battleRival.getTeam().getIntro(), battleRival.getTeam().getName(), battleRival.getTeam().getPeopleNum(), battleRival.getStep()))
                     .collect(Collectors.toList());
+
 
             if(battleRivalResponseDTOList.size() == 2) {
                 battleCheck = "대결 진행 중";
@@ -150,6 +157,7 @@ public class BattleService {
             return BattleResponseDTO.builder()
                     .id(battle.getId())
                     .startDate(battle.getStartDate())
+                    .createdDate(format.format(battle.getCreatedDate()))
                     .totalStep(battle.getTotalStep())
                     .battleCheck(battleCheck)
                     .battleRivalResponseDTOList(battleRivalResponseDTOList)
@@ -164,7 +172,7 @@ public class BattleService {
      * 대결 검색 조회
      * - 전우진 2023.07.23
      */
-    public List<BattleResponseDTO> getSearchBattle(BattleSearchDTO battleSearchDTO) {
+    public List<BattleResponseDTO> getSearchBattle(BattleSearchDTO battleSearchDTO) throws ParseException {
         List<Battle> battles = battleRepository.findAllByBattleRivalsByTeamName(battleSearchDTO.getSearch());
         List<BattleResponseDTO> result = new ArrayList<>();
         String battleCheck = "";
@@ -172,8 +180,9 @@ public class BattleService {
         for(Battle battle : battles) {
 
             List<BattleRivalResponseDTO> battleRivalResponseDTOList = battle.getBattleRivals().stream()
-                    .map(battleRival -> new BattleRivalResponseDTO(battleRival.getTeam().getId(), battleRival.getTeam().getName(), battleRival.getTeam().getPeopleNum(), battleRival.getStep()))
+                    .map(battleRival -> new BattleRivalResponseDTO(battleRival.getTeam().getId(), battleRival.getTeam().getTeamMembers().get(0).getUser().getName(), battleRival.getTeam().getTeamRank().getTear(), battleRival.getTeam().getIntro(), battleRival.getTeam().getName(), battleRival.getTeam().getPeopleNum(), battleRival.getStep()))
                     .collect(Collectors.toList());
+
 
             if(battleRivalResponseDTOList.size() == 2) {
                 battleCheck = "대결 진행 중";
@@ -182,6 +191,7 @@ public class BattleService {
             BattleResponseDTO battleResponseDTO = new BattleResponseDTO(
                     battle.getId(),
                     battle.getStartDate(),
+                    format.format(battle.getCreatedDate()),
                     battle.getTotalStep(),
                     battleCheck,
                     battleRivalResponseDTOList
@@ -196,7 +206,7 @@ public class BattleService {
      * 대결 종료
      * - 전우진 2023.07.31
      */
-    public BattleResponseDTO finishBattle(Long battleId) {
+    public BattleResponseDTO finishBattle(Long battleId) throws ParseException {
         Battle battle = battleRepository.findById(battleId).orElse(null);
 
         if(battle == null) {
@@ -259,6 +269,7 @@ public class BattleService {
         return BattleResponseDTO.builder()
                 .id(battle.getId())
                 .startDate(battle.getStartDate())
+                .createdDate(format.format(battle.getCreatedDate()))
                 .totalStep(battle.getTotalStep())
                 .build();
     }

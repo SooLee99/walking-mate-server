@@ -21,7 +21,7 @@ import java.util.List;
 /**
  *    대결 생성, 삭제, 단일 조회, 전체 조회, 검색, 종료
  *
- *   @version          1.00 / 2023.07.31
+ *   @version          1.00 / 2023.08.20
  *   @author           전우진
  */
 
@@ -42,7 +42,7 @@ public class BattleController {
 
     // 대결 생성
     @PostMapping("/new")
-    public ResponseEntity<DefaultRes<BattleResponseDTO>> saveBattle(Authentication authentication) throws ParseException {
+    public ResponseEntity<DefaultRes<BattleResponseDTO>> saveBattle(@RequestBody BattleRequestDTO battleRequestDTO, Authentication authentication) throws ParseException {
         UserEntity user = userService.FindUser(authentication.getName());
         if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
@@ -53,7 +53,7 @@ public class BattleController {
         // 팀장이 아닌 경우
         if(teamMember.isTeamLeader() == false) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAMLEADER, null), HttpStatus.OK);
 
-        BattleResponseDTO battleResponseDTO = battleService.saveBattle(teamMember);
+        BattleResponseDTO battleResponseDTO = battleService.saveBattle(battleRequestDTO, teamMember);
 
         if(battleResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_BATTLE, battleResponseDTO), HttpStatus.OK);
@@ -63,7 +63,7 @@ public class BattleController {
 
     // 대결 삭제
     @DeleteMapping("/{battleId}")
-    public ResponseEntity<DefaultRes<BattleResponseDTO>> deleteBattle(@PathVariable Long battleId) {
+    public ResponseEntity<DefaultRes<BattleResponseDTO>> deleteBattle(@PathVariable Long battleId) throws ParseException {
         BattleResponseDTO battleResponseDTO = battleService.deleteBattle(battleId);
 
         if(battleResponseDTO != null)
@@ -74,7 +74,7 @@ public class BattleController {
 
     // 대결 전체 조회 - 대결 상대 포함
     @GetMapping("/list")
-    public ResponseEntity<DefaultRes<List<BattleResponseDTO>>> listBatlle() {
+    public ResponseEntity<DefaultRes<List<BattleResponseDTO>>> listBatlle() throws ParseException {
         List<BattleResponseDTO> battleResponseDTO = battleService.getAllBattle();
 
         if(battleResponseDTO != null)
@@ -85,7 +85,7 @@ public class BattleController {
 
     // 단일 대결 조회 - 대결 상대 포함
     @GetMapping("/{battleId}")
-    public ResponseEntity<DefaultRes<BattleResponseDTO>> SpecificationBattle(@PathVariable Long battleId) {
+    public ResponseEntity<DefaultRes<BattleResponseDTO>> SpecificationBattle(@PathVariable Long battleId) throws ParseException {
         BattleResponseDTO battleResponseDTO = battleService.getBattle(battleId);
 
         if(battleResponseDTO != null)
@@ -96,7 +96,7 @@ public class BattleController {
 
     // 대결 검색 조회
     @GetMapping("/list/search")
-    public ResponseEntity<DefaultRes<List<BattleResponseDTO>>> listSearchBatlle(@RequestBody BattleSearchDTO battleSearchDTO) {
+    public ResponseEntity<DefaultRes<List<BattleResponseDTO>>> listSearchBatlle(@RequestBody BattleSearchDTO battleSearchDTO) throws ParseException {
         List<BattleResponseDTO> battleResponseDTO = battleService.getSearchBattle(battleSearchDTO);
 
         if(battleResponseDTO != null)
@@ -107,7 +107,7 @@ public class BattleController {
 
     // 대결 종료
     @DeleteMapping("/finish/{battleId}")
-    public ResponseEntity<DefaultRes<BattleResponseDTO>> finishBattle(@PathVariable Long battleId) {
+    public ResponseEntity<DefaultRes<BattleResponseDTO>> finishBattle(@PathVariable Long battleId) throws ParseException {
         BattleResponseDTO battleResponseDTO = battleService.finishBattle(battleId);
 
         if(battleResponseDTO != null)

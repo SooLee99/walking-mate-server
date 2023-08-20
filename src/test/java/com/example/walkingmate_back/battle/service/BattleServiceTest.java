@@ -52,16 +52,18 @@ class BattleServiceTest {
         System.out.println("## saveBattleTest 시작 ##");
         System.out.println();
 
+        BattleRequestDTO battleRequestDTO = new BattleRequestDTO();
+        battleRequestDTO.setCreatedDate("2023-08-20");
         TeamMember teamMember = teamMemberService.FindTeam("aaa");
 
-        BattleResponseDTO saveBattle = battleService.saveBattle(teamMember);
+        BattleResponseDTO saveBattle = battleService.saveBattle(battleRequestDTO, teamMember);
 
         assertEquals(saveBattle.getTotalStep(), 0);
     }
 
     @Test
     @DisplayName("대결 삭제 테스트")
-    void deleteBattleTest() {
+    void deleteBattleTest() throws ParseException {
         System.out.println("## deleteBattleTest 시작 ##");
         System.out.println();
 
@@ -74,7 +76,7 @@ class BattleServiceTest {
 
     @Test
     @DisplayName("대결 전체 조회 테스트")
-    void getAllBattleTest() {
+    void getAllBattleTest() throws ParseException {
         System.out.println("## getAllBattleTest 시작 ##");
         System.out.println();
 
@@ -85,7 +87,7 @@ class BattleServiceTest {
 
     @Test
     @DisplayName("대결 단일 조회 테스트")
-    void getBattleTest() {
+    void getBattleTest() throws ParseException {
         System.out.println("## getBattleTest 시작 ##");
         System.out.println();
 
@@ -100,7 +102,7 @@ class BattleServiceTest {
 
     @Test
     @DisplayName("대결 검색 조회 테스트")
-    void getSearchBattleTest() {
+    void getSearchBattleTest() throws ParseException {
         System.out.println("## getSearchBattleTest 시작 ##");
         System.out.println();
 
@@ -114,7 +116,7 @@ class BattleServiceTest {
 
     @Test
     @DisplayName("대결 종료 테스트")
-    void finishBattleTest() {
+    void finishBattleTest() throws ParseException {
         System.out.println("## finishBattleTest 시작 ##");
         System.out.println();
 

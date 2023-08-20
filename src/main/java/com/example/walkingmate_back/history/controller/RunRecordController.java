@@ -20,7 +20,7 @@ import java.util.List;
 /**
  *    운동 기록 등록, 조회 - 날짜별, 금일 운동 기록 조회, 평균 운동 기록 조회
  *
- *   @version          1.00 / 2023.07.24
+ *   @version          1.00 / 2023.08.20
  *   @author           전우진
  */
 
@@ -50,7 +50,7 @@ public class RunRecordController {
 
     // 운동 기록 조회 - 날짜별
     @GetMapping({"/list/{date}"})
-    public ResponseEntity<DefaultRes<List<RunRecordResponseDTO>>> listDateRun(@PathVariable String date, Authentication authentication) {
+    public ResponseEntity<DefaultRes<List<RunRecordResponseDTO>>> listDateRun(@PathVariable String date, Authentication authentication) throws ParseException {
         UserEntity user = userService.FindUser(authentication.getName());
 
         List<RunRecordResponseDTO> runRecordResponseDTO = runRecordService.getDateRun(user.getId(), date);
