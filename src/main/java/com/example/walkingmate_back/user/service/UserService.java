@@ -23,6 +23,29 @@ public class UserService {
 
     private UserResponse userResponse;
 
+    public UserResponse updateInfo(String userId, UserEntity user){
+        userResponse = new UserResponse();
+        Optional<UserEntity> newUser = userRepository.findById(userId);
+
+        // transactional 적용하면 set 하고 save 안해줘도 변경된 값 DB에 반영됨 ㅋㅋ
+
+        if (newUser.isPresent()) {
+            newUser.get().setName(user.getName());
+            newUser.get().setPhone(user.getPhone());
+            newUser.get().setBirth(user.getBirth());
+            userResponse.data.code = userResponse.success;
+            userResponse.data.userId = userId;
+            userResponse.data.message = "user info updated.";
+
+        } else {
+            userResponse.data.code = userResponse.fail;
+            userResponse.data.userId = userId;
+            userResponse.data.message = "user not found.";
+
+        }
+        return userResponse;
+    }
+
     public UserEntity FindUser(String userId){
         return userRepository.findById(userId).orElse(null);
     }
