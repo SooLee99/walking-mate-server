@@ -35,7 +35,7 @@ public class BoardComment extends BaseTimeEntity {
     @JoinColumn(name = "userId") // 외래키 설정
     private UserEntity user;  // 사용자 id
 
-    @Column
+    @Column(length = 500)
     private String content;  // 내용
 
     @OneToMany(mappedBy = "parent", orphanRemoval = true)

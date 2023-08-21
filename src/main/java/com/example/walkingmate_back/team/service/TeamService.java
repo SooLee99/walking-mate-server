@@ -112,7 +112,7 @@ public class TeamService {
 
             // 랭킹
             TeamRank teamRanks = team.getTeamRank();
-            TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO(teamRanks.getTeam().getId(), teamRanks.getCoin(), teamRanks.getTear(), teamRanks.getWinNum());
+            TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO(teamRanks.getTeam().getId(), teamRanks.getCoin(), teamRanks.getTier(), teamRanks.getWinNum());
 
             return TeamResponseDTO.builder()
                     .id(team.getId())
@@ -147,7 +147,7 @@ public class TeamService {
 
             // 랭킹
             TeamRank teamRanks = team.getTeamRank();
-            TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO(teamRanks.getTeam().getId(), teamRanks.getCoin(), teamRanks.getTear(), teamRanks.getWinNum());
+            TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO(teamRanks.getTeam().getId(), teamRanks.getCoin(), teamRanks.getTier(), teamRanks.getWinNum());
 
             TeamResponseDTO teamResponseDTO = new TeamResponseDTO(
                     team.getId(),
@@ -186,7 +186,7 @@ public class TeamService {
 
             // 랭킹
             TeamRank teamRanks = team.getTeamRank();
-            TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO(teamRanks.getTeam().getId(), teamRanks.getCoin(), teamRanks.getTear(), teamRanks.getWinNum());
+            TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO(teamRanks.getTeam().getId(), teamRanks.getCoin(), teamRanks.getTier(), teamRanks.getWinNum());
 
             return TeamResponseDTO.builder()
                     .id(team.getId())
@@ -220,7 +220,7 @@ public class TeamService {
 
             // 랭킹
             TeamRank teamRanks = team.getTeamRank();
-            TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO(teamRanks.getTeam().getId(), teamRanks.getCoin(), teamRanks.getTear(), teamRanks.getWinNum());
+            TeamRankResponseDTO teamRankResponseDTO = new TeamRankResponseDTO(teamRanks.getTeam().getId(), teamRanks.getCoin(), teamRanks.getTier(), teamRanks.getWinNum());
 
             TeamResponseDTO teamResponseDTO = new TeamResponseDTO(
                     team.getId(),

@@ -10,17 +10,17 @@ public class TeamRankResponseDTO {
 
     private Long teamId; // 팀 id
 
-    private String tear;  // 팀 티어
+    private String tier;  // 팀 티어
 
     private int coin;  // 팀 코인
 
     private int winNum;  // 이긴 횟수
 
     @Builder
-    public TeamRankResponseDTO(Long teamId, int coin, String tear, int winNum) {
+    public TeamRankResponseDTO(Long teamId, int coin, String tier, int winNum) {
         this.teamId=teamId;
         this.coin=coin;
-        this.tear=tear;
+        this.tier = tier;
         this.winNum=winNum;
     }
 }

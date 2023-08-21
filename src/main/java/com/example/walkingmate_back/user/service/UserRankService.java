@@ -35,7 +35,7 @@ public class UserRankService {
             return UserRankResponseDTO.builder()
                     .userId(userRank.getUser().getId())
                     .coin(userRank.getCoin())
-                    .tear(userRank.getTear())
+                    .tier(userRank.getTier())
                     .runNum(userRank.getRunNum())
                     .build();
         } else {
@@ -55,7 +55,7 @@ public class UserRankService {
             UserRankResponseDTO rankResponseDTO = new UserRankResponseDTO(
                     userRank.getUserId(),
                     userRank.getCoin(),
-                    userRank.getTear(),
+                    userRank.getTier(),
                     userRank.getRunNum()
             );
             result.add(rankResponseDTO);
@@ -73,23 +73,23 @@ public class UserRankService {
         int num = userRank.getRunNum();
 
         // 아이언, 브론즈, 실버, 골드, 플래티넘, 다이아몬드, 마스터, 챌린저
-        String tear;
-        if(num >= 100000) tear = "챌린저";  // 100,000
-        else if(100000 > num && num > 49999) tear = "마스터"; // 50,000 ~ 99,999
-        else if(50000 > num && num > 9999) tear = "다이아몬드";  // 10,000 ~ 49,999
-        else if(10000 > num && num > 4999) tear = "플래티넘";  // 5,000 ~ 9,999
-        else if(5000 > num && num > 2499) tear = "골드";  // 2,500 ~ 4,999
-        else if(2500 > num && num > 999) tear = "실버";  // 1,000 ~ 2,499
-        else if(1000 > num && num > 99) tear = "브론즈";  // 100 ~ 999
-        else tear = "아이언";  // 0 ~ 99
+        String tier;
+        if(num >= 100000) tier = "챌린저";  // 100,000
+        else if(100000 > num && num > 49999) tier = "마스터"; // 50,000 ~ 99,999
+        else if(50000 > num && num > 9999) tier = "다이아몬드";  // 10,000 ~ 49,999
+        else if(10000 > num && num > 4999) tier = "플래티넘";  // 5,000 ~ 9,999
+        else if(5000 > num && num > 2499) tier = "골드";  // 2,500 ~ 4,999
+        else if(2500 > num && num > 999) tier = "실버";  // 1,000 ~ 2,499
+        else if(1000 > num && num > 99) tier = "브론즈";  // 100 ~ 999
+        else tier = "아이언";  // 0 ~ 99
 
-        userRank.update(tear);
+        userRank.update(tier);
         userRankRepository.save(userRank);
 
         return UserRankResponseDTO.builder()
                 .userId(userId)
                 .coin(userRank.getCoin())
-                .tear(userRank.getTear())
+                .tier(userRank.getTier())
                 .runNum(userRank.getRunNum())
                 .build();
     }

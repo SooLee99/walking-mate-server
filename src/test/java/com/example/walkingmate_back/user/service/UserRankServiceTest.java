@@ -49,7 +49,7 @@ class UserRankServiceTest {
 
         assertEquals(userRankResponseDTO.getUserId(), "aaa");
         assertEquals(userRankResponseDTO.getCoin(), 19);
-        assertEquals(userRankResponseDTO.getTear(), "실버");
+        assertEquals(userRankResponseDTO.getTier(), "실버");
     }
 
     @Test

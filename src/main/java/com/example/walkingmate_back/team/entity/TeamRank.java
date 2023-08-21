@@ -22,7 +22,7 @@ public class TeamRank {
     private Team team;  // 팀 id
 
     @Column
-    private String tear;  // 팀 티어
+    private String tier;  // 팀 티어
 
     @Column
     private int coin;  // 팀 코인
@@ -30,15 +30,15 @@ public class TeamRank {
     @Column
     private int winNum; // 이긴 횟수
 
-    public TeamRank(Long teamId, int coin, String tear, int winNum) {
+    public TeamRank(Long teamId, int coin, String tier, int winNum) {
         this.id=teamId;
         this.coin=coin;
-        this.tear=tear;
+        this.tier = tier;
         this.winNum=winNum;
     }
 
-    public void updateTear(String tear) {
-        this.tear=tear;
+    public void updateTear(String tier) {
+        this.tier =tier;
     }
 
     public void updateWinNum() {

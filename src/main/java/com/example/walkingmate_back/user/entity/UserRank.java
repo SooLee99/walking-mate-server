@@ -23,8 +23,8 @@ public class UserRank {
     @JoinColumn(name = "userId") // 외래키 설정
     private UserEntity user;  // 사용자 id
 
-    @Column
-    private String tear;  // 사용자 티어
+    @Column(length = 20)
+    private String tier;  // 사용자 티어
 
     @Column
     private int coin;  // 사용자 코인
@@ -42,7 +42,7 @@ public class UserRank {
         this.coin = this.coin + coin;
     }
 
-    public void update(String tear) { this.tear = tear; }
+    public void update(String tier) { this.tier = tier; }
 
     public void updateRunNum() {
         this.runNum = runNum + 1;

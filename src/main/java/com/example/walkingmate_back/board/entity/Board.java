@@ -29,10 +29,10 @@ public class Board extends BaseTimeEntity {
 
     // 시간 빼둠
 
-    @Column
+    @Column(length = 50)
     private String title;  // 제목
 
-    @Column
+    @Column(length = 1000)
     private String content;  // 내용
 
     @Column(columnDefinition = "int default 0")

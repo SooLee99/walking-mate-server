@@ -21,16 +21,16 @@ public class Team {
     @Column
     private Long id;  // 팀 id
 
-    @Column
+    @Column(length = 55)
     private String name;  // 팀 이름
 
-    @Column
+    @Column(length = 200)
     private String intro;  // 팀 소개
 
-    @Column
+    @Column(length = 5)
     private int peopleNum;  // 팀 인원
 
-    @Column
+    @Column(length = 20)
     private String state;  // 팀 경쟁 상태
 
     @Column

@@ -29,7 +29,7 @@ public class CheckList {
     @Column
     private boolean checked;  // 체크 여부
 
-    @Column
+    @Column(length = 200)
     private String content;  // 내용
 
     public CheckList(UserEntity userEntity, LocalDate date, String content, boolean checked) {
