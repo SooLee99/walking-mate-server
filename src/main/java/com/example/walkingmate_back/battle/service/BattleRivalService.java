@@ -6,7 +6,9 @@ import com.example.walkingmate_back.battle.entity.Battle;
 import com.example.walkingmate_back.battle.entity.BattleRival;
 import com.example.walkingmate_back.battle.repository.BattleRepository;
 import com.example.walkingmate_back.battle.repository.BattleRivalRepository;
+import com.example.walkingmate_back.team.entity.Team;
 import com.example.walkingmate_back.team.entity.TeamMember;
+import com.example.walkingmate_back.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +29,7 @@ public class BattleRivalService {
 
     private final BattleRepository battleRepository;
     private final BattleRivalRepository battleRivalRepository;
+    private final TeamRepository teamRepository;
 
     /**
      * 사용자, 팀 소속, 팀장, 대결 여부 확인 후 대결 라이벌 저장
@@ -43,6 +46,14 @@ public class BattleRivalService {
 
             battle.update(lc);
             battleRepository.save(battle);
+
+            Team team = teamRepository.findById(battle.getBattleRivals().get(0).getTeam().getId()).orElse(null);
+            team.updateState("대결 진행 중");
+            teamRepository.save(team);
+
+            team = teamRepository.findById(teamMember.getTeam().getId()).orElse(null);
+            team.updateState("대결 진행 중");
+            teamRepository.save(team);
 
             return BattleRivalResponseDTO.builder()
                     .teamId(battleRival.getTeam().getId())

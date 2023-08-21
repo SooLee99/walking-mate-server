@@ -12,10 +12,10 @@ public class HomeResponseDTO {
 
     private double distance;  // 거리
 
-    private long kcal;  // 칼로리
+    private double kcal;  // 칼로리
 
     @Builder
-    public HomeResponseDTO(int step, double distance, long kcal) {
+    public HomeResponseDTO(int step, double distance, double kcal) {
         this.step=step;
         this.distance=distance;
         this.kcal=kcal;

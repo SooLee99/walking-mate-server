@@ -8,12 +8,11 @@ import com.example.walkingmate_back.battle.entity.Battle;
 import com.example.walkingmate_back.battle.entity.BattleRival;
 import com.example.walkingmate_back.battle.repository.BattleRepository;
 import com.example.walkingmate_back.battle.repository.BattleRivalRepository;
-import com.example.walkingmate_back.team.entity.BattleHistoryEnum;
-import com.example.walkingmate_back.team.entity.TeamBattleHistory;
-import com.example.walkingmate_back.team.entity.TeamMember;
-import com.example.walkingmate_back.team.entity.TeamRank;
+import com.example.walkingmate_back.team.entity.*;
 import com.example.walkingmate_back.team.repository.TeamBattleHistoryRepository;
+import com.example.walkingmate_back.team.repository.TeamMemberRepository;
 import com.example.walkingmate_back.team.repository.TeamRankRepository;
+import com.example.walkingmate_back.team.repository.TeamRepository;
 import com.example.walkingmate_back.user.entity.UserRank;
 import com.example.walkingmate_back.user.repository.UserRankRepository;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +43,9 @@ public class BattleService {
     private final TeamBattleHistoryRepository teamBattleHistoryRepository;
     private final UserRankRepository userRankRepository;
     private final TeamRankRepository teamRankRepository;
+    private final TeamMemberRepository teamMemberRepository;
+    private final TeamRepository teamRepository;
+
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
@@ -86,6 +88,21 @@ public class BattleService {
         if(battle == null) {
             // 대결이 존재하지 않는 경우
             return null;
+        }
+
+        if(battle.getBattleRivals().size() == 2) {
+            Team team = teamRepository.findById(battle.getBattleRivals().get(0).getTeam().getId()).orElse(null);
+            team.updateState("대결 팀 모집 중");
+            teamRepository.save(team);
+
+            team = teamRepository.findById(battle.getBattleRivals().get(1).getTeam().getId()).orElse(null);
+            team.updateState("대결 팀 모집 중");
+            teamRepository.save(team);
+        } else {
+            Team team = teamRepository.findById(battle.getBattleRivals().get(0).getTeam().getId()).orElse(null);
+            team.updateState("대결 팀 모집 중");
+            teamRepository.save(team);
+
         }
 
         // 대결상대 모두 삭제
@@ -148,7 +165,6 @@ public class BattleService {
             List<BattleRivalResponseDTO> battleRivalResponseDTOList = battle.getBattleRivals().stream()
                     .map(battleRival -> new BattleRivalResponseDTO(battleRival.getTeam().getId(), battleRival.getTeam().getTeamMembers().get(0).getUser().getName(), battleRival.getTeam().getTeamRank().getTear(), battleRival.getTeam().getIntro(), battleRival.getTeam().getName(), battleRival.getTeam().getPeopleNum(), battleRival.getStep()))
                     .collect(Collectors.toList());
-
 
             if(battleRivalResponseDTOList.size() == 2) {
                 battleCheck = "대결 진행 중";
@@ -263,6 +279,14 @@ public class BattleService {
             }
         }
 
+        Team team = teamRepository.findById(battle.getBattleRivals().get(0).getTeam().getId()).orElse(null);
+        team.updateState("대결 팀 모집 중");
+        teamRepository.save(team);
+
+        team = teamRepository.findById(battle.getBattleRivals().get(1).getTeam().getId()).orElse(null);
+        team.updateState("대결 팀 모집 중");
+        teamRepository.save(team);
+
         // 대결상대 모두 삭제
         battleRepository.delete(battle);
 
@@ -277,4 +301,5 @@ public class BattleService {
     public Battle FindBattle(Long battleId){
         return battleRepository.findById(battleId).orElse(null);
     }
+
 }

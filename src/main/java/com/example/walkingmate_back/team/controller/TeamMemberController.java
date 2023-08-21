@@ -4,6 +4,7 @@ import com.example.walkingmate_back.main.response.DefaultRes;
 import com.example.walkingmate_back.main.response.ResponseMessage;
 import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.team.dto.TeamMemberResponseDTO;
+import com.example.walkingmate_back.team.dto.TeamMemberSearchResponseDTO;
 import com.example.walkingmate_back.team.service.TeamMemberService;
 import com.example.walkingmate_back.team.service.TeamService;
 import com.example.walkingmate_back.user.entity.UserEntity;
@@ -14,9 +15,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 /**
- *    멤버 가입, 삭제
+ *    멤버 가입, 삭제, 검색
  *
- *   @version          1.00 / 2023.07.24
+ *   @version          1.00 / 2023.08.21
  *   @author           전우진
  */
 
@@ -67,5 +68,14 @@ public class TeamMemberController {
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
     }
 
+    // 팀원 검색 조회
+    @GetMapping("/list/search/{userId}")
+    public ResponseEntity<DefaultRes<TeamMemberSearchResponseDTO>> searchTeamMember(@PathVariable String userId) {
+        TeamMemberSearchResponseDTO teamMemberSearchResponseDTO = teamMemberService.searchTeamMember(userId);
 
+        if(teamMemberSearchResponseDTO != null)
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, teamMemberSearchResponseDTO), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
+    }
 }

@@ -43,7 +43,7 @@ public class TeamService {
         if(teamMemberRepository.findByUserId(user.getId()) == null) {  // 기존 팀이 없는 경우
             LocalDate lc = LocalDate.now();
 
-            Team team = new Team(teamRequestDTO.getName(), teamRequestDTO.getIntro(), teamRequestDTO.getPeopleNum(), "모집", lc);
+            Team team = new Team(teamRequestDTO.getName(), teamRequestDTO.getIntro(), teamRequestDTO.getPeopleNum(), "대결 팀 모집 중", lc);
             teamRepository.save(team);
 
             // 팀 가입 - 리더
@@ -240,8 +240,9 @@ public class TeamService {
 
         return result;
     }
-
+    
     public Team FindTeam(Long teamId){
         return teamRepository.findById(teamId).orElse(null);
     }
+    
 }

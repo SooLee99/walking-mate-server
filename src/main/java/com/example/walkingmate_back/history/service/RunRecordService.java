@@ -139,7 +139,7 @@ public class RunRecordService {
         List<RunRecord> runRecords = runRecordRepository.findByUserIdWithDate(user.getId(), lc);
         int totalStep = 0;
         double totalDis = 0;
-        long totalKcal = 0;
+        double totalKcal = 0;
 
         for (RunRecord runRecord : runRecords) {
             totalStep += runRecord.getStep();
