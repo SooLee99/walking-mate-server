@@ -33,14 +33,20 @@ public class LoginService {
     }
 
 
-    public void join(JoinRequest joinRequest) {
-        userRepository.save(UserEntity.builder()
-                .id(joinRequest.getId())
-                .pw(joinRequest.getPw())
-                .name(joinRequest.getName())
-                .phone(joinRequest.getPhone())
-                .birth(joinRequest.getBirth())
-                .build());
+    public int join(JoinRequest joinRequest) {
+        try{
+            userRepository.save(UserEntity.builder()
+                    .id(joinRequest.getId())
+                    .pw(joinRequest.getPw())
+                    .name(joinRequest.getName())
+                    .phone(joinRequest.getPhone())
+                    .birth(joinRequest.getBirth())
+                    .build());
+            return 1;
+        } catch (Exception e){
+            return 0;
+        }
+
     }
 
     public LoginResponse login(LoginRequest loginRequest) {

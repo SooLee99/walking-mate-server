@@ -68,4 +68,19 @@ public class ResponseMessage {
 
     public static final String READ_SUCCESS = "데이터베이스 조회 성공";
     public static final String DB_ERROR = "데이터베이스 에러";
+
+    public static final String LOGIN_SUCCESS = "로그인 성공";
+    public static final String LOGIN_FAIL = "로그인 실패";
+
+    public static final String JOIN_SUCCESS = "회원가입 성공";
+    public static final String JOIN_FAIL = "회원가입 실패";
+
+    public static final String PASSWORD_UPDATE_SUCCESS = "비밀번호 변경 성공";
+    public static final String PASSWORD_UPDATE_FAIL = "비밀번호 변경 실패";
+
+    public static final String USER_INFO_SEARCH = "사용자 정보조회 성공";
+    public static final String NOT_USER_INFO = "사용자 정보조회 실패";
+
+    public static final String USER_UPDATE = "사용자 정보수정 성공";
+    public static final String USER_UPDATE_FAIL = "사용자 정보수정 실패";
 }
