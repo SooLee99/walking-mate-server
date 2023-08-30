@@ -13,6 +13,7 @@ import com.example.walkingmate_back.team.repository.TeamBattleHistoryRepository;
 import com.example.walkingmate_back.team.repository.TeamMemberRepository;
 import com.example.walkingmate_back.team.repository.TeamRankRepository;
 import com.example.walkingmate_back.team.repository.TeamRepository;
+import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.entity.UserRank;
 import com.example.walkingmate_back.user.repository.UserRankRepository;
 import lombok.RequiredArgsConstructor;
@@ -296,6 +297,41 @@ public class BattleService {
                 .createdDate(format.format(battle.getCreatedDate()))
                 .totalStep(battle.getTotalStep())
                 .build();
+    }
+
+    /**
+     * 현재 로그인된 사용자의 대결 조회 (팀 대결 상태 + 대결 아이디)
+     * - 전우진 2023.08.30
+     */
+    public BattleResponseDTO getUserBattle(BattleRival battleRivalId) {
+
+        Battle battle = battleRepository.findById(battleRivalId.getBattle().getId()).orElse(null);
+
+        if(battle != null) {  // 대결이 존재하는 경우
+            String battleCheck = "";
+
+            List<BattleRival> battleRivals = battle.getBattleRivals();
+
+            List<BattleRivalResponseDTO> battleRivalResponseDTOList = battleRivals.stream()
+                    .map(battleRival -> new BattleRivalResponseDTO(battleRival.getTeam().getId(), battleRival.getTeam().getTeamMembers().get(0).getUser().getName(), battleRival.getTeam().getTeamRank().getTier(), battleRival.getTeam().getIntro(), battleRival.getTeam().getName(), battleRival.getTeam().getPeopleNum(), battleRival.getStep()))
+                    .collect(Collectors.toList());
+
+            if(battleRivalResponseDTOList.size() == 2) {
+                battleCheck = "대결 진행 중";
+            } else battleCheck = "대결 팀 모집 중";
+
+            return BattleResponseDTO.builder()
+                    .id(battle.getId())
+                    .startDate(battle.getStartDate())
+                    .createdDate(format.format(battle.getCreatedDate()))
+                    .totalStep(battle.getTotalStep())
+                    .battleCheck(battleCheck)
+                    .battleRivalResponseDTOList(battleRivalResponseDTOList)
+                    .build();
+        } else {
+            // 대결이 존재하지 않는 경우
+            return null;
+        }
     }
 
     public Battle FindBattle(Long battleId){

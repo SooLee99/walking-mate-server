@@ -3,6 +3,8 @@ package com.example.walkingmate_back.battle.controller;
 import com.example.walkingmate_back.battle.dto.BattleRequestDTO;
 import com.example.walkingmate_back.battle.dto.BattleResponseDTO;
 import com.example.walkingmate_back.battle.dto.BattleSearchDTO;
+import com.example.walkingmate_back.battle.entity.BattleRival;
+import com.example.walkingmate_back.battle.service.BattleRivalService;
 import com.example.walkingmate_back.battle.service.BattleService;
 import com.example.walkingmate_back.main.response.ResponseMessage;
 import com.example.walkingmate_back.main.response.DefaultRes;
@@ -21,7 +23,7 @@ import java.util.List;
 /**
  *    대결 생성, 삭제, 단일 조회, 전체 조회, 검색, 종료
  *
- *   @version          1.00 / 2023.08.20
+ *   @version          1.00 / 2023.08.30
  *   @author           전우진
  */
 
@@ -33,11 +35,13 @@ public class BattleController {
     private final BattleService battleService;
     private final UserService userService;
     private final TeamMemberService teamMemberService;
+    private final BattleRivalService battleRivalService;
 
-    public BattleController(BattleService battleService, UserService userService, TeamMemberService teamMemberService) {
+    public BattleController(BattleService battleService, UserService userService, TeamMemberService teamMemberService, BattleRivalService battleRivalService) {
         this.battleService = battleService;
         this.userService = userService;
         this.teamMemberService = teamMemberService;
+        this.battleRivalService = battleRivalService;
     }
 
     // 대결 생성
@@ -109,6 +113,24 @@ public class BattleController {
     @DeleteMapping("/finish/{battleId}")
     public ResponseEntity<DefaultRes<BattleResponseDTO>> finishBattle(@PathVariable Long battleId) throws ParseException {
         BattleResponseDTO battleResponseDTO = battleService.finishBattle(battleId);
+
+        if(battleResponseDTO != null)
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.DELETE_BATTLE, battleResponseDTO), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_BATTLE, null), HttpStatus.OK);
+    }
+
+    // 현재 로그인된 사용자의 대결 조회 (팀 대결 상태 + 대결 아이디)
+    @GetMapping("/teamStatus")
+    public ResponseEntity<DefaultRes<BattleResponseDTO>> finishBattle(Authentication authentication) {
+
+        TeamMember teamMember = teamMemberService.FindTeam(authentication.getName());
+        if(teamMember == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+
+        BattleRival battleRivalId = battleRivalService.FindBattleRival(teamMember.getTeam().getId());
+        if(battleRivalId == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_BATTLE, null), HttpStatus.OK);
+
+        BattleResponseDTO battleResponseDTO = battleService.getUserBattle(battleRivalId);
 
         if(battleResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.DELETE_BATTLE, battleResponseDTO), HttpStatus.OK);

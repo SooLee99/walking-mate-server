@@ -94,4 +94,8 @@ public class BattleRivalService {
                 .step(battleRival.getStep())
                 .build();
     }
+
+    public BattleRival FindBattleRival(Long teamId){
+        return battleRivalRepository.findByTeamId(teamId);
+    }
 }
