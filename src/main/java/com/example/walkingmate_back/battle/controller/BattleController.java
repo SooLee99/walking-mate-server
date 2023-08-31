@@ -21,9 +21,9 @@ import java.text.ParseException;
 import java.util.List;
 
 /**
- *    대결 생성, 삭제, 단일 조회, 전체 조회, 검색, 종료
+ *    대결 생성, 삭제, 단일 조회, 전체 조회, 검색
  *
- *   @version          1.00 / 2023.08.30
+ *   @version          1.00 / 2023.08.31
  *   @author           전우진
  */
 
@@ -109,8 +109,8 @@ public class BattleController {
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_BATTLE, null), HttpStatus.OK);
     }
 
-    // 대결 종료
-    @DeleteMapping("/finish/{battleId}")
+    // 대결 종료 - 삭제 예정
+    /*@DeleteMapping("/finish/{battleId}")
     public ResponseEntity<DefaultRes<BattleResponseDTO>> finishBattle(@PathVariable Long battleId) throws ParseException {
         BattleResponseDTO battleResponseDTO = battleService.finishBattle(battleId);
 
@@ -118,7 +118,7 @@ public class BattleController {
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.DELETE_BATTLE, battleResponseDTO), HttpStatus.OK);
         else
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_BATTLE, null), HttpStatus.OK);
-    }
+    }*/
 
     // 현재 로그인된 사용자의 대결 조회 (팀 대결 상태 + 대결 아이디)
     @GetMapping("/teamStatus")
