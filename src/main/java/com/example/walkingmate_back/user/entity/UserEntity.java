@@ -3,6 +3,7 @@ package com.example.walkingmate_back.user.entity;
 import com.example.walkingmate_back.board.entity.Board;
 import com.example.walkingmate_back.board.entity.BoardComment;
 import com.example.walkingmate_back.board.entity.Recommend;
+import com.example.walkingmate_back.board.entity.RecommendComment;
 import com.example.walkingmate_back.history.entity.BuyHistory;
 import com.example.walkingmate_back.history.entity.CheckList;
 import com.example.walkingmate_back.history.entity.RunRecord;
@@ -57,6 +58,9 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Recommend> recommends;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<RecommendComment> recommendComments;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<BuyHistory> buyHistorys;

@@ -25,10 +25,14 @@ public class BoardCommentResponseDTO {
 
     private Long parentId; // 댓글 아이디
 
+    private int recommend; // 좋아요
+
+    private boolean isrecommend;  // 사용자의 좋아요 여부
+
     private List<BoardCommentResponseDTO> children = new ArrayList<>();
 
     @Builder
-    public BoardCommentResponseDTO(Long id, Long boardId, String userId, String content, Long parentId, LocalDateTime regTime, LocalDateTime updateTime, List<BoardCommentResponseDTO> children) {
+    public BoardCommentResponseDTO(Long id, Long boardId, String userId, String content, Long parentId, LocalDateTime regTime, LocalDateTime updateTime, int recommend, boolean isrecommend, List<BoardCommentResponseDTO> children) {
         this.id=id;
         this.boardId=boardId;
         this.userId=userId;
@@ -37,6 +41,8 @@ public class BoardCommentResponseDTO {
         this.children=children;
         this.regTime=regTime;
         this.updateTime=updateTime;
+        this.recommend=recommend;
+        this.isrecommend=isrecommend;
     }
 
     public BoardCommentResponseDTO(Long id, Long boardId, String userId, String content, Long parentId, LocalDateTime regTime, LocalDateTime updateTime) {

@@ -3,8 +3,11 @@ package com.example.walkingmate_back.board.entity;
 import com.example.walkingmate_back.board.dto.BoardCommentUpdateDTO;
 import com.example.walkingmate_back.main.entity.BaseTimeEntity;
 import com.example.walkingmate_back.user.entity.UserEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +40,14 @@ public class BoardComment extends BaseTimeEntity {
 
     @Column(length = 500)
     private String content;  // 내용
+
+    @Column(columnDefinition = "int default 0")
+    private int recommend; // 댓글 좋아요
+
+    @JsonIgnore
+    @BatchSize(size = 500)
+    @OneToMany(mappedBy = "boardComment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RecommendComment> recommendComments;  // 좋아요 리스트
 
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<BoardComment> children = new ArrayList<>();

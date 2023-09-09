@@ -52,9 +52,10 @@ public class BoardCommentService {
                 .boardId(boardComment.getBoard().getId())
                 .userId(boardComment.getUser().getId())
                 .content(boardComment.getContent())
-                .parentId(parentId)
                 .regTime(boardComment.getRegTime())
                 .updateTime(boardComment.getUpdateTime())
+                .parentId(parentId)
+                .recommend(boardComment.getRecommend())
                 .build();
     }
 
@@ -74,6 +75,7 @@ public class BoardCommentService {
                     .content(boardComment.getContent())
                     .regTime(boardComment.getRegTime())
                     .updateTime(boardComment.getUpdateTime())
+                    .recommend(boardComment.getRecommend())
                     .build();
         }
         return null;
@@ -98,6 +100,7 @@ public class BoardCommentService {
                 .content(boardComment.getContent())
                 .regTime(boardComment.getRegTime())
                 .updateTime(boardComment.getUpdateTime())
+                .recommend(boardComment.getRecommend())
                 .build();
     }
 

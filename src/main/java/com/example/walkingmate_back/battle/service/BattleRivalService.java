@@ -10,9 +10,19 @@ import com.example.walkingmate_back.team.entity.Team;
 import com.example.walkingmate_back.team.entity.TeamMember;
 import com.example.walkingmate_back.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  *    대결 라이벌 저장, 걸음 수 수정
@@ -30,13 +40,18 @@ public class BattleRivalService {
     private final BattleRepository battleRepository;
     private final BattleRivalRepository battleRivalRepository;
     private final TeamRepository teamRepository;
+    private final BattleService battleService;
+
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     /**
-     * 사용자, 팀 소속, 팀장, 대결 여부 확인 후 대결 라이벌 저장
-     * - 전우진 2023.07.19
+     * 사용자, 팀 소속, 팀장, 대결 여부 확인 후 대결 라이벌 저장 -> 7일 후 종료 + 대결 기록 추가
+     * - 전우진 2023.08.31
      */
     public BattleRivalResponseDTO saveBattleRival(Battle battle, TeamMember teamMember) {
         LocalDate lc = LocalDate.now();
+        LocalDateTime finishTime = LocalDateTime.now().plusDays(7);
+
         BattleRival result = battleRivalRepository.findByTeamId(teamMember.getTeam().getId());
 
         // 팀이 대결에 참여하지 않은 경우
@@ -54,6 +69,14 @@ public class BattleRivalService {
             team = teamRepository.findById(teamMember.getTeam().getId()).orElse(null);
             team.updateState("대결 진행 중");
             teamRepository.save(team);
+
+            scheduler.schedule(() -> {
+                try {
+                    battleService.finishBattle(battle.getId());
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+            }, ChronoUnit.SECONDS.between(LocalDateTime.now(), finishTime), TimeUnit.SECONDS);
 
             return BattleRivalResponseDTO.builder()
                     .teamId(battleRival.getTeam().getId())
@@ -93,5 +116,9 @@ public class BattleRivalService {
                 .peopleNum(battleRival.getTeam().getPeopleNum())
                 .step(battleRival.getStep())
                 .build();
+    }
+
+    public BattleRival FindBattleRival(Long teamId){
+        return battleRivalRepository.findByTeamId(teamId);
     }
 }
