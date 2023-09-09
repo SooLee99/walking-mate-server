@@ -28,6 +28,7 @@ import java.util.List;
  */
 
 //@Controller
+// 깃허브 테스트 입니다. (2023-09-09 이수)
 @RestController
 @RequestMapping("/battle")
 public class BattleController {
