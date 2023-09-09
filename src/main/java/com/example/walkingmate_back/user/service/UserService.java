@@ -1,12 +1,12 @@
 package com.example.walkingmate_back.user.service;
 
+import com.example.walkingmate_back.user.dto.User;
 import com.example.walkingmate_back.user.dto.UserResponse;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +27,6 @@ public class UserService {
         userResponse = new UserResponse();
         Optional<UserEntity> newUser = userRepository.findById(userId);
 
-        // transactional 적용하면 set 하고 save 안해줘도 변경된 값 DB에 반영됨 ㅋㅋ
-
         if (newUser.isPresent()) {
             newUser.get().setName(user.getName());
             newUser.get().setPhone(user.getPhone());
@@ -46,8 +44,15 @@ public class UserService {
         return userResponse;
     }
 
+    public User getInfo(String userId){
+        UserEntity user = userRepository.findById(userId).orElse(null);
+        User u = new User(user.getId(), user.getPw(), user.getName(), user.getPhone(), user.getBirth().toString());
+        return u;
+    }
+
     public UserEntity FindUser(String userId){
-        return userRepository.findById(userId).orElse(null);
+        UserEntity user = userRepository.findById(userId).orElse(null);
+        return user;
     }
 
     public UserResponse passwordUpdate(String userId, String oldPw, String newPw) {
