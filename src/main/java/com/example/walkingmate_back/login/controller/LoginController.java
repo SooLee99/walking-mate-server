@@ -2,6 +2,7 @@ package com.example.walkingmate_back.login.controller;
 
 import com.example.walkingmate_back.board.dto.BoardResponseDTO;
 import com.example.walkingmate_back.login.domain.JoinRequest;
+import com.example.walkingmate_back.login.domain.JoinResponseDTO;
 import com.example.walkingmate_back.login.domain.LoginRequest;
 import com.example.walkingmate_back.login.domain.LoginResponse;
 import com.example.walkingmate_back.login.service.LoginService;
@@ -30,12 +31,12 @@ public class LoginController {
 
     }
     @PostMapping("/join")
-    public ResponseEntity<DefaultRes<Void>> join(@RequestBody JoinRequest joinRequest) {
-        int joinCheck = loginService.join(joinRequest);
+    public ResponseEntity<DefaultRes<JoinResponseDTO>> join(@RequestBody JoinRequest joinRequest) {
+        JoinResponseDTO joinResponseDTO = loginService.join(joinRequest);
 
-        if(joinCheck == 1)
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.JOIN_SUCCESS), HttpStatus.OK);
+        if(joinResponseDTO != null)
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.JOIN_MESSAGE, joinResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.JOIN_FAIL), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.JOIN_FAIL, joinResponseDTO), HttpStatus.OK);
     }
 }

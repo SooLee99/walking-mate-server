@@ -72,7 +72,7 @@ public class ResponseMessage {
     public static final String LOGIN_MESSAGE = "로그인";
     public static final String LOGIN_FAIL = "로그인 실패";
 
-    public static final String JOIN_SUCCESS = "회원가입 성공";
+    public static final String JOIN_MESSAGE = "회원가입";
     public static final String JOIN_FAIL = "회원가입 실패";
 
     public static final String PASSWORD_UPDATE_SUCCESS = "비밀번호 변경 성공";

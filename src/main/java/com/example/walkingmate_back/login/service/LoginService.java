@@ -1,6 +1,7 @@
 package com.example.walkingmate_back.login.service;
 
 import com.example.walkingmate_back.login.domain.JoinRequest;
+import com.example.walkingmate_back.login.domain.JoinResponseDTO;
 import com.example.walkingmate_back.login.domain.LoginRequest;
 import com.example.walkingmate_back.login.domain.LoginResponse;
 import com.example.walkingmate_back.login.utils.JwtUtil;
@@ -30,6 +31,7 @@ public class LoginService {
     private final UserBodyRepository userBodyRepository;
 
     private LoginResponse loginResponse;
+    private JoinResponseDTO joinResponseDTO;
 
     @Autowired
     public LoginService(UserRepository userRepository, UserBodyRepository userBodyRepository) {
@@ -37,31 +39,38 @@ public class LoginService {
         this.userBodyRepository = userBodyRepository;
     }
 
-    public int join(JoinRequest joinRequest) {
+    public JoinResponseDTO join(JoinRequest joinRequest) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-        // 문자열 -> Date
+        // 문자열 -> LocalDate
         LocalDate date = LocalDate.parse(joinRequest.getBirth(), formatter);
-        try{
-            userRepository.save(UserEntity.builder()
-                    .id(joinRequest.getId())
-                    .pw(joinRequest.getPw())
-                    .name(joinRequest.getName())
-                    .phone(joinRequest.getPhone())
-                    .birth(date)
-                    .build());
 
-            // 신체정보 저장
-            UserBody userBody = new UserBody();
-            userBody.setUserId(joinRequest.getId());
-            userBody.setHeight(joinRequest.getHeight());
-            userBody.setWeight(joinRequest.getWeight());
-            userBodyRepository.save(userBody);
-            return 1;
-        } catch (Exception e){
-            return 0;
-        }
+        joinResponseDTO = new JoinResponseDTO();
 
+        if(userRepository.existsById(joinRequest.getId()) == false) {
+                userRepository.save(UserEntity.builder()
+                        .id(joinRequest.getId())
+                        .pw(joinRequest.getPw())
+                        .name(joinRequest.getName())
+                        .phone(joinRequest.getPhone())
+                        .birth(date)
+                        .build());
+
+                // 신체정보 저장
+                UserBody userBody = new UserBody();
+                userBody.setUserId(joinRequest.getId());
+                userBody.setHeight(joinRequest.getHeight());
+                userBody.setWeight(joinRequest.getWeight());
+                userBodyRepository.save(userBody);
+
+                joinResponseDTO.data.code = joinResponseDTO.success;
+                joinResponseDTO.data.message = "회원가입 성공";
+                return joinResponseDTO;
+            } else {
+                joinResponseDTO.data.code = joinResponseDTO.fail;
+                joinResponseDTO.data.message = "중복된 아이디";
+                return joinResponseDTO;
+            }
     }
 
     public LoginResponse login(LoginRequest loginRequest) {
