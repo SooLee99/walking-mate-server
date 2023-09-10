@@ -1,6 +1,5 @@
 package com.example.walkingmate_back.history.dto;
 
-import com.example.walkingmate_back.user.entity.UserEntity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;

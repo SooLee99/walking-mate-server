@@ -6,16 +6,19 @@ import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.user.dto.User;
 import com.example.walkingmate_back.user.dto.UserResponse;
 import com.example.walkingmate_back.user.dto.UserUpdateDTO;
-import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+/**
+ *    사용자 정보 수정, 조회, 탈퇴, 비밀번호 재설정
+ *
+ *   @version          1.00 / 2023.09.10
+ *   @author           전우진, 이인범
+ */
 
 @RestController
 @RequestMapping("/user")
@@ -23,8 +26,8 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-    //private final UserService2 userService2;
 
+    // 비밀번호 재설정
     @GetMapping("/pwUpdate")
     public ResponseEntity<DefaultRes<UserResponse>> passwordUpdate(Authentication auth, @RequestParam String oldPw, @RequestParam String newPw) {
         UserResponse userResponse = userService.passwordUpdate(auth.getName(), oldPw, newPw);
@@ -35,6 +38,7 @@ public class UserController {
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.PASSWORD_UPDATE_FAIL), HttpStatus.OK);
     }
 
+    // 사용자 정보 조회
     @GetMapping("/getInfo")
     public ResponseEntity<DefaultRes<User>> getInfo(Authentication auth) {
         User user = userService.getInfo(auth.getName());
@@ -46,17 +50,7 @@ public class UserController {
 
     }
 
-    @GetMapping("/info")
-    public ResponseEntity<DefaultRes<UserEntity>> userInfo(Authentication auth) {
-        UserEntity userEntity = userService.FindUser(auth.getName());
-
-        if(userEntity != null)
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.USER_INFO_SEARCH, userEntity), HttpStatus.OK);
-        else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_USER_INFO), HttpStatus.OK);
-
-    }
-
+    // 사용자 정보 수정
     @PostMapping("/updateInfo")
     public ResponseEntity<DefaultRes<User>> updateInfo(Authentication auth, @RequestBody UserUpdateDTO userUpdateDTO){
         User user = userService.updateInfo(auth.getName(), userUpdateDTO);
@@ -68,5 +62,16 @@ public class UserController {
 
     }
 
+    // 사용자 탈퇴
+    @DeleteMapping("/withdrawal")
+    public ResponseEntity<DefaultRes<UserResponse>> withdrawalUser(Authentication authentication) {
+        UserResponse userResponse = userService.withdrawalUser(authentication.getName());
+
+        if(userResponse != null)
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.USER_WITHDRAWAL_SUCCESS, userResponse), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER), HttpStatus.OK);
+
+    }
 
 }

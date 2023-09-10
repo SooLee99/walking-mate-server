@@ -1,8 +1,6 @@
 package com.example.walkingmate_back.team.dto;
 
-import com.example.walkingmate_back.team.entity.Team;
 import lombok.Data;
-import java.util.Date;
 
 @Data
 public class TeamBattleRequestDTO {

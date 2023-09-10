@@ -1,8 +1,5 @@
 package com.example.walkingmate_back.login.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 public class LoginResponse {
 
     public Data data = new Data();
@@ -11,7 +8,6 @@ public class LoginResponse {
     public static String fail = "fail";
 
     public class Data {
-
         public String userId = "";
         public String message = "";
         public String code = "";

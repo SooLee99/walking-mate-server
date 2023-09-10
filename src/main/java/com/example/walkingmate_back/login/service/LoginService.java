@@ -18,6 +18,14 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
+/**
+ *    로그인, 회원가입
+ *    - 서비스 로직
+ *
+ *   @version          1.00 / 2023.09.10
+ *   @author           전우진, 이인범
+ */
+
 @Service
 @Slf4j
 @Transactional
@@ -39,6 +47,10 @@ public class LoginService {
         this.userBodyRepository = userBodyRepository;
     }
 
+    /**
+     * 회원가입
+     * - 전우진, 이인범 2023.09.10
+     */
     public JoinResponseDTO join(JoinRequest joinRequest) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
@@ -73,6 +85,10 @@ public class LoginService {
             }
     }
 
+    /**
+     * 로그인
+     * - 이인범
+     */
     public LoginResponse login(LoginRequest loginRequest) {
         String userId = loginRequest.getUserId();
         String password = loginRequest.getPassword();

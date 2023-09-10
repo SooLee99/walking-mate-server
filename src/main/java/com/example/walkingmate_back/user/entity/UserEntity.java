@@ -7,15 +7,12 @@ import com.example.walkingmate_back.board.entity.RecommendComment;
 import com.example.walkingmate_back.history.entity.BuyHistory;
 import com.example.walkingmate_back.history.entity.CheckList;
 import com.example.walkingmate_back.history.entity.RunRecord;
-import com.example.walkingmate_back.team.entity.Team;
 import com.example.walkingmate_back.team.entity.TeamMember;
 import com.example.walkingmate_back.user.dto.UserUpdateDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Entity

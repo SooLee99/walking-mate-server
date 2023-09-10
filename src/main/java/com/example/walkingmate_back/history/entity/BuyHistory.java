@@ -3,8 +3,6 @@ package com.example.walkingmate_back.history.entity;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity

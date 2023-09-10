@@ -2,9 +2,7 @@ package com.example.walkingmate_back.team.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Getter

@@ -10,12 +10,8 @@ import com.example.walkingmate_back.team.entity.Team;
 import com.example.walkingmate_back.team.entity.TeamMember;
 import com.example.walkingmate_back.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.TaskScheduler;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

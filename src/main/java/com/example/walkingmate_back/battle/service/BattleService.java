@@ -13,11 +13,9 @@ import com.example.walkingmate_back.team.repository.TeamBattleHistoryRepository;
 import com.example.walkingmate_back.team.repository.TeamMemberRepository;
 import com.example.walkingmate_back.team.repository.TeamRankRepository;
 import com.example.walkingmate_back.team.repository.TeamRepository;
-import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.entity.UserRank;
 import com.example.walkingmate_back.user.repository.UserRankRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
@@ -25,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**

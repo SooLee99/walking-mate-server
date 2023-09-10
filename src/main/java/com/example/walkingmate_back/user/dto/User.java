@@ -1,7 +1,6 @@
 package com.example.walkingmate_back.user.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 
 @Data
