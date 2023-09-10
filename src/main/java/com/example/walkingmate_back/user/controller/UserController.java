@@ -5,6 +5,7 @@ import com.example.walkingmate_back.main.response.ResponseMessage;
 import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.user.dto.User;
 import com.example.walkingmate_back.user.dto.UserResponse;
+import com.example.walkingmate_back.user.dto.UserUpdateDTO;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -56,12 +57,12 @@ public class UserController {
 
     }
 
-    @PostMapping("updateInfo")
-    public ResponseEntity<DefaultRes<UserResponse>> updateInfo(Authentication auth, @RequestBody UserEntity user){
-        UserResponse userResponse = userService.updateInfo(auth.getName(), user);
+    @PostMapping("/updateInfo")
+    public ResponseEntity<DefaultRes<User>> updateInfo(Authentication auth, @RequestBody UserUpdateDTO userUpdateDTO){
+        User user = userService.updateInfo(auth.getName(), userUpdateDTO);
 
-        if(userResponse != null)
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.USER_UPDATE, userResponse), HttpStatus.OK);
+        if(user != null)
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.USER_UPDATE, user), HttpStatus.OK);
         else
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.USER_UPDATE_FAIL), HttpStatus.OK);
 

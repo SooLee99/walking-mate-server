@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
  *    사용자 신체정보 수정, 조회
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.07.23
+ *   @version          1.00 / 2023.09.10
  *   @author           전우진
  */
 
@@ -25,11 +25,11 @@ public class UserBodyService {
 
     /**
      * 사용자 확인 후 신체정보 조회
-     * - 전우진 2023.07.14
+     * - 전우진 2023.09.10
      */
     public UserBodyResponseDTO getUserBody(String userId) {
         UserBody userBody = userBodyRepository.findById(userId).orElse(null);
-        int BMI = userBody.getWeight() / (userBody.getHeight() * userBody.getHeight());
+        int BMI = (int) Math.round((double) userBody.getWeight() / (userBody.getHeight() * userBody.getHeight()) * 10000);
         if(userBody != null) {  // 신체정보가 존재하는 경우
 
             return UserBodyResponseDTO.builder()

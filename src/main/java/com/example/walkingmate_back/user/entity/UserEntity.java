@@ -9,9 +9,12 @@ import com.example.walkingmate_back.history.entity.CheckList;
 import com.example.walkingmate_back.history.entity.RunRecord;
 import com.example.walkingmate_back.team.entity.Team;
 import com.example.walkingmate_back.team.entity.TeamMember;
+import com.example.walkingmate_back.user.dto.UserUpdateDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -39,7 +42,7 @@ public class UserEntity {
     String phone; // 사용자 전화번호
 
     @Column
-    Date birth; // 사용자 생년월일
+    LocalDate birth; // 사용자 생년월일
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private UserRank userRank;
@@ -71,4 +74,9 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<RunRecord> runRecords;
 
+    public void update(UserUpdateDTO userUpdateDTO, LocalDate date) {
+        this.birth=date;
+        this.phone=userUpdateDTO.getPhone();
+        this.name=userUpdateDTO.getName();
+    }
 }

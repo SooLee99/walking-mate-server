@@ -24,7 +24,7 @@ public class LoginController {
         LoginResponse loginResponse = loginService.login(loginRequest);
 
         if(loginResponse != null)
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.LOGIN_SUCCESS, loginResponse), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.LOGIN_MESSAGE, loginResponse), HttpStatus.OK);
         else
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.LOGIN_FAIL), HttpStatus.OK);
 

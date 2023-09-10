@@ -1,8 +1,15 @@
 package com.example.walkingmate_back.user.service;
 
+import com.example.walkingmate_back.team.entity.Team;
+import com.example.walkingmate_back.team.entity.TeamMember;
+import com.example.walkingmate_back.team.repository.TeamMemberRepository;
+import com.example.walkingmate_back.team.repository.TeamRepository;
 import com.example.walkingmate_back.user.dto.User;
 import com.example.walkingmate_back.user.dto.UserResponse;
+import com.example.walkingmate_back.user.dto.UserUpdateDTO;
+import com.example.walkingmate_back.user.entity.UserBody;
 import com.example.walkingmate_back.user.entity.UserEntity;
+import com.example.walkingmate_back.user.repository.UserBodyRepository;
 import com.example.walkingmate_back.user.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Service
@@ -20,33 +29,44 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserBodyRepository userBodyRepository;
+    private final TeamMemberRepository teamMemberRepository;
 
     private UserResponse userResponse;
 
-    public UserResponse updateInfo(String userId, UserEntity user){
+    public User updateInfo(String userId, UserUpdateDTO userUpdateDTO){
         userResponse = new UserResponse();
-        Optional<UserEntity> newUser = userRepository.findById(userId);
+        UserEntity user = userRepository.findById(userId).orElse(null);
 
-        if (newUser.isPresent()) {
-            newUser.get().setName(user.getName());
-            newUser.get().setPhone(user.getPhone());
-            newUser.get().setBirth(user.getBirth());
-            userResponse.data.code = userResponse.success;
-            userResponse.data.userId = userId;
-            userResponse.data.message = "user info updated.";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
+        // 문자열 -> Date
+        LocalDate date = LocalDate.parse(userUpdateDTO.getBirth(), formatter);
+
+        if (user != null) {
+            user.update(userUpdateDTO, date);
+            userRepository.save(user);
+
+            User u = new User(user.getId(), user.getName(), user.getPhone(), user.getBirth().toString());
+            return u;
         } else {
-            userResponse.data.code = userResponse.fail;
-            userResponse.data.userId = userId;
-            userResponse.data.message = "user not found.";
-
+            return null;
         }
-        return userResponse;
     }
 
     public User getInfo(String userId){
         UserEntity user = userRepository.findById(userId).orElse(null);
-        User u = new User(user.getId(), user.getPw(), user.getName(), user.getPhone(), user.getBirth().toString());
+        UserBody userBody = userBodyRepository.findById(user.getId()).orElse(null);
+        TeamMember teamMember = teamMemberRepository.findByUserId(user.getId());
+
+        String teamName = "";
+        if(teamMember == null) {
+            teamName = "사용자 팀 없음";
+        } else teamName = teamMember.getTeam().getName();
+
+        int BMI = (int) Math.round((double) userBody.getWeight() / (userBody.getHeight() * userBody.getHeight()) * 10000);
+
+        User u = new User(user.getId(), user.getPw(), user.getName(), user.getPhone(), user.getBirth().toString(), userBody.getHeight(), userBody.getWeight(), teamName, BMI);
         return u;
     }
 
