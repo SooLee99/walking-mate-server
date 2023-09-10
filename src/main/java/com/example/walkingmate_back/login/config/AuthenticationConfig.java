@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 @Configuration // 설정파일 선언
 @EnableWebSecurity // security사용 선언
 @RequiredArgsConstructor
@@ -26,18 +27,16 @@ public class AuthenticationConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .httpBasic().disable()
-                .csrf().disable()
-                .cors().and()
-                .authorizeHttpRequests()
-                .requestMatchers("/api/login", "/api/join", "/buyHistory/**", "/board/**", "/user/**", "/battle/**", "/checkList/**", "/run/**", "/team/**").permitAll() // 인증 필요없음
-                .requestMatchers(HttpMethod.POST, "/api/**").authenticated() // 인증 있어야함
+
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers("/api/login", "/api/join", "/buyHistory/**", "/board/**", "/user/**", "/battle/**", "/checkList/**", "/run/**", "/team/**").permitAll() // 인증 필요없음
+                        .requestMatchers(HttpMethod.POST, "/api/**").authenticated() // 인증 있어야함
+                )
 //                .requestMatchers(HttpMethod.POST, "/api/v1/home/user").hasRole("USER") // USER 권한 있어야함
 //                .requestMatchers(HttpMethod.POST, "/api/v1/home/admin").hasRole("ADMIN") // ADMIN 권한 있어야함
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt 사용하는 경우 사용
-                .and()
+                .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JwtFilter(loginService, secretKey), UsernamePasswordAuthenticationFilter.class) // FilterChain 앞에 JwtFilter 추가
                 .build();
     }
