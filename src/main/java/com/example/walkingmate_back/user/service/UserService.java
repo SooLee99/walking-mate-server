@@ -75,7 +75,7 @@ public class UserService {
             teamName = "사용자 팀 없음";
         } else teamName = teamMember.getTeam().getName();
 
-        int BMI = (int) Math.round((double) userBody.getWeight() / (userBody.getHeight() * userBody.getHeight()) * 10000);
+        double BMI = Math.round(userBody.getWeight() / (userBody.getHeight() * userBody.getHeight()) * 10000 * 100) / 100.0;
 
         User u = new User(user.getId(), user.getPw(), user.getName(), user.getPhone(), user.getBirth().toString(), userBody.getHeight(), userBody.getWeight(), teamName, BMI);
         return u;

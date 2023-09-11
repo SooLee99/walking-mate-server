@@ -23,10 +23,10 @@ public class UserBody {
     private UserEntity user;  // 사용자 id
 
     @Column
-    private int height;  // 사용자 키
+    private double height;  // 사용자 키
 
     @Column
-    private int weight;  // 사용자 몸무게
+    private double weight;  // 사용자 몸무게
 
     // 신체정보 수정
     public UserBody update(UserBodyUpdateDTO userBodyUpdateDTO) {

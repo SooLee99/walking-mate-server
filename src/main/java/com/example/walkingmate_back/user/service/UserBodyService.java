@@ -29,7 +29,7 @@ public class UserBodyService {
      */
     public UserBodyResponseDTO getUserBody(String userId) {
         UserBody userBody = userBodyRepository.findById(userId).orElse(null);
-        int BMI = (int) Math.round((double) userBody.getWeight() / (userBody.getHeight() * userBody.getHeight()) * 10000);
+        double BMI = Math.round(userBody.getWeight() / (userBody.getHeight() * userBody.getHeight()) * 10000 * 100) / 100.0;
         if(userBody != null) {  // 신체정보가 존재하는 경우
 
             return UserBodyResponseDTO.builder()
@@ -51,7 +51,7 @@ public class UserBodyService {
      */
     public UserBodyResponseDTO updateUserBody(UserBodyUpdateDTO userBodyUpdateDTO, String userId) {
         UserBody userBody = userBodyRepository.findById(userId).orElse(null);
-        int BMI = userBody.getWeight() / (userBody.getHeight() * userBody.getHeight());
+        double BMI = Math.round(userBody.getWeight() / (userBody.getHeight() * userBody.getHeight()) * 10000 * 100) / 100.0;
         if(userBody == null) {  // 신체정보가 존재하지 않는 경우
             return null;
         }

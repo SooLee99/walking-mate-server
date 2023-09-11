@@ -12,11 +12,11 @@ public class User {
     private String name;
     private String phone;
     private String birth;
-    private int height;
-    private int weigth;
+    private double height;
+    private double weigth;
 
     private String userTeam;
-    private int BMI;
+    private double BMI;
 
     public User(String id, String name, String phone, String birth) {
         this.id=id;

@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class UserBodyUpdateDTO {
 
-    private int height;  // 사용자 키
+    private double height;  // 사용자 키
 
-    private int weight;  // 사용자 몸무게
+    private double weight;  // 사용자 몸무게
 
 }
