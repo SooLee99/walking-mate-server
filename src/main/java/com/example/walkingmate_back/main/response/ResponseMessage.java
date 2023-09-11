@@ -85,4 +85,8 @@ public class ResponseMessage {
     public static final String USER_UPDATE_FAIL = "사용자 정보수정 실패";
 
     public static final String USER_WITHDRAWAL_SUCCESS = "사용자 탈퇴 성공";
+
+    public static final String USER_EMAIL_SUCESS = "인증번호 전송";
+    public static final String USER_NUMBER_TRUE = "인증번호 일치";
+    public static final String USER_NUMBER_FALSE = "인증번호 불일치";
 }

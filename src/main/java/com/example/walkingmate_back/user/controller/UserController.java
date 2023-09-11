@@ -1,9 +1,12 @@
 package com.example.walkingmate_back.user.controller;
 
+import com.example.walkingmate_back.login.domain.JoinRequest;
+import com.example.walkingmate_back.login.service.EmailService;
 import com.example.walkingmate_back.main.response.DefaultRes;
 import com.example.walkingmate_back.main.response.ResponseMessage;
 import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.user.dto.User;
+import com.example.walkingmate_back.user.dto.UserEmailConfirmDTO;
 import com.example.walkingmate_back.user.dto.UserResponse;
 import com.example.walkingmate_back.user.dto.UserUpdateDTO;
 import com.example.walkingmate_back.user.service.UserService;
@@ -74,4 +77,21 @@ public class UserController {
 
     }
 
+
+    private final EmailService emailService;
+
+    @PostMapping("/emailConfirm")
+    public ResponseEntity<DefaultRes<String>> mailConfirm(@RequestBody JoinRequest joinRequest) {
+        int num = emailService.sendEmail(joinRequest.getId());
+
+        return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.USER_EMAIL_SUCESS, ""+num), HttpStatus.OK);
+    }
+
+    @PostMapping("/numberConfirm")
+    public ResponseEntity<DefaultRes<String>> numberConfirm(@RequestBody UserEmailConfirmDTO userEmailConfirmDTO) {
+        if(userEmailConfirmDTO.getUserNumber() == userEmailConfirmDTO.getEmailNumber())
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.USER_NUMBER_TRUE, "인증번호가 일치합니다."), HttpStatus.OK);
+        else
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.USER_NUMBER_FALSE, "인증번호가 일치하지 않습니다."), HttpStatus.OK);
+    }
 }
