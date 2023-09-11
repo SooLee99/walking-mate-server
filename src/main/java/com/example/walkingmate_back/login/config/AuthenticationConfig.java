@@ -40,8 +40,6 @@ public class AuthenticationConfig {
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JwtFilter(loginService, secretKey), UsernamePasswordAuthenticationFilter.class); // FilterChain 앞에 JwtFilter 추가
 
-        httpSecurity.logout(Customizer.withDefaults());
-                
         return httpSecurity.build();
     }
 }
