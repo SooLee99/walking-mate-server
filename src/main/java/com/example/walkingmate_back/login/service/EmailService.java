@@ -1,5 +1,8 @@
 package com.example.walkingmate_back.login.service;
 
+import com.example.walkingmate_back.user.entity.UserEntity;
+import com.example.walkingmate_back.user.repository.UserRepository;
+import com.example.walkingmate_back.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,8 @@ public class EmailService {
     private final JavaMailSender javaMailSender;  // 의존성 주입을 통해 필요한 객체를 가져옴
     private static final String senderEmail= "202145022@itc.ac.kr";
     private static int number;  // 랜덤 인증 코드
+
+    private final UserRepository userRepository;
 
     // 랜덤 인증 코드 생성
     public static void createNumber() {
@@ -63,5 +68,20 @@ public class EmailService {
 
         // 인증 코드 반환
         return number;
+    }
+
+    // 비밀번호 재설정 시 사용자 확인 후 이메일 인증번호 전송
+    public int sendPwEmail(String userId) {
+        UserEntity user = userRepository.findById(userId).orElse(null);
+
+        if(user != null) {
+            // 메일 전송에 필요한 정보 설정
+            MimeMessage message = createMail(userId);
+            // 실제 메일 전송
+            javaMailSender.send(message);
+
+            // 인증 코드 반환
+            return number;
+        } else return -1;
     }
 }

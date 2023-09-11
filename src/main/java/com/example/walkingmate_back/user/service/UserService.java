@@ -3,6 +3,7 @@ package com.example.walkingmate_back.user.service;
 import com.example.walkingmate_back.team.entity.TeamMember;
 import com.example.walkingmate_back.team.repository.TeamMemberRepository;
 import com.example.walkingmate_back.user.dto.User;
+import com.example.walkingmate_back.user.dto.UserPwConfirmDTO;
 import com.example.walkingmate_back.user.dto.UserResponse;
 import com.example.walkingmate_back.user.dto.UserUpdateDTO;
 import com.example.walkingmate_back.user.entity.UserBody;
@@ -21,7 +22,7 @@ import java.util.Optional;
  *    사용자 정보 수정, 조회, 탈퇴, 비밀번호 재설정
  *    - 서비스 로직
  *
- *   @version          1.00 / 2023.09.10
+ *   @version          1.00 / 2023.09.11
  *   @author           전우진
  */
 
@@ -91,31 +92,29 @@ public class UserService {
 
     /**
      * 비밀번호 재설정
-     * - 전우진, 이인범 2023.09.10
+     * - 전우진, 이인범 2023.09.11
      */
-    public UserResponse passwordUpdate(String userId, String oldPw, String newPw) {
-        log.info("userId:{}, oldPw:{}, newPw:{}", userId, oldPw, newPw);
-
+    public UserResponse passwordUpdate(UserPwConfirmDTO userPwConfirmDTO) {
         userResponse = new UserResponse();
 
-        Optional<UserEntity> user = userRepository.findById(userId);
+        Optional<UserEntity> user = userRepository.findById(userPwConfirmDTO.getUserId());
         user.ifPresentOrElse(
                 userEntity -> {
             userResponse.data.userId = userEntity.getId();
 
-            if (userEntity.getPw().equals(oldPw)) {
+            if (userPwConfirmDTO.getNewPw().equals(userPwConfirmDTO.getNewConfirmPw())) {
                 // TODO password update
-                userEntity.setPw(newPw);
+                userEntity.setPw(userPwConfirmDTO.getNewPw());
                 userRepository.save(userEntity);
 
                 userResponse.data.code = userResponse.success;
-                userResponse.data.message = "password update";
+                userResponse.data.message = "비밀번호 재설정 성공";
             } else{
-                userResponse.data.message = "password wrong";
+                userResponse.data.message = "비밀번호 불일치";
                 userResponse.data.code = userResponse.fail;
             }
         }, () -> {
-               userResponse.data.message = "user not found";
+               userResponse.data.message = "존재하지 않는 사용자";
                userResponse.data.code = userResponse.fail;
             }
         );

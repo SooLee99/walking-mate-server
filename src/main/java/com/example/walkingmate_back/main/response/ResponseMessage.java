@@ -75,7 +75,7 @@ public class ResponseMessage {
     public static final String JOIN_MESSAGE = "회원가입";
     public static final String JOIN_FAIL = "회원가입 실패";
 
-    public static final String PASSWORD_UPDATE_SUCCESS = "비밀번호 변경 성공";
+    public static final String PASSWORD_UPDATE = "비밀번호 재설정";
     public static final String PASSWORD_UPDATE_FAIL = "비밀번호 변경 실패";
 
     public static final String USER_INFO_SEARCH = "사용자 정보조회 성공";
