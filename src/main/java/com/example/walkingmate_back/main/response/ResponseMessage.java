@@ -23,6 +23,8 @@ public class ResponseMessage {
     public static final String CHECK_TEAM_BATTLE = "팀 대결 참여";
     public static final String NOT_FOUND_BATTLE = "대결 조회 실패";
 
+    public static final String SUCCESS_BATTLE = "대결 진행 중";
+
     public static final String WRITE_BATTLERIVAL = "대결 라이벌 생성 성공";
     public static final String UPDATE_BATTLERIVAL = "대결 라이벌 걸음수 수정 성공";
 

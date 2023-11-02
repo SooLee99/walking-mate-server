@@ -1,7 +1,7 @@
 package com.example.walkingmate_back.login.config;
 
 import com.example.walkingmate_back.login.service.LoginService;
-import com.example.walkingmate_back.login.utils.JwtUtil;
+import com.example.walkingmate_back.login.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -59,7 +59,8 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         log.info("Role : {}", authenticationToken.getAuthorities());
 
-        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         filterChain.doFilter(request, response);
     }
 }

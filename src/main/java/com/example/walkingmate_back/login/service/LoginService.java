@@ -4,7 +4,7 @@ import com.example.walkingmate_back.login.domain.JoinRequest;
 import com.example.walkingmate_back.login.domain.JoinResponseDTO;
 import com.example.walkingmate_back.login.domain.LoginRequest;
 import com.example.walkingmate_back.login.domain.LoginResponse;
-import com.example.walkingmate_back.login.utils.JwtUtil;
+import com.example.walkingmate_back.login.util.JwtUtil;
 import com.example.walkingmate_back.user.entity.UserBody;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.repository.UserBodyRepository;

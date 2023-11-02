@@ -10,6 +10,7 @@ import com.example.walkingmate_back.main.response.ResponseMessage;
 import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -27,6 +28,7 @@ import java.util.List;
 //@Controller
 @RestController
 @RequestMapping("/run")
+@Slf4j
 public class RunRecordController {
 
     private final RunRecordService runRecordService;
@@ -40,6 +42,10 @@ public class RunRecordController {
     // 운동 기록 추가
     @PostMapping("/record")
     public ResponseEntity<DefaultRes<RunRecordResponseDTO>> saveRun(@RequestBody RunRecordRequestDTO runRecordRequestDTO, Authentication authentication) throws ParseException {
+        log.info("운동 기록 추가 호출");
+        log.info(String.valueOf(runRecordRequestDTO));
+        log.info(String.valueOf(authentication));
+
         RunRecordResponseDTO runRecordResponseDTO = runRecordService.saveRun(runRecordRequestDTO, authentication.getName());
 
         if(runRecordResponseDTO != null)

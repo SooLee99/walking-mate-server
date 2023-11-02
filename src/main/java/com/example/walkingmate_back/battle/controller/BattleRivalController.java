@@ -12,6 +12,7 @@ import com.example.walkingmate_back.team.entity.TeamMember;
 import com.example.walkingmate_back.team.service.TeamMemberService;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 //@Controller
 @RestController
 @RequestMapping("/battle")
+@Slf4j
 public class BattleRivalController {
 
     private final BattleRivalService battleRivalService;
@@ -45,28 +47,45 @@ public class BattleRivalController {
     // 대결 라이벌 저장
     @PostMapping("/battleRival/{battleId}")
     public ResponseEntity<DefaultRes<BattleRivalResponseDTO>> saveBattleRival(@PathVariable Long battleId,  Authentication authentication) {
-        UserEntity user = userService.FindUser(authentication.getName());
-        if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
+        log.info("대결 라이벌 신청이 들어옴");
 
+        UserEntity user = userService.FindUser(authentication.getName());
+        if (user == null) {
+            log.info("대결 신청 : 사용자 토큰 확인 불가");
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
+        }
         TeamMember teamMember = teamMemberService.FindTeam(user.getId());
         // 팀 소속이 없는 경우
-        if(teamMember == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+        if (teamMember == null) {
+            log.info("현재 팀 소속을 확인할 수가 없음.");
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+        }
 
         // 팀장이 아닌 경우
-        if(teamMember.isTeamLeader() == false) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAMLEADER, null), HttpStatus.OK);
+        if (teamMember.isTeamLeader() == false) {
+            log.info("현재 팀장이 아님.");
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAMLEADER, null), HttpStatus.OK);
+        }
 
         // 대결이 존재하지 않는 경우
         Battle battle = battleService.FindBattle(battleId);
-        if(battle == null)  return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_BATTLE, null), HttpStatus.OK);
+        if (battle == null) {
+            log.info("대결이 존재하지 않음.");
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_BATTLE, null), HttpStatus.OK);
+        }
 
         BattleRivalResponseDTO battleRivalResponseDTO = battleRivalService.saveBattleRival(battle, teamMember);
 
-        if(battleRivalResponseDTO != null)
+        if (battleRivalResponseDTO != null) {
+            log.info("대결 신청 성공");
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_BATTLERIVAL, battleRivalResponseDTO), HttpStatus.OK);
-        else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.CHECK_TEAM_BATTLE, null), HttpStatus.OK);
-    }
 
+        } else {
+            log.info("대결 신청 실패");
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.CHECK_TEAM_BATTLE, null), HttpStatus.OK);
+        }
+    }
+        
     // 대결 라이벌 수정 - 걸음 수
     @PutMapping("/battleRival/{battleId}")
     public ResponseEntity<DefaultRes<BattleRivalResponseDTO>> updateBattleRival(@RequestBody BattleRivalUpdateDTO battleRivalUpdateDTO, @PathVariable Long battleId, Authentication authentication) {

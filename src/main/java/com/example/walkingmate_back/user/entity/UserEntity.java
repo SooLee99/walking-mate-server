@@ -12,19 +12,25 @@ import com.example.walkingmate_back.user.dto.UserUpdateDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
+
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@ToString
+//@ToString  // 무한 루프 발생해서 주석처리함. <= 2023-09-15 이수 작성함.
 @Builder
-@NoArgsConstructor
+//@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user")
+@Slf4j
 public class UserEntity {
 
+    public UserEntity() {
+        log.info("현재 UserEntity 건드림");
+    }
     @Id
     @Column
     private String id; // 사용자 id

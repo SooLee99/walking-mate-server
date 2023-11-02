@@ -4,6 +4,7 @@ import com.example.walkingmate_back.history.dto.BuyHistoryRequestDTO;
 import com.example.walkingmate_back.history.dto.CoinRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @Getter
@@ -13,6 +14,7 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Table(name = "userRank")
+@Slf4j
 public class UserRank {
 
     @Id
@@ -45,6 +47,7 @@ public class UserRank {
     public void update(String tier) { this.tier = tier; }
 
     public void updateRunNum() {
+        log.info("문제점 2");
         this.runNum = runNum + 1;
     }
 }

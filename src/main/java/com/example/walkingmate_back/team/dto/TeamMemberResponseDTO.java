@@ -1,11 +1,10 @@
 package com.example.walkingmate_back.team.dto;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
+@Getter   // 정보 확인용 (2023-09-15 이수 작성)
 public class TeamMemberResponseDTO {
 
     private String userId;  // 사용자 id

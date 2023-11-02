@@ -2,15 +2,16 @@ package com.example.walkingmate_back.user.entity;
 
 import com.example.walkingmate_back.user.dto.UserBodyUpdateDTO;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 @Table(name = "userBody")
 public class UserBody {
 
@@ -28,10 +29,10 @@ public class UserBody {
     @Column
     private double weight;  // 사용자 몸무게
 
-    // 신체정보 수정
+    // DTO를 사용하여 업데이트
     public UserBody update(UserBodyUpdateDTO userBodyUpdateDTO) {
-        this.height=userBodyUpdateDTO.getHeight();
-        this.weight=userBodyUpdateDTO.getWeight();
+        this.height = userBodyUpdateDTO.getHeight();
+        this.weight = userBodyUpdateDTO.getWeight();
         return this;
     }
 }

@@ -49,11 +49,11 @@ public class RunRecordService {
         if(user != null) {  // 사용자가 존재하는 경우
             RunRecord runRecord = new RunRecord(user, now, runRecordRequestDTO.getStep(), runRecordRequestDTO.getDistance(), runRecordRequestDTO.getKcal(), runRecordRequestDTO.getTime(), runRecordRequestDTO.getStartTime());
             runRecordRepository.save(runRecord);
-
             UserRank userRank = userRankRepository.findById(user.getId()).orElse(null);
-            userRank.updateRunNum();
-            userRankRepository.save(userRank);
-
+            if (userRank != null) {
+                userRank.updateRunNum();
+                userRankRepository.save(userRank);
+            }
             String date = runRecord.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
             return RunRecordResponseDTO.builder()
                     .id(runRecord.getId())

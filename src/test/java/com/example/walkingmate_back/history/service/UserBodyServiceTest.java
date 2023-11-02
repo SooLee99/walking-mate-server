@@ -1,8 +1,9 @@
-package com.example.walkingmate_back.user.service;
+package com.example.walkingmate_back.history.service;
 
 import com.example.walkingmate_back.user.dto.UserBodyResponseDTO;
 import com.example.walkingmate_back.user.dto.UserBodyUpdateDTO;
 import com.example.walkingmate_back.user.entity.UserBody;
+import com.example.walkingmate_back.user.service.UserBodyService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

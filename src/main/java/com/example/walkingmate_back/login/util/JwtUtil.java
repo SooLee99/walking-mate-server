@@ -1,4 +1,4 @@
-package com.example.walkingmate_back.login.utils;
+package com.example.walkingmate_back.login.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

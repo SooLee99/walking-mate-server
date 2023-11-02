@@ -4,6 +4,7 @@ import com.example.walkingmate_back.user.dto.UserRankResponseDTO;
 import com.example.walkingmate_back.user.entity.UserRank;
 import com.example.walkingmate_back.user.repository.UserRankRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class UserRankService {
 
     private final UserRankRepository userRankRepository;

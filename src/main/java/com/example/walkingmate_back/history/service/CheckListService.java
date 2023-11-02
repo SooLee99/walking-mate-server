@@ -7,6 +7,7 @@ import com.example.walkingmate_back.history.repository.CheckListRepository;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
@@ -34,19 +35,19 @@ public class CheckListService {
      * 사용자 확인 후 체크리스트 저장
      * - 전우진 2023.07.12
      */
+
+    // 수정사항: 체크리스트를 작성할 때, 사용자가 원하는 날짜에 일정을 기입할 수 있도록 수정하였습니다. (2023-09-11 이수 수정함.)
     public CheckListResponseDTO saveCheckList(CheckListRequestDTO checkListRequestDTO, String userId) {
         UserEntity user = userRepository.findById(userId).orElse(null);
-        LocalDate now = LocalDate.now();
 
         if(user != null) { // 사용자가 존재하는 경우
-            CheckList checkList = new CheckList(user, now, checkListRequestDTO.getContent(), false);
+            CheckList checkList = new CheckList(user,LocalDate.parse(checkListRequestDTO.getDate()) , checkListRequestDTO.getContent(), false);
             checkListRepository.save(checkList);
 
-            String date = checkList.getDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
             return CheckListResponseDTO.builder()
                     .listId(checkList.getListId())
                     .userId(checkList.getUser().getId())
-                    .date(date)
+                    .date(String.valueOf(checkList.getDate()))
                     .checked(checkList.isChecked())
                     .content(checkList.getContent())
                     .build();
@@ -54,7 +55,6 @@ public class CheckListService {
             // 사용자가 존재하지 않는 경우
             return null;
         }
-
     }
 
     /**

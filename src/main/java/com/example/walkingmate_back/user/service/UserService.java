@@ -81,6 +81,14 @@ public class UserService {
         return u;
     }
 
+    public UserEntity getUserInfo(String userId){
+        log.info("getUserInfo 함수에 들어옴 -> " + userId);
+        UserEntity user = userRepository.findById(userId).orElse(null);
+        log.info("회원 조회 결과 -> " + user);
+
+        return user;
+    }
+
     /**
      * 사용자 조회
      * - 이인범

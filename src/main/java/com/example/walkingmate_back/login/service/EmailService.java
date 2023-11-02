@@ -4,6 +4,7 @@ import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.repository.UserRepository;
 import com.example.walkingmate_back.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import jakarta.mail.internet.MimeMessage;
@@ -18,6 +19,7 @@ import jakarta.mail.internet.MimeMessage;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EmailService {
 
     private final JavaMailSender javaMailSender;  // 의존성 주입을 통해 필요한 객체를 가져옴
@@ -61,6 +63,8 @@ public class EmailService {
 
     // 실제 메일 전송
     public int sendEmail(String userId) {
+        log.info("sendEmail 함수 들어옴.");
+        log.info(userId);
         // 메일 전송에 필요한 정보 설정
         MimeMessage message = createMail(userId);
         // 실제 메일 전송

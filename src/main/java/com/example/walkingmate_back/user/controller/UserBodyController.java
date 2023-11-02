@@ -6,6 +6,7 @@ import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.user.dto.UserBodyResponseDTO;
 import com.example.walkingmate_back.user.dto.UserBodyUpdateDTO;
 import com.example.walkingmate_back.user.service.UserBodyService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 //@Controller
 @RestController
 @RequestMapping("/user/userBody")
+@Slf4j
 public class UserBodyController {
 
     private final UserBodyService userBodyService;

@@ -59,7 +59,7 @@ public class BattleService {
         String battleCheck = "대결 팀 모집 중";
         // 팀이 대결을 생성하지 않은 경우
         if(result == null) {
-            Battle battle = new Battle(format.parse(battleRequestDTO.getCreatedDate()));
+            Battle battle = new Battle(battleRequestDTO.getCreatedDate());
             battleRepository.save(battle);
 
             BattleRival battleRival = new BattleRival(battle, teamMember.getTeam());
@@ -292,22 +292,34 @@ public class BattleService {
      * - 전우진 2023.08.30
      */
     public BattleResponseDTO getUserBattle(BattleRival battleRivalId) {
+        // 해당 코드에서 NullPointException이 발생해서 밑에와 같이 수정하였습니다. (2023-09-16 이수)
+        // 해당 BattleRival ID로 Battle을 데이터베이스에서 찾습니다.
+        if(battleRivalId != null) {
+            Battle battle = battleRepository.findById(battleRivalId.getBattle().getId()).orElse(null);
 
-        Battle battle = battleRepository.findById(battleRivalId.getBattle().getId()).orElse(null);
-
-        if(battle != null) {  // 대결이 존재하는 경우
+            // 대결 상태를 나타낼 문자열 변수를 초기화합니다.
             String battleCheck = "";
 
-            List<BattleRival> battleRivals = battle.getBattleRivals();
-
-            List<BattleRivalResponseDTO> battleRivalResponseDTOList = battleRivals.stream()
-                    .map(battleRival -> new BattleRivalResponseDTO(battleRival.getTeam().getId(), battleRival.getTeam().getTeamMembers().get(0).getUser().getName(), battleRival.getTeam().getTeamRank().getTier(), battleRival.getTeam().getIntro(), battleRival.getTeam().getName(), battleRival.getTeam().getPeopleNum(), battleRival.getStep()))
+            // BattleRival을 BattleRivalResponseDTO로 변환하여 리스트로 만듭니다.
+            List<BattleRivalResponseDTO> battleRivalResponseDTOList = battle.getBattleRivals().stream()
+                    .map(battleRival -> new BattleRivalResponseDTO(
+                            battleRival.getTeam().getId(),
+                            battleRival.getTeam().getTeamMembers().get(0).getUser().getName(),
+                            battleRival.getTeam().getTeamRank().getTier(),
+                            battleRival.getTeam().getIntro(),
+                            battleRival.getTeam().getName(),
+                            battleRival.getTeam().getPeopleNum(),
+                            battleRival.getStep()))
                     .collect(Collectors.toList());
 
+            // 대결 참가 팀이 2개인지 확인하여 대결 상태를 설정합니다.
             if(battleRivalResponseDTOList.size() == 2) {
                 battleCheck = "대결 진행 중";
-            } else battleCheck = "대결 팀 모집 중";
+            } else {
+                battleCheck = "대결 팀 모집 중";
+            }
 
+            // 최종적으로 BattleResponseDTO 객체를 생성하여 반환합니다.
             return BattleResponseDTO.builder()
                     .id(battle.getId())
                     .startDate(battle.getStartDate())
@@ -317,7 +329,7 @@ public class BattleService {
                     .battleRivalResponseDTOList(battleRivalResponseDTOList)
                     .build();
         } else {
-            // 대결이 존재하지 않는 경우
+            // 해당 BattleRival ID로 Battle을 찾지 못한 경우 null을 반환합니다.
             return null;
         }
     }

@@ -1,6 +1,7 @@
-package com.example.walkingmate_back.user.service;
+package com.example.walkingmate_back.history.service;
 
 import com.example.walkingmate_back.user.dto.UserRankResponseDTO;
+import com.example.walkingmate_back.user.service.UserRankService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

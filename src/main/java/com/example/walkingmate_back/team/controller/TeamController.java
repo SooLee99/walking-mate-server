@@ -13,6 +13,7 @@ import com.example.walkingmate_back.team.service.TeamRankService;
 import com.example.walkingmate_back.team.service.TeamService;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -29,6 +30,7 @@ import java.util.List;
 //@Controller
 @RestController
 @RequestMapping("/team")
+@Slf4j
 public class TeamController {
 
     private final TeamService teamService;
@@ -46,18 +48,23 @@ public class TeamController {
     // 팀 생성
     @PostMapping("/save")
     public ResponseEntity<DefaultRes<TeamResponseDTO>> saveTeam(@RequestBody TeamRequestDTO teamRequestDTO, Authentication authentication){
+        log.info("현재 여기 지나가는 중");
+        log.info(String.valueOf(teamRequestDTO));
+
         UserEntity user = userService.FindUser(authentication.getName());
+
         if(user == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_USER, null), HttpStatus.OK);
 
         TeamResponseDTO teamResponseDTO = teamService.saveTeam(teamRequestDTO, user);
 
         if(teamResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.WRITE_TEAM, teamResponseDTO), HttpStatus.OK);
-        else
+        else    // 현재 여기 통과함.
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_WRITE_TEAM, null), HttpStatus.OK);
     }
 
     // 팀 삭제
+    // TODO : 현재 대결 중인 상태에서 팀을 삭제하고자 한다면, 대결중이라고 막아야 합니다... (2023-09-16 이수) 
     @DeleteMapping("/{teamId}")
     public ResponseEntity<DefaultRes<TeamResponseDTO>> deleteTeam(@PathVariable Long teamId, Authentication authentication) {
         UserEntity user = userService.FindUser(authentication.getName());
@@ -76,12 +83,18 @@ public class TeamController {
     // 단일 팀 조회 - 멤버 포함
     @GetMapping("/{teamId}")
     public ResponseEntity<DefaultRes<TeamResponseDTO>> SpecificationTeam(@PathVariable Long teamId) {
+        log.info("현재 팀 검색이 실행되었습니다. => " + teamId);
         TeamResponseDTO teamResponseDTO = teamService.getTeam(teamId);
+        log.info(teamResponseDTO.toString());
 
-        if(teamResponseDTO != null)
+        if (teamResponseDTO != null) {
+            log.info("팀 조회 성공함");
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, teamResponseDTO), HttpStatus.OK);
-        else
+        } else {
+            log.info("팀 조회 실패함");
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+
+        }
     }
 
     // 팀 전체 조회 - 멤버 포함
@@ -90,6 +103,7 @@ public class TeamController {
         List<TeamResponseDTO> teamResponseDTO = teamService.getAllTeam();
 
         if(teamResponseDTO != null)
+
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, teamResponseDTO), HttpStatus.OK);
         else
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
@@ -99,15 +113,17 @@ public class TeamController {
     @GetMapping("/list/userTeam")
     public ResponseEntity<DefaultRes<TeamResponseDTO>> SpecificationUserTeam(Authentication authentication) {
 
-        // 가입된 팀이 없는 경우
+        // 가입된 팀이 없는 경우 <= 우선 api 테스트를 위해 주석 처리가 필요함 (2023-09-12 이수 작성.)
         TeamMember teamMember = teamMemberService.FindTeam(authentication.getName());
-        if(teamMember == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
+
+        //if(teamMember == null) return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);
 
         teamRankService.updateTeamRank(teamMember.getTeam().getId());
 
         TeamResponseDTO teamResponseDTO = teamService.getUserTeam(teamMember);
 
-        if(teamResponseDTO != null)
+        // "데이터베이스 조회 성공",
+        if (teamResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, teamResponseDTO), HttpStatus.OK);
         else
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_TEAM, null), HttpStatus.OK);

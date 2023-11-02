@@ -5,6 +5,7 @@ import com.example.walkingmate_back.main.response.ResponseMessage;
 import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.team.dto.TeamRankResponseDTO;
 import com.example.walkingmate_back.team.service.TeamRankService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import java.util.List;
 //@Controller
 @RestController
 @RequestMapping("/team/teamRank")
+@Slf4j
 public class TeamRankController {
 
     private final TeamRankService teamRankService;
@@ -32,6 +34,8 @@ public class TeamRankController {
     @GetMapping("/list")
     public ResponseEntity<DefaultRes<List<TeamRankResponseDTO>>> SpecificationTeamRank() {
         List<TeamRankResponseDTO> teamRankResponseDTO =  teamRankService.getAllRank();
+        log.info("전체 리스트 조회");
+        log.info(teamRankResponseDTO.toString());
 
         if(teamRankResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_TEAMRANK, teamRankResponseDTO), HttpStatus.OK);

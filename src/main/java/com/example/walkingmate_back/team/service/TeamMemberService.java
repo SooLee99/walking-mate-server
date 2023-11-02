@@ -12,6 +12,7 @@ import com.example.walkingmate_back.team.repository.TeamRepository;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class TeamMemberService {
 
     private final TeamMemberRepository teamMemberRepository;
@@ -79,6 +81,8 @@ public class TeamMemberService {
     }
 
     public TeamMember FindTeam(String userId){
+        log.info("팀 맴버 검색 결과 : " + userId );
+        log.info(String.valueOf(teamMemberRepository.findByUserId(userId)));
         return teamMemberRepository.findByUserId(userId);
     }
 

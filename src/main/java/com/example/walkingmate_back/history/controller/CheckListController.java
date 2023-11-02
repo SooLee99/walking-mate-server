@@ -8,6 +8,7 @@ import com.example.walkingmate_back.main.response.ResponseMessage;
 import com.example.walkingmate_back.main.response.StatusEnum;
 import com.example.walkingmate_back.user.entity.UserEntity;
 import com.example.walkingmate_back.user.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -25,6 +26,7 @@ import java.util.List;
 //@Controller
 @RestController
 @RequestMapping("/checkList")
+@Slf4j
 public class CheckListController {
 
     private final CheckListService checkListService;
@@ -38,6 +40,7 @@ public class CheckListController {
     // 체크리스트 추가
     @PostMapping("/save")
     public ResponseEntity<DefaultRes<CheckListResponseDTO>> saveCheckList(@RequestBody CheckListRequestDTO checkListRequestDTO, Authentication authentication) {
+        log.info("가져온 데이터: " + checkListRequestDTO);
         CheckListResponseDTO checkListResponseDTO = checkListService.saveCheckList(checkListRequestDTO, authentication.getName());
 
         if(checkListResponseDTO != null)
@@ -80,7 +83,7 @@ public class CheckListController {
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_CHECKLIST, null), HttpStatus.OK);
     }
 
-    // 체크리스트 조회 - 날짜별
+    // 체크리스트 조회
     @GetMapping("/list/{date}")
     public ResponseEntity<DefaultRes<List<CheckListResponseDTO>>> listCheckList(@PathVariable String date, Authentication authentication) {
         UserEntity user = userService.FindUser(authentication.getName());
@@ -90,7 +93,7 @@ public class CheckListController {
         if(checkListResponseDTO != null)
             return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.READ_SUCCESS, checkListResponseDTO), HttpStatus.OK);
         else
-            return new ResponseEntity<>(DefaultRes.res(StatusEnum.BAD_REQUEST, ResponseMessage.NOT_FOUND_CHECKLIST, null), HttpStatus.OK);
+            return new ResponseEntity<>(DefaultRes.res(StatusEnum.OK, ResponseMessage.NOT_FOUND_CHECKLIST, null), HttpStatus.OK);
     }
 
 }

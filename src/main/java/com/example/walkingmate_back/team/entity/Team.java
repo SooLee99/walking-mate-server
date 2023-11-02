@@ -4,17 +4,23 @@ import com.example.walkingmate_back.battle.entity.BattleRival;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
+
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@ToString
-@NoArgsConstructor
+//@ToString  // 무한 루프 발생해서 주석처리함. <= 2023-09-15 이수 작성함.
+//@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "team")
+@Slf4j
 public class Team {
+    public Team(){
+        log.info("team 테이블 건드림.");
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
